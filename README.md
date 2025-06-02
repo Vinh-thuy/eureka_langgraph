@@ -9,6 +9,34 @@ Ce projet propose un système avancé de gestion et d'analyse d'incidents IT, ut
 - **Routage intelligent** : Distribution des requêtes entre différents agents spécialisés
 - **Interface utilisateur intuitive** : Affichage clair des messages et des images associées
 
+## Architecture de la Boucle de Conversation
+
+Le système utilise une architecture modulaire avec une séparation claire entre la collecte d'informations et la gestion de la conversation :
+
+### 1. Sous-graphe d'Analyse d'Incident
+- **Rôle** : Collecte et structure les données liées à un incident
+- **Actions** :
+  - Récupère les informations sur l'incident (applications impactées, incidents liés, etc.)
+  - Génère un `system_prompt` complet avec toutes les données structurées
+  - Produit une synthèse initiale pour l'utilisateur
+- **Exécution** : Ne s'exécute qu'une seule fois au début de la conversation
+
+### 2. Orchestrateur Principal
+- **Rôle** : Gère la conversation sur plusieurs tours
+- **Fonctionnalités** :
+  - Maintient l'état de la conversation (`in_incident_conversation`, compteur de tours)
+  - Appelle le LLM pour chaque nouvelle question en utilisant le `system_prompt` initial
+  - Gère l'historique des messages
+  - Détecte les intentions de sortie (ex: "fin", "merci")
+
+### 3. Flux de Données
+```
+[Utilisateur] 
+     |→ [Orchestrateur] → [Sous-graphe] (premier tour uniquement)
+          |→ [LLM avec system_prompt + historique] (tours suivants)
+               |→ [Réponse à l'utilisateur]
+```
+
 ## Structure du Projet
 
 - `frontend/` : Interface utilisateur réactive (React)
