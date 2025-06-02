@@ -305,16 +305,42 @@ def invoke_incident_analysis_agent(state: OrchestratorState):
             context["in_incident_conversation"] = False
             # On garde l'ID d'incident pour référence future
         
-        # Préparer la réponse
+        # Déterminer le nombre de tours de conversation
+        conversation_count = context.get("conversation_count", 1)
+        system_prompt = final_agent_state.get("system_prompt", "")
+        
+        # Récupérer la question utilisateur pour l'appel LLM
+        question = state.get("question", "")
+        
+        # Par défaut, on renvoie la synthèse courte (premier tour)
         response = final_agent_state.get(
-            "current_response",
+            "final_response",
             final_agent_state.get(
-                "response",
-                "Désolé, je n'ai pas pu traiter votre demande d'incident."
+                "current_response",
+                final_agent_state.get(
+                    "response",
+                    "Désolé, je n'ai pas pu traiter votre demande d'incident."
+                )
             )
         )
         
-        print(f"[INCIDENT AGENT] Réponse générée: {response[:100]}...")
+        print(f"[DEBUG] conversation_count={conversation_count}, system_prompt not empty? {bool(system_prompt)}")
+        
+        # Si on est dans la boucle conversationnelle (après synthèse), on appelle le LLM avec le contexte enrichi
+        if conversation_count > 1 and system_prompt:
+            try:
+                from langchain_core.messages import SystemMessage, HumanMessage
+                llm_response = llm.invoke([
+                    SystemMessage(content=system_prompt),
+                    HumanMessage(content=question)
+                ])
+                response = llm_response.content
+                print(f"[INCIDENT AGENT] Réponse LLM générée: {response[:100]}...")
+            except Exception as e:
+                print(f"[INCIDENT AGENT] Erreur lors de l'appel LLM: {e}")
+                response = "Désolé, une erreur est survenue lors de la génération de la réponse contextuelle."
+        else:
+            print(f"[INCIDENT AGENT] Réponse générée (synthèse): {response[:100]}...")
         
         # Retourner la réponse et le contexte mis à jour
         return {

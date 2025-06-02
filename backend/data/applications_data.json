@@ -1,0 +1,42 @@
+{
+  "APP001": {
+    "name": "Système de Gestion des Commandes",
+    "owner": "Équipe Commerce Électronique",
+    "environment": "Production",
+    "version": "2.5.1",
+    "status": "Actif",
+    "description": "Gestion des commandes clients et suivi des livraisons"
+  },
+  "APP002": {
+    "name": "Service d'Authentification",
+    "owner": "Équipe Sécurité",
+    "environment": "Production",
+    "version": "3.2.0",
+    "status": "Actif",
+    "description": "Gestion de l'authentification et des autorisations utilisateurs"
+  },
+  "APP003": {
+    "name": "Module de Paiement",
+    "owner": "Équipe Paiement",
+    "environment": "Production",
+    "version": "1.8.3",
+    "status": "Actif",
+    "description": "Traitement sécurisé des paiements en ligne"
+  },
+  "APP004": {
+    "name": "Service de Notification",
+    "owner": "Équipe Communication",
+    "environment": "Production",
+    "version": "2.1.5",
+    "status": "Actif",
+    "description": "Envoi de notifications par email et SMS"
+  },
+  "APP005": {
+    "name": "API Catalogue Produits",
+    "owner": "Équipe Catalogue",
+    "environment": "Production",
+    "version": "4.0.2",
+    "status": "Actif",
+    "description": "Gestion du catalogue de produits et des références"
+  }
+}

@@ -159,9 +159,3 @@ Pour tester le bon fonctionnement :
 3. Vérifier la conservation du contexte
 4. Tester différentes requêtes de suivi
 
-## Déploiement
-
-Pour un environnement de production, il est recommandé d'utiliser :
-- Gunicorn ou Uvicorn avec gestionnaire de processus (PM2, Supervisor) pour le backend
-- Build de production pour le frontend avec `npm run build`
-- Serveur web comme Nginx pour servir les fichiers statiques et faire du reverse proxy

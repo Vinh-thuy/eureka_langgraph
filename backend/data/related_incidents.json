@@ -1,0 +1,68 @@
+{
+  "INC123456": [
+    {
+      "id": "INC789012",
+      "status": "Résolu",
+      "severity": "Moyenne",
+      "description": "Problème d'authentification des utilisateurs",
+      "date_creation": "2025-05-28T14:30:00Z",
+      "date_resolution": "2025-05-28T16:45:00Z"
+    },
+    {
+      "id": "INC901234",
+      "status": "En cours",
+      "severity": "Élevée",
+      "description": "Erreur lors du traitement des paiements",
+      "date_creation": "2025-06-01T09:15:00Z",
+      "date_resolution": null
+    }
+  ],
+  "INC789012": [
+    {
+      "id": "INC123456",
+      "status": "En cours",
+      "severity": "Haute",
+      "description": "Incident majeur sur le système de commandes",
+      "date_creation": "2025-06-02T10:20:00Z",
+      "date_resolution": null
+    }
+  ],
+  "INC345678": [
+    {
+      "id": "INC567890",
+      "status": "Résolu",
+      "severity": "Basse",
+      "description": "Notification de maintenance planifiée",
+      "date_creation": "2025-05-25T18:00:00Z",
+      "date_resolution": "2025-05-25T20:00:00Z"
+    }
+  ],
+  "INC901234": [
+    {
+      "id": "INC123456",
+      "status": "En cours",
+      "severity": "Haute",
+      "description": "Incident majeur sur le système de commandes",
+      "date_creation": "2025-06-02T10:20:00Z",
+      "date_resolution": null
+    },
+    {
+      "id": "INC789012",
+      "status": "Résolu",
+      "severity": "Moyenne",
+      "description": "Problème d'authentification des utilisateurs",
+      "date_creation": "2025-05-28T14:30:00Z",
+      "date_resolution": "2025-05-28T16:45:00Z"
+    }
+  ],
+  "INC567890": [
+    {
+      "id": "INC345678",
+      "status": "Résolu",
+      "severity": "Basse",
+      "description": "Problème d'affichage du catalogue produits",
+      "date_creation": "2025-05-24T11:10:00Z",
+      "date_resolution": "2025-05-24T12:30:00Z"
+    }
+  ]
+}
