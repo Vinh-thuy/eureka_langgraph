@@ -1,17 +1,27 @@
-# Présentation Chatbot IA
+# Chatbot d'Analyse d'Incidents IT
 
-Ce projet propose un chatbot intelligent pour présenter l'équipe, ses objectifs, et le concept d'Intelligent Digital Twins, à partir des documents du dossier `docs` et d'images associées.
+Ce projet propose un système avancé de gestion et d'analyse d'incidents IT, utilisant des techniques d'IA pour faciliter le diagnostic et la résolution des problèmes techniques. L'application permet de maintenir le contexte des conversations et de gérer des flux de travail complexes pour l'analyse d'incidents.
 
-## Structure du projet
+## Fonctionnalités Principales
 
-- `frontend/` : Interface web (React)
-- `backend/`  : API et moteur IA (FastAPI)
-- `docs/`     : Documents de présentation (Markdown)
-- `images/`   : Images à afficher lors de la présentation
+- **Gestion de contexte de conversation** : Maintien de l'état de la conversation entre les requêtes
+- **Analyse d'incidents** : Détection et suivi des numéros d'incident (format INC suivi de chiffres)
+- **Routage intelligent** : Distribution des requêtes entre différents agents spécialisés
+- **Interface utilisateur intuitive** : Affichage clair des messages et des images associées
+
+## Structure du Projet
+
+- `frontend/` : Interface utilisateur réactive (React)
+- `backend/` : API et logique métier (FastAPI + LangGraph)
+  - `agents/` : Différents agents spécialisés
+    - `incident_analysis_agent.py` : Gère l'analyse des incidents IT
+    - `generic_chatbot_agent.py` : Gère les conversations générales
+    - `orchestrator.py` : Orchestre le routage entre les agents
+- `images/` : Ressources visuelles pour l'application
 
 ## Prérequis
 
-- Python 3.8+
+- Python 3.8+ (ne pas utiliser 3.13)
 - Node.js 16+
 - npm ou yarn
 
@@ -82,14 +92,36 @@ npm run dev
 - **API Backend** : L'API sera disponible sur `http://localhost:8000`
 - **Documentation de l'API** : `http://localhost:8000/docs` (Swagger UI)
 
+## Gestion du Contexte de Conversation
+
+Le système maintient un contexte de conversation qui permet de :
+- Suivre l'état actuel de la conversation
+- Conserver les informations sur l'incident en cours d'analyse
+- Maintenir un compteur de tours de conversation
+
+### Comment utiliser l'analyse d'incidents
+
+1. **Démarrer une analyse** : 
+   ```
+   Analyse l'incident INC12345
+   ```
+2. **Poser des questions de suivi** :
+   ```
+   Quels sont les changements suspects ?
+   ```
+3. **Terminer la conversation** :
+   ```
+   Fin de la conversation
+   ```
+
 ## Configuration
 
-### Variables d'environnement
+### Variables d'Environnement
 
 Créez un fichier `.env` à la racine du projet avec les variables nécessaires :
 
 ```env
-# Clé API OpenAI
+# Clé API OpenAI (obligatoire)
 OPENAI_API_KEY=votre_cle_api_openai
 
 # Configuration du backend
@@ -98,14 +130,34 @@ BACKEND_PORT=8000
 
 # Configuration du frontend
 VITE_API_URL=http://localhost:8000
+
+# Niveau de logs (optionnel)
+LOG_LEVEL=INFO  # DEBUG, INFO, WARNING, ERROR
 ```
 
-## Personnalisation
+## Développement
 
-- Ajoutez vos documents dans le dossier `docs/` (format Markdown)
-- Ajoutez vos images dans le dossier `images/`
-- Modifiez les styles dans le dossier `frontend/src/`
-- Personnalisez les prompts dans le code du backend
+### Améliorations Récentes
+
+- **v1.0** : Implémentation de la gestion du contexte de conversation
+  - Maintien de l'état entre les requêtes
+  - Support des conversations multi-tours
+  - Gestion des numéros d'incident
+
+### Personnalisation
+
+- **Agents** : Ajoutez de nouveaux agents dans le dossier `backend/agents/`
+- **Styles** : Personnalisez l'interface dans `frontend/src/`
+- **Prompts** : Modifiez les prompts dans les fichiers des agents
+- **Logs** : Niveaux de logs configurables pour le débogage
+
+### Tests
+
+Pour tester le bon fonctionnement :
+1. Démarrer le backend et le frontend
+2. Essayer une conversation d'incident complète
+3. Vérifier la conservation du contexte
+4. Tester différentes requêtes de suivi
 
 ## Déploiement
 
