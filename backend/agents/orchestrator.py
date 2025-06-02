@@ -153,7 +153,11 @@ def route_question(state: OrchestratorState) -> dict:
 def invoke_generic_chatbot_agent(state: OrchestratorState):
     print("---ORCHESTRATEUR: INVOCATION DE L'AGENT GENERIC CHATBOT---")
     
-    # Initialiser les champs manquants
+    # --- LOGIQUE DE BOUCLE DE CONVERSATION POUR LE CHATBOT GÉNÉRIQUE ---
+    # Cette fonction assure la fluidité multi-tours en conservant l'historique et le contexte conversationnel.
+    # Contrairement à l'agent d'incident, il n'y a pas de collecte de données structurées, mais on maintient l'historique pour la cohérence des échanges.
+    
+    # Initialiser les champs manquants dans l'état
     if "question" not in state:
         state["question"] = ""
     if "conversation_context" not in state:
@@ -167,67 +171,63 @@ def invoke_generic_chatbot_agent(state: OrchestratorState):
     
     print(f"[GENERIC CHATBOT] Contexte d'entrée: {context}")
     print(f"[GENERIC CHATBOT] Question: {question}")
+    print(f"[GENERIC CHATBOT] Historique: {history[-3:]}")
     
-    # Vérifier si on vient d'une conversation d'incident
+    # --- Gestion de la transition depuis une conversation d'incident ---
     was_in_incident_conv = context.pop("in_incident_conversation", False)
     incident_id = context.pop("incident_id", None)
-    
     if was_in_incident_conv:
         print("---GENERIC CHATBOT: FIN DE LA CONVERSATION D'INCIDENT---")
         if incident_id:
             print(f"[GENERIC CHATBOT] Incident précédent: {incident_id}")
     
-    # Créer une copie du contexte pour l'envoi à l'agent
-    context_copy = context.copy()
+    # --- Détection d'intention de sortie (NLU simple) ---
+    exit_keywords = ["fin", "stop", "quitter", "merci", "terminé", "au revoir"]
+    if any(kw in question.lower() for kw in exit_keywords):
+        print("[GENERIC CHATBOT] Fin de conversation détectée (NLU)")
+        # Nettoyage du contexte et de l'historique
+        context.clear()
+        history.clear()
+        return {
+            "final_response": "Merci pour cette conversation ! N'hésitez pas à revenir si vous avez d'autres questions.",
+            "conversation_context": context,
+            "history": history
+        }
+
+    # --- Ajout de la question courante à l'historique ---
+    if question:
+        history.append({"role": "user", "content": question})
     
-    # Préparer l'entrée pour l'agent générique
-    generic_chatbot_graph = create_generic_chatbot_graph()
-    
-    # Préparer les données d'entrée
-    chatbot_input = {
-        "question": question,
-        "conversation_context": context_copy,
-        "history": history,
-        "response": ""
-    }
-    
-    print(f"[GENERIC CHATBOT] Données envoyées à l'agent: {chatbot_input}")
-    
+    # --- Génération de la réponse via LLM (prompt simple, contexte = historique) ---
     try:
-        # Appeler l'agent générique
-        final_agent_state = generic_chatbot_graph.invoke(chatbot_input)
-        
-        # Mettre à jour le contexte de conversation
-        if "conversation_context" in final_agent_state:
-            print(f"[GENERIC CHATBOT] Contexte retourné: {final_agent_state['conversation_context']}")
-            context.update(final_agent_state["conversation_context"])
-        else:
-            print("[GENERIC CHATBOT] Aucun contexte retourné par l'agent")
-        
-        # Préparer la réponse
-        response = final_agent_state.get(
-            "response",
-            final_agent_state.get("current_response", "Désolé, je n'ai pas pu traiter votre demande.")
-        )
-        
+        # Appel direct au LLM avec l'historique (pas de prompt système spécifique)
+        messages = [HumanMessage(content=msg["content"]) if msg["role"] == "user" else SystemMessage(content=msg["content"]) for msg in history]
+        llm_response = llm.invoke(messages)
+        response = llm_response.content
         print(f"[GENERIC CHATBOT] Réponse générée: {response[:100]}...")
-        
+        # Ajout de la réponse à l'historique
+        history.append({"role": "assistant", "content": response})
         # Retourner la réponse et le contexte mis à jour
         return {
             "final_response": response,
-            "conversation_context": context
+            "conversation_context": context,
+            "history": history
         }
-        
     except Exception as e:
         print(f"[ERREUR GENERIC CHATBOT] Erreur lors de l'appel à l'agent: {str(e)}")
         # En cas d'erreur, on nettoie le contexte pour éviter les états bloqués
         context.pop("in_incident_conversation", None)
         context.pop("incident_id", None)
-        
         return {
             "final_response": "Désolé, une erreur est survenue lors du traitement de votre demande.",
-            "conversation_context": context
+            "conversation_context": context,
+            "history": history
         }
+
+# ---
+# Cette logique permet de conserver la fluidité et la mémoire de la conversation pour le chatbot générique,
+# même sur plusieurs tours, sans workflow structuré ni collecte de données, simplement en stockant l'historique.
+# ---
 
 def invoke_incident_analysis_agent(state: OrchestratorState):
     print("---ORCHESTRATEUR: INVOCATION DE L'AGENT INCIDENT ANALYSIS---")
@@ -249,11 +249,16 @@ def invoke_incident_analysis_agent(state: OrchestratorState):
     # Détection NLU (mots-clés) de l'intention de sortie
     exit_keywords = ["fin", "stop", "quitter", "merci", "terminé", "au revoir"]
     if any(kw in question.lower() for kw in exit_keywords):
+        # Mot-clé de sortie détecté, on termine la conversation d'incident
         print("---INCIDENT AGENT: FIN DE LA CONVERSATION D'INCIDENT (mot-clé détecté)---")
         context["in_incident_conversation"] = False
+        # Nettoyage de l'historique côté backend
+        if "history" in state:
+            state["history"].clear()
         return {
             "final_response": "Conversation d’incident terminée. N’hésitez pas à solliciter une nouvelle analyse.",
-            "conversation_context": context
+            "conversation_context": context,
+            "history": []
         }
     
     # Vérifier si on a un ID d'incident dans le contexte

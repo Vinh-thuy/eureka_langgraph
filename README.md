@@ -11,6 +11,24 @@ Ce projet propose un système avancé de gestion et d'analyse d'incidents IT, ut
 
 ## Architecture de la Boucle de Conversation
 
+### Conversation Générique (Chatbot)
+
+Pour le chatbot générique, la logique de gestion de la conversation est similaire à celle de l'incident, mais sans collecte de données structurées :
+
+- **Objectif** : Permettre des échanges fluides et cohérents sur plusieurs tours, même autour d'une thématique, sans repartir de zéro à chaque question.
+- **Historique** : À chaque question, l'historique complet de la conversation (questions/réponses) est transmis au LLM, permettant au chatbot de garder le fil de la discussion.
+- **Pas de contexte structuré** : Contrairement à l'analyse d'incident, il n'y a pas de sous-graphe de collecte ou de prompt système enrichi, seulement l'historique qui sert de mémoire.
+- **Sortie** : L'utilisateur peut quitter la conversation à tout moment, l'historique est alors réinitialisé ou conservé selon le besoin.
+
+Exemple de scénario :
+
+1. Utilisateur : "Explique-moi la blockchain."
+2. Chatbot : [réponse détaillée]
+3. Utilisateur : "Et ses applications concrètes ?"
+4. Chatbot : [réponse contextuelle, car il se souvient du sujet précédent]
+
+---
+
 Le système utilise une architecture modulaire avec une séparation claire entre la collecte d'informations et la gestion de la conversation :
 
 ### 1. Sous-graphe d'Analyse d'Incident
