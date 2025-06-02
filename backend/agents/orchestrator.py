@@ -245,6 +245,16 @@ def invoke_incident_analysis_agent(state: OrchestratorState):
     
     print(f"[INCIDENT AGENT] Contexte d'entrée: {context}")
     print(f"[INCIDENT AGENT] Question: {question}")
+
+    # Détection NLU (mots-clés) de l'intention de sortie
+    exit_keywords = ["fin", "stop", "quitter", "merci", "terminé", "au revoir"]
+    if any(kw in question.lower() for kw in exit_keywords):
+        print("---INCIDENT AGENT: FIN DE LA CONVERSATION D'INCIDENT (mot-clé détecté)---")
+        context["in_incident_conversation"] = False
+        return {
+            "final_response": "Conversation d’incident terminée. N’hésitez pas à solliciter une nouvelle analyse.",
+            "conversation_context": context
+        }
     
     # Vérifier si on a un ID d'incident dans le contexte
     incident_id = context.get("incident_id")
@@ -269,95 +279,76 @@ def invoke_incident_analysis_agent(state: OrchestratorState):
     elif in_incident_conv:
         context["conversation_count"] = context.get("conversation_count", 0) + 1
         print(f"[INCIDENT AGENT] Suite de la conversation (tour {context['conversation_count']})")
-    
-    # Créer une copie du contexte pour l'envoi à l'agent
-    context_copy = context.copy()
-    
-    # Préparer l'entrée pour l'agent d'analyse d'incident
-    incident_analysis_graph = create_incident_analysis_graph()
-    
-    # Préparer les données d'entrée
-    incident_analysis_input = {
-        "question": question,
-        "conversation_context": context_copy,
-        "history": state["history"],
-        "current_response": "",
-        "end_conversation": False
-    }
-    
-    print(f"[INCIDENT AGENT] Données envoyées à l'agent: {incident_analysis_input}")
-    
-    try:
-        # Appeler l'agent d'analyse d'incident
-        final_agent_state = incident_analysis_graph.invoke(incident_analysis_input)
         
-        # Mettre à jour le contexte de conversation
-        if "conversation_context" in final_agent_state:
-            print(f"[INCIDENT AGENT] Contexte retourné: {final_agent_state['conversation_context']}")
-            context.update(final_agent_state["conversation_context"])
-        else:
-            print("[INCIDENT AGENT] Aucun contexte retourné par l'agent")
-        
-        # Vérifier si la conversation est terminée
-        end_conversation = final_agent_state.get("end_conversation", False)
-        if end_conversation:
-            print("---INCIDENT AGENT: FIN DE LA CONVERSATION D'INCIDENT---")
-            context["in_incident_conversation"] = False
-            # On garde l'ID d'incident pour référence future
-        
-        # Déterminer le nombre de tours de conversation
-        conversation_count = context.get("conversation_count", 1)
-        system_prompt = final_agent_state.get("system_prompt", "")
-        
-        # Récupérer la question utilisateur pour l'appel LLM
-        question = state.get("question", "")
-        
-        # Par défaut, on renvoie la synthèse courte (premier tour)
-        response = final_agent_state.get(
-            "final_response",
-            final_agent_state.get(
-                "current_response",
+        # Appel normal à l'agent d'analyse d'incident (plus de détection NLU ici)
+        try:
+            # Préparer l'entrée pour l'agent d'analyse d'incident
+            incident_analysis_graph = create_incident_analysis_graph()
+            incident_analysis_input = {
+                "question": question,
+                "conversation_context": context.copy(),
+                "history": state["history"],
+                "current_response": "",
+                "end_conversation": False
+            }
+            print(f"[INCIDENT AGENT] Données envoyées à l'agent: {incident_analysis_input}")
+            final_agent_state = incident_analysis_graph.invoke(incident_analysis_input)
+            if "conversation_context" in final_agent_state:
+                print(f"[INCIDENT AGENT] Contexte retourné: {final_agent_state['conversation_context']}")
+                context.update(final_agent_state["conversation_context"])
+            else:
+                print("[INCIDENT AGENT] Aucun contexte retourné par l'agent")
+            # Vérifier si la conversation est terminée
+            end_conversation = final_agent_state.get("end_conversation", False)
+            if end_conversation:
+                print("---INCIDENT AGENT: FIN DE LA CONVERSATION D'INCIDENT---")
+                context["in_incident_conversation"] = False
+            # Déterminer le nombre de tours de conversation
+            conversation_count = context.get("conversation_count", 1)
+            system_prompt = final_agent_state.get("system_prompt", "")
+            # Récupérer la question utilisateur pour l'appel LLM
+            question = state.get("question", "")
+            # Par défaut, on renvoie la synthèse courte (premier tour)
+            response = final_agent_state.get(
+                "final_response",
                 final_agent_state.get(
-                    "response",
-                    "Désolé, je n'ai pas pu traiter votre demande d'incident."
+                    "current_response",
+                    final_agent_state.get(
+                        "response",
+                        "Désolé, je n'ai pas pu traiter votre demande d'incident."
+                    )
                 )
             )
-        )
-        
-        print(f"[DEBUG] conversation_count={conversation_count}, system_prompt not empty? {bool(system_prompt)}")
-        
-        # Si on est dans la boucle conversationnelle (après synthèse), on appelle le LLM avec le contexte enrichi
-        if conversation_count > 1 and system_prompt:
-            try:
-                from langchain_core.messages import SystemMessage, HumanMessage
-                llm_response = llm.invoke([
-                    SystemMessage(content=system_prompt),
-                    HumanMessage(content=question)
-                ])
-                response = llm_response.content
-                print(f"[INCIDENT AGENT] Réponse LLM générée: {response[:100]}...")
-            except Exception as e:
-                print(f"[INCIDENT AGENT] Erreur lors de l'appel LLM: {e}")
-                response = "Désolé, une erreur est survenue lors de la génération de la réponse contextuelle."
-        else:
-            print(f"[INCIDENT AGENT] Réponse générée (synthèse): {response[:100]}...")
-        
-        # Retourner la réponse et le contexte mis à jour
-        return {
-            "final_response": response,
-            "conversation_context": context
-        }
-        
-    except Exception as e:
-        print(f"[ERREUR INCIDENT AGENT] Erreur lors de l'appel à l'agent: {str(e)}")
-        # En cas d'erreur, on nettoie le contexte d'incident pour éviter les états bloqués
-        context.pop("in_incident_conversation", None)
-        context.pop("incident_id", None)
-        
-        return {
-            "final_response": "Désolé, une erreur est survenue lors du traitement de votre demande d'incident.",
-            "conversation_context": context
-        }
+            print(f"[DEBUG] conversation_count={conversation_count}, system_prompt not empty? {bool(system_prompt)}")
+            # Si on est dans la boucle conversationnelle (après synthèse), on appelle le LLM avec le contexte enrichi
+            if conversation_count > 1 and system_prompt:
+                try:
+                    from langchain_core.messages import SystemMessage, HumanMessage
+                    llm_response = llm.invoke([
+                        SystemMessage(content=system_prompt),
+                        HumanMessage(content=question)
+                    ])
+                    response = llm_response.content
+                    print(f"[INCIDENT AGENT] Réponse LLM générée: {response[:100]}...")
+                except Exception as e:
+                    print(f"[INCIDENT AGENT] Erreur lors de l'appel LLM: {e}")
+                    response = "Désolé, une erreur est survenue lors de la génération de la réponse contextuelle."
+            else:
+                print(f"[INCIDENT AGENT] Réponse générée (synthèse): {response[:100]}...")
+            # Retourner la réponse et le contexte mis à jour
+            return {
+                "final_response": response,
+                "conversation_context": context
+            }
+        except Exception as e:
+            print(f"[ERREUR INCIDENT AGENT] Erreur lors de l'appel à l'agent: {str(e)}")
+            # En cas d'erreur, on nettoie le contexte d'incident pour éviter les états bloqués
+            context.pop("in_incident_conversation", None)
+            context.pop("incident_id", None)
+            return {
+                "final_response": "Désolé, une erreur est survenue lors du traitement de votre demande d'incident.",
+                "conversation_context": context
+            }
 
 def fallback_node(state: OrchestratorState):
     print("---ORCHESTRATEUR: NŒUD PAR DÉFAUT (FALLBACK)---")
