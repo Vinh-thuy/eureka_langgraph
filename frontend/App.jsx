@@ -6,6 +6,7 @@ function App() {
   const [imageUrl, setImageUrl] = useState('');
   const [messages, setMessages] = useState([]); // {role: 'user'|'bot', content: string}
   const [conversationContext, setConversationContext] = useState({});
+  const [lastRawResponse, setLastRawResponse] = useState(null); // Pour debug visuel
   const messagesEndRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -29,14 +30,16 @@ function App() {
       });
       
       const data = await res.json();
-      console.log('[DEBUG] /ask response', data);
+      console.log('[DEBUG] Réponse brute backend:', JSON.stringify(data, null, 2));
+      setLastRawResponse(data); // Stocke la dernière réponse brute pour debug UI
       
       // Mettre à jour le contexte de conversation
       if (data.conversation_context) {
         setConversationContext(data.conversation_context);
       }
       
-      setMessages(prev => [...prev, { role: 'bot', content: data.answer }]);
+      console.log('[DEBUG] meta:', data.meta);
+      setMessages(prev => [...prev, { role: 'bot', content: data.final_response, meta: data.meta }]);
       setImageUrl(data.image_url || '');
       setQuestion(''); // Vide le champ
     } catch (error) {
@@ -92,7 +95,29 @@ function App() {
               fontSize: 18,
               whiteSpace: msg.role === 'user' ? 'pre-line' : undefined
             }}>
-              {msg.role === 'bot' ? <ReactMarkdown>{msg.content}</ReactMarkdown> : msg.content}
+              {msg.role === 'bot' ? (
+                <>
+                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                  <div style={{
+                    display: 'flex', justifyContent: 'flex-end', marginTop: 8
+                  }}>
+                    <span style={{
+                      background: msg.meta && msg.meta.use_case === 'incident_analysis' ? '#1976d2' : '#43a047',
+                      color: '#fff',
+                      borderRadius: 10,
+                      padding: '3px 12px',
+                      fontSize: 14,
+                      fontWeight: 500,
+                      boxShadow: '0 1px 4px #bbb',
+                      marginLeft: 6
+                    }}>
+                      {msg.meta && msg.meta.use_case === 'incident_analysis'
+                        ? `🛠️ Analyse d’incident${msg.meta.incident_id ? ' – ID: ' + msg.meta.incident_id : ''}`
+                        : '💬 Chatbot générique'}
+                    </span>
+                  </div>
+                </>
+              ) : msg.content}
             </div>
           ))}
           <div ref={messagesEndRef} />
@@ -111,6 +136,7 @@ function App() {
             ➤
           </button>
         </div>
+
       </div>
     </div>
   );

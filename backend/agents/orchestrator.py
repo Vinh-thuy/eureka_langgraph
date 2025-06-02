@@ -189,9 +189,13 @@ def invoke_generic_chatbot_agent(state: OrchestratorState):
         context.clear()
         history.clear()
         return {
-            "final_response": "Merci pour cette conversation ! N'hésitez pas à revenir si vous avez d'autres questions.",
+            "final_response": "[💬 Chatbot générique]\nMerci pour cette conversation ! N'hésitez pas à revenir si vous avez d'autres questions.",
             "conversation_context": context,
-            "history": history
+            "history": history,
+            "meta": {
+                "use_case": "generic_chatbot",
+                "subgraph": "Generic Chatbot"
+            }
         }
 
     # --- Ajout de la question courante à l'historique ---
@@ -210,6 +214,10 @@ def invoke_generic_chatbot_agent(state: OrchestratorState):
         # Retourner la réponse et le contexte mis à jour
         return {
             "final_response": response,
+            "meta": {
+                "subgraph": "Chatbot générique",
+                "use_case": "generic_chatbot"
+            },
             "conversation_context": context,
             "history": history
         }
@@ -257,6 +265,11 @@ def invoke_incident_analysis_agent(state: OrchestratorState):
             state["history"].clear()
         return {
             "final_response": "Conversation d’incident terminée. N’hésitez pas à solliciter une nouvelle analyse.",
+            "meta": {
+                "use_case": "incident_analysis",
+                "subgraph": "Analyse d'incident",
+                "incident_id": context.get("incident_id")
+            },
             "conversation_context": context,
             "history": []
         }
@@ -271,6 +284,8 @@ def invoke_incident_analysis_agent(state: OrchestratorState):
             incident_id = match.group(0)
             context["incident_id"] = incident_id
             print(f"[INCIDENT AGENT] ID d'incident extrait: {incident_id}")
+    # Toujours synchroniser l'ID d'incident courant pour le meta
+    incident_id = context.get("incident_id")
     
     # Vérifier si on est dans une conversation d'incident
     in_incident_conv = context.get("in_incident_conversation", False)
@@ -343,6 +358,11 @@ def invoke_incident_analysis_agent(state: OrchestratorState):
             # Retourner la réponse et le contexte mis à jour
             return {
                 "final_response": response,
+                "meta": {
+                    "use_case": "incident_analysis",
+                    "subgraph": "Analyse d'incident",
+                    "incident_id": context.get("incident_id")
+                },
                 "conversation_context": context
             }
         except Exception as e:
@@ -352,6 +372,11 @@ def invoke_incident_analysis_agent(state: OrchestratorState):
             context.pop("incident_id", None)
             return {
                 "final_response": "Désolé, une erreur est survenue lors du traitement de votre demande d'incident.",
+                "meta": {
+                    "use_case": "incident_analysis",
+                    "subgraph": "Analyse d'incident",
+                    "incident_id": context.get("incident_id")
+                },
                 "conversation_context": context
             }
 
@@ -451,6 +476,23 @@ def create_orchestrator_graph():
         # Appeler la fonction originale
         result = original_invoke(state)
         print(f"[ORCHESTRATEUR] Résultat après invocation: {result.keys() if isinstance(result, dict) else 'N/A'}")
+        # Propagation explicite du champ meta si présent
+        if isinstance(result, dict) and "meta" in result:
+            result["meta"] = result["meta"]
+        elif isinstance(result, dict):
+            # Utilisation du routage réel pour déterminer le meta
+            routing = result.get("routing_decision", state.get("routing_decision", "generic_chatbot"))
+            if routing == "incident_analysis":
+                result["meta"] = {
+                    "use_case": "incident_analysis",
+                    "subgraph": "Analyse d'incident",
+                    "incident_id": result.get("conversation_context", {}).get("incident_id")
+                }
+            else:
+                result["meta"] = {
+                    "use_case": "generic_chatbot",
+                    "subgraph": "Chatbot générique"
+                }
         return result
     
     app.invoke = wrapped_invoke

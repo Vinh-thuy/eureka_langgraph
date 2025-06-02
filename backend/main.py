@@ -121,9 +121,12 @@ async def ask_bot(request: Request):
         print(f"[RÉPONSE] Taille de la réponse: {len(str(response_content))} caractères")
         print(f"[RÉPONSE] Contexte mis à jour: {updated_context}")
         
+        # DEBUG : affiche tout le retour de l'orchestrateur
+        print(f"[DEBUG] final_state complet: {final_state}")
         # Retourner la réponse au format standard
         return JSONResponse(content={
-            "answer": response_content,
+            "final_response": response_content,
+            "meta": final_state.get("meta"),
             "conversation_context": updated_context
         })
 
