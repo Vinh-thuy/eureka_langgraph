@@ -5,24 +5,47 @@ function App() {
   const [question, setQuestion] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [messages, setMessages] = useState([]); // {role: 'user'|'bot', content: string}
+  const [conversationContext, setConversationContext] = useState({});
   const messagesEndRef = useRef(null);
   const containerRef = useRef(null);
 
   const handleAsk = async () => {
     if (!question.trim()) return;
+    
     // Ajoute la question à l'historique
-    setMessages(prev => [...prev, { role: 'user', content: question }]);
+    const updatedMessages = [...messages, { role: 'user', content: question }];
+    setMessages(updatedMessages);
     setImageUrl('');
-    const res = await fetch('http://localhost:8000/ask', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question, history: messages })
-    });
-    const data = await res.json();
-    console.log('[DEBUG] /ask response', data);
-    setMessages(prev => [...prev, { role: 'bot', content: data.answer }]);
-    setImageUrl(data.image_url || '');
-    setQuestion(''); // Vide le champ
+    
+    try {
+      const res = await fetch('http://localhost:8000/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          question, 
+          history: updatedMessages,
+          conversation_context: conversationContext
+        })
+      });
+      
+      const data = await res.json();
+      console.log('[DEBUG] /ask response', data);
+      
+      // Mettre à jour le contexte de conversation
+      if (data.conversation_context) {
+        setConversationContext(data.conversation_context);
+      }
+      
+      setMessages(prev => [...prev, { role: 'bot', content: data.answer }]);
+      setImageUrl(data.image_url || '');
+      setQuestion(''); // Vide le champ
+    } catch (error) {
+      console.error('Erreur lors de la requête:', error);
+      setMessages(prev => [...prev, { 
+        role: 'bot', 
+        content: "Désolé, une erreur est survenue lors du traitement de votre demande." 
+      }]);
+    }
   };
 
   const scrollToBottom = () => {

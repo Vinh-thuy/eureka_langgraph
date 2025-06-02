@@ -41,9 +41,8 @@ class OrchestratorState(TypedDict):
     history: List[dict]  # Pour l'historique de chat
     routing_decision: Literal["generic_chatbot", "incident_analysis"]
     final_response: Union[str, dict]  # Pour stocker la réponse finale
-    # Les états des sous-agents pourraient être utiles pour des scénarios plus complexes
-    # recipe_agent_state: RecipeAgentState 
-    # apartment_agent_state: ApartmentAgentState
+    conversation_context: dict  # Pour maintenir le contexte de conversation
+
 
 # Schéma pour la validation de la sortie structurée du LLM
 class Route(BaseModel):
@@ -80,43 +79,259 @@ Ta réponse doit être UNIQUEMENT un des deux mots suivants : "generic_chatbot" 
 # 2. Définir les nœuds de l'orchestrateur
 def route_question(state: OrchestratorState) -> dict:
     print("---ORCHESTRATEUR: ROUTAGE DE LA QUESTION---")
+    
+    # Initialiser les champs manquants
+    if "question" not in state:
+        state["question"] = ""
+    
+    if "conversation_context" not in state:
+        state["conversation_context"] = {}
+    
+    context = state["conversation_context"]
     question = state["question"]
     
+    # Vérifier si on est déjà dans une conversation d'incident
+    in_incident_conv = context.get("in_incident_conversation", False)
+    
+    # Si on est déjà dans une conversation d'incident, on reste sur l'agent d'incident
+    if in_incident_conv:
+        print("---ORCHESTRATEUR: RESTE DANS LA CONVERSATION D'INCIDENT---")
+        print(f"[ROUTEUR] Contexte actuel: {context}")
+        state["routing_decision"] = "incident_analysis"
+        return state
+    
+    # Sinon, on route normalement
     try:
-        print(f"Question à router: {question}")
-        decision = router.invoke(
-            [
-                SystemMessage(content=router_prompt),
-                HumanMessage(content=question),
-            ]
-        )
-        print(f"Décision de routage: {decision.step}")
+        print(f"[ROUTEUR] Question à router: {question}")
+        print(f"[ROUTEUR] Contexte actuel: {context}")
+        
+        # Appeler le routeur seulement si nécessaire
+        if not question.strip():
+            print("[ROUTEUR] Question vide, utilisation du chatbot générique par défaut")
+            state["routing_decision"] = "generic_chatbot"
+            return state
+            
+        # Appeler le routeur pour prendre une décision
+        decision = router.invoke([
+            SystemMessage(content=router_prompt),
+            HumanMessage(content=question),
+        ])
+        
+        print(f"[ROUTEUR] Décision de routage: {decision.step}")
+        
         # Mise à jour de l'état avec la décision de routage
         state["routing_decision"] = decision.step
+        
+        # Si on commence une analyse d'incident, on marque le contexte
+        if decision.step == "incident_analysis":
+            print("[ROUTEUR] Détection d'une demande d'analyse d'incident")
+            context["in_incident_conversation"] = True
+            
+            # Extraire l'ID d'incident si présent dans la question
+            if "INC" in question.upper():
+                import re
+                match = re.search(r'INC\d+', question.upper())
+                if match:
+                    context["incident_id"] = match.group(0)
+                    print(f"[ROUTEUR] ID d'incident extrait: {context['incident_id']}")
+        
         return state
         
     except Exception as e:
-        print(f"Erreur lors du routage: {str(e)}")
+        print(f"[ERREUR ROUTEUR] Erreur lors du routage: {str(e)}")
         # Fallback en cas d'échec
         state["routing_decision"] = "generic_chatbot"
+        
+        # En cas d'erreur, on nettoie le contexte d'incident pour éviter les états bloqués
+        if "in_incident_conversation" in context:
+            print("[ERREUR ROUTEUR] Nettoyage du contexte d'incident suite à une erreur")
+            context.pop("in_incident_conversation", None)
+            context.pop("incident_id", None)
     
     return state
 
 def invoke_generic_chatbot_agent(state: OrchestratorState):
-    print("---ORCHESTRATEUR: INVOCATION DE L'AGENT CHATBOT GENERIQUE---")
+    print("---ORCHESTRATEUR: INVOCATION DE L'AGENT GENERIC CHATBOT---")
+    
+    # Initialiser les champs manquants
+    if "question" not in state:
+        state["question"] = ""
+    if "conversation_context" not in state:
+        state["conversation_context"] = {}
+    if "history" not in state:
+        state["history"] = []
+    
+    context = state["conversation_context"]
     question = state["question"]
+    history = state["history"]
+    
+    print(f"[GENERIC CHATBOT] Contexte d'entrée: {context}")
+    print(f"[GENERIC CHATBOT] Question: {question}")
+    
+    # Vérifier si on vient d'une conversation d'incident
+    was_in_incident_conv = context.pop("in_incident_conversation", False)
+    incident_id = context.pop("incident_id", None)
+    
+    if was_in_incident_conv:
+        print("---GENERIC CHATBOT: FIN DE LA CONVERSATION D'INCIDENT---")
+        if incident_id:
+            print(f"[GENERIC CHATBOT] Incident précédent: {incident_id}")
+    
+    # Créer une copie du contexte pour l'envoi à l'agent
+    context_copy = context.copy()
+    
+    # Préparer l'entrée pour l'agent générique
     generic_chatbot_graph = create_generic_chatbot_graph()
-    generic_chatbot_input = {"question": question}
-    final_agent_state = generic_chatbot_graph.invoke(generic_chatbot_input)
-    return {"final_response": final_agent_state.get("response", "Désolé, je n'ai pas pu générer de réponse.")}
+    
+    # Préparer les données d'entrée
+    chatbot_input = {
+        "question": question,
+        "conversation_context": context_copy,
+        "history": history,
+        "response": ""
+    }
+    
+    print(f"[GENERIC CHATBOT] Données envoyées à l'agent: {chatbot_input}")
+    
+    try:
+        # Appeler l'agent générique
+        final_agent_state = generic_chatbot_graph.invoke(chatbot_input)
+        
+        # Mettre à jour le contexte de conversation
+        if "conversation_context" in final_agent_state:
+            print(f"[GENERIC CHATBOT] Contexte retourné: {final_agent_state['conversation_context']}")
+            context.update(final_agent_state["conversation_context"])
+        else:
+            print("[GENERIC CHATBOT] Aucun contexte retourné par l'agent")
+        
+        # Préparer la réponse
+        response = final_agent_state.get(
+            "response",
+            final_agent_state.get("current_response", "Désolé, je n'ai pas pu traiter votre demande.")
+        )
+        
+        print(f"[GENERIC CHATBOT] Réponse générée: {response[:100]}...")
+        
+        # Retourner la réponse et le contexte mis à jour
+        return {
+            "final_response": response,
+            "conversation_context": context
+        }
+        
+    except Exception as e:
+        print(f"[ERREUR GENERIC CHATBOT] Erreur lors de l'appel à l'agent: {str(e)}")
+        # En cas d'erreur, on nettoie le contexte pour éviter les états bloqués
+        context.pop("in_incident_conversation", None)
+        context.pop("incident_id", None)
+        
+        return {
+            "final_response": "Désolé, une erreur est survenue lors du traitement de votre demande.",
+            "conversation_context": context
+        }
 
 def invoke_incident_analysis_agent(state: OrchestratorState):
     print("---ORCHESTRATEUR: INVOCATION DE L'AGENT INCIDENT ANALYSIS---")
+    
+    # Initialiser les champs manquants
+    if "question" not in state:
+        state["question"] = ""
+    if "conversation_context" not in state:
+        state["conversation_context"] = {}
+    if "history" not in state:
+        state["history"] = []
+    
+    context = state["conversation_context"]
     question = state["question"]
+    
+    print(f"[INCIDENT AGENT] Contexte d'entrée: {context}")
+    print(f"[INCIDENT AGENT] Question: {question}")
+    
+    # Vérifier si on a un ID d'incident dans le contexte
+    incident_id = context.get("incident_id")
+    if not incident_id and "INC" in question.upper():
+        # Essayer d'extraire l'ID d'incident de la question
+        import re
+        match = re.search(r'INC\d+', question.upper())
+        if match:
+            incident_id = match.group(0)
+            context["incident_id"] = incident_id
+            print(f"[INCIDENT AGENT] ID d'incident extrait: {incident_id}")
+    
+    # Vérifier si on est dans une conversation d'incident
+    in_incident_conv = context.get("in_incident_conversation", False)
+    
+    # Si on n'est pas dans une conversation d'incident mais qu'on a un ID, on commence une nouvelle conversation
+    if not in_incident_conv and incident_id:
+        print(f"[INCIDENT AGENT] Début d'une nouvelle conversation pour l'incident {incident_id}")
+        context["in_incident_conversation"] = True
+        context["conversation_count"] = 1
+    # Si on est déjà dans une conversation, on incrémente le compteur
+    elif in_incident_conv:
+        context["conversation_count"] = context.get("conversation_count", 0) + 1
+        print(f"[INCIDENT AGENT] Suite de la conversation (tour {context['conversation_count']})")
+    
+    # Créer une copie du contexte pour l'envoi à l'agent
+    context_copy = context.copy()
+    
+    # Préparer l'entrée pour l'agent d'analyse d'incident
     incident_analysis_graph = create_incident_analysis_graph()
-    incident_analysis_input = {"question": question}
-    final_agent_state = incident_analysis_graph.invoke(incident_analysis_input)
-    return {"final_response": final_agent_state.get("response", "Pas d'appartement trouvé.")}
+    
+    # Préparer les données d'entrée
+    incident_analysis_input = {
+        "question": question,
+        "conversation_context": context_copy,
+        "history": state["history"],
+        "current_response": "",
+        "end_conversation": False
+    }
+    
+    print(f"[INCIDENT AGENT] Données envoyées à l'agent: {incident_analysis_input}")
+    
+    try:
+        # Appeler l'agent d'analyse d'incident
+        final_agent_state = incident_analysis_graph.invoke(incident_analysis_input)
+        
+        # Mettre à jour le contexte de conversation
+        if "conversation_context" in final_agent_state:
+            print(f"[INCIDENT AGENT] Contexte retourné: {final_agent_state['conversation_context']}")
+            context.update(final_agent_state["conversation_context"])
+        else:
+            print("[INCIDENT AGENT] Aucun contexte retourné par l'agent")
+        
+        # Vérifier si la conversation est terminée
+        end_conversation = final_agent_state.get("end_conversation", False)
+        if end_conversation:
+            print("---INCIDENT AGENT: FIN DE LA CONVERSATION D'INCIDENT---")
+            context["in_incident_conversation"] = False
+            # On garde l'ID d'incident pour référence future
+        
+        # Préparer la réponse
+        response = final_agent_state.get(
+            "current_response",
+            final_agent_state.get(
+                "response",
+                "Désolé, je n'ai pas pu traiter votre demande d'incident."
+            )
+        )
+        
+        print(f"[INCIDENT AGENT] Réponse générée: {response[:100]}...")
+        
+        # Retourner la réponse et le contexte mis à jour
+        return {
+            "final_response": response,
+            "conversation_context": context
+        }
+        
+    except Exception as e:
+        print(f"[ERREUR INCIDENT AGENT] Erreur lors de l'appel à l'agent: {str(e)}")
+        # En cas d'erreur, on nettoie le contexte d'incident pour éviter les états bloqués
+        context.pop("in_incident_conversation", None)
+        context.pop("incident_id", None)
+        
+        return {
+            "final_response": "Désolé, une erreur est survenue lors du traitement de votre demande d'incident.",
+            "conversation_context": context
+        }
 
 def fallback_node(state: OrchestratorState):
     print("---ORCHESTRATEUR: NŒUD PAR DÉFAUT (FALLBACK)---")
@@ -124,26 +339,56 @@ def fallback_node(state: OrchestratorState):
 
 # 3. Définir les arêtes conditionnelles
 def decide_next_node(state: OrchestratorState):
-    decision = state['routing_decision']
-    print(f"---ORCHESTRATEUR: DÉCISION DU PROCHAIN NŒUD basé sur '{decision}'---")
-    if decision == "generic_chatbot":
-        return "generic_chatbot_agent"
-    elif decision == "incident_analysis":
-        return "incident_analysis_agent"
-    else:
-        return "fallback"
+    print("---ORCHESTRATEUR: DÉCISION DU PROCHAIN NŒUD---")
+    
+    # Initialiser les champs manquants
+    if "routing_decision" not in state:
+        state["routing_decision"] = "generic_chatbot"
+    if "conversation_context" not in state:
+        state["conversation_context"] = {}
+    
+    context = state["conversation_context"]
+    print(f"[DECIDE NEXT NODE] Contexte actuel: {context}")
+    print(f"[DECIDE NEXT NODE] Décision de routage: {state['routing_decision']}")
+    
+    # Si on est dans une conversation d'incident, on reste sur l'agent d'incident
+    if context.get("in_incident_conversation", False):
+        print("[DECIDE NEXT NODE] Reste dans la conversation d'incident")
+        return "incident_analysis_agent"  # Retourne le nom du nœud tel que défini dans create_orchestrator_graph
+    
+    # Si on a une décision de routage, on la suit
+    if state["routing_decision"] == "incident_analysis":
+        print("[DECIDE NEXT NODE] Routage vers l'analyse d'incident")
+        
+        # Extraire l'ID d'incident de la question si possible
+        question = state.get("question", "")
+        if "INC" in question.upper():
+            import re
+            match = re.search(r'INC\d+', question.upper())
+            if match:
+                context["incident_id"] = match.group(0)
+                print(f"[DECIDE NEXT NODE] ID d'incident extrait: {context['incident_id']}")
+        
+        return "incident_analysis_agent"  # Retourne le nom du nœud tel que défini dans create_orchestrator_graph
+    
+    # Par défaut, on utilise le chatbot générique
+    print("[DECIDE NEXT NODE] Utilisation du chatbot générique par défaut")
+    return "generic_chatbot_agent"  # Retourne le nom du nœud tel que défini dans create_orchestrator_graph
 
 # 4. Construire le graphe de l'orchestrateur
 def create_orchestrator_graph():
     workflow = StateGraph(OrchestratorState)
 
+    # Ajouter les nœuds
     workflow.add_node("router", route_question)
     workflow.add_node("generic_chatbot_agent", invoke_generic_chatbot_agent)
     workflow.add_node("incident_analysis_agent", invoke_incident_analysis_agent)
     workflow.add_node("fallback", fallback_node)
 
+    # Définir le point d'entrée
     workflow.set_entry_point("router")
 
+    # Ajouter les arêtes conditionnelles
     workflow.add_conditional_edges(
         "router",
         decide_next_node,
@@ -154,10 +399,39 @@ def create_orchestrator_graph():
         },
     )
 
+    # Ajouter les arêtes de sortie
     workflow.add_edge("generic_chatbot_agent", END)
     workflow.add_edge("incident_analysis_agent", END)
     workflow.add_edge("fallback", END)
     
+    # Compiler le workflow
     app = workflow.compile()
+    
+    # Fonction pour initialiser l'état si nécessaire
+    def _init_state(state):
+        if not state.get("conversation_context"):
+            state["conversation_context"] = {}
+        if not state.get("history"):
+            state["history"] = []
+        if not state.get("routing_decision"):
+            state["routing_decision"] = "generic_chatbot"
+        if not state.get("final_response"):
+            state["final_response"] = ""
+        return state
+    
+    # Envelopper la fonction invoke pour gérer l'initialisation
+    original_invoke = app.invoke
+    
+    def wrapped_invoke(input_state):
+        # Initialiser l'état
+        state = _init_state(input_state.copy())
+        print(f"[ORCHESTRATEUR] État initialisé: {state.keys()}")
+        # Appeler la fonction originale
+        result = original_invoke(state)
+        print(f"[ORCHESTRATEUR] Résultat après invocation: {result.keys() if isinstance(result, dict) else 'N/A'}")
+        return result
+    
+    app.invoke = wrapped_invoke
+    
     return app
 

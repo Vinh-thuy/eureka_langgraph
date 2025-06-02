@@ -46,32 +46,106 @@ def read_root():
 
 @app.post("/ask")
 async def ask_bot(request: Request):
+    """
+    Endpoint pour poser une question au chatbot.
+    Gère le contexte de conversation entre les requêtes.
+    """
+    print("\n=== NOUVELLE REQUÊTE /ask ===")
+    
+    # Vérifier que l'orchestrateur est initialisé
     if orchestrator_graph is None:
-        return JSONResponse(status_code=503, content={"error": "Service temporairement indisponible: l'orchestrateur n'a pas pu être initialisé."})
+        error_msg = "Service temporairement indisponible: l'orchestrateur n'a pas pu être initialisé."
+        print(f"[ERREUR] {error_msg}")
+        return JSONResponse(
+            status_code=503, 
+            content={"error": error_msg}
+        )
 
+    # Parser la requête JSON
     try:
         data = await request.json()
+        print(f"[REQUEST] Données reçues: {data.keys()}")
     except Exception as e:
-        return JSONResponse(status_code=400, content={"error": f"Requête JSON invalide: {str(e)}"})
+        error_msg = f"Requête JSON invalide: {str(e)}"
+        print(f"[ERREUR] {error_msg}")
+        return JSONResponse(
+            status_code=400, 
+            content={"error": error_msg}
+        )
 
-    question = data.get("question", "")
+    # Extraire les données de la requête avec des valeurs par défaut
+    question = data.get("question", "").strip()
     history = data.get("history", [])
+    conversation_context = data.get("conversation_context", {})
+    
+    print(f"[TRAITEMENT] Question: {question[:100]}...")
+    print(f"[TRAITEMENT] Taille de l'historique: {len(history)}")
+    print(f"[TRAITEMENT] Contexte reçu: {conversation_context}")
 
+    # Valider la question
     if not question:
-        return JSONResponse(status_code=400, content={"error": "La question ne peut pas être vide."})
+        error_msg = "La question ne peut pas être vide."
+        print(f"[ERREUR] {error_msg}")
+        return JSONResponse(
+            status_code=400, 
+            content={"error": error_msg}
+        )
 
     try:
-        orchestrator_input = {"question": question, "history": history}
+        # Préparer l'entrée pour l'orchestrateur
+        orchestrator_input = {
+            "question": question,
+            "history": history,
+            "conversation_context": conversation_context,
+            "final_response": "",
+            "routing_decision": ""
+        }
         
+        print("[TRAITEMENT] Appel de l'orchestrateur...")
+        
+        # Exécuter le graphe d'orchestration de manière asynchrone
         loop = asyncio.get_event_loop()
-        final_state = await loop.run_in_executor(None, orchestrator_graph.invoke, orchestrator_input)
+        final_state = await loop.run_in_executor(
+            None, 
+            lambda: orchestrator_graph.invoke(orchestrator_input)
+        )
         
-        response_content = final_state.get("final_response", "Désolé, une réponse attendue n'a pas été trouvée dans l'état final.")
+        # Extraire la réponse et le contexte mis à jour
+        response_content = final_state.get(
+            "final_response", 
+            "Désolé, je n'ai pas pu générer de réponse."
+        )
         
-        return JSONResponse(content={"answer": response_content})
+        updated_context = final_state.get("conversation_context", {})
+        
+        print(f"[RÉPONSE] Taille de la réponse: {len(str(response_content))} caractères")
+        print(f"[RÉPONSE] Contexte mis à jour: {updated_context}")
+        
+        # Retourner la réponse au format standard
+        return JSONResponse(content={
+            "answer": response_content,
+            "conversation_context": updated_context
+        })
 
     except Exception as e:
-        # Log l'erreur côté serveur pour le débogage
-        print(f"[ERREUR /ask] Exception lors de l'invocation de l'orchestrateur ou du traitement: {type(e).__name__}: {e}")
-        # Réponse générique à l'utilisateur pour des raisons de sécurité
-        return JSONResponse(status_code=500, content={"error": "Une erreur interne est survenue lors du traitement de votre demande."})
+        # Log l'erreur complète pour le débogage
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"[ERREUR CRITIQUE] {str(e)}\n{error_details}")
+        
+        # En cas d'erreur, on nettoie le contexte pour éviter les états incohérents
+        if isinstance(conversation_context, dict):
+            conversation_context.pop("in_incident_conversation", None)
+            conversation_context.pop("incident_id", None)
+        
+        # Réponse d'erreur détaillée en mode debug, générique en production
+        error_response = {
+            "error": "Une erreur est survenue lors du traitement de votre demande.",
+            "details": str(e) if app.debug else None,
+            "conversation_context": conversation_context
+        }
+        
+        return JSONResponse(
+            status_code=500, 
+            content=error_response
+        )
