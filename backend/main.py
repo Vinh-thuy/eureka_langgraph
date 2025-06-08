@@ -61,14 +61,17 @@ async def session_middleware(request: Request, call_next):
     if not session_id:
         session_id = str(uuid4())
     
+    # ===== DÉBUT MODIF: INITIALISATION SESSION =====
     # Initialiser la session si elle n'existe pas
     if session_id not in sessions:
         sessions[session_id] = {
             "created_at": datetime.now(),
             "last_activity": datetime.now(),
             "context": {},  # Pour stocker le contexte de conversation
-            "history": []    # Pour stocker l'historique des messages
+            "history": [],  # Pour stocker l'historique des messages
+            "routing_decision": ""  # Pour conserver la décision de routage
         }
+    # ===== FIN MODIF =====
     
     # Mettre à jour le timestamp d'activité
     sessions[session_id]["last_activity"] = datetime.now()
@@ -172,14 +175,17 @@ async def ask_bot(request: Request):
         )
 
     try:
-        # Préparer l'entrée pour l'orchestrateur
+        # ===== DÉBUT MODIF: PRÉPARATION ENTRÉE ORCHESTRATEUR =====
+        # Modifier cette section pour inclure tous les champs nécessaires
         orchestrator_input = {
             "question": question,
             "history": history,
             "conversation_context": conversation_context,
             "final_response": "",
-            "routing_decision": ""
+            "routing_decision": session.get("routing_decision", ""),  # Conserver la décision de routage
+            "meta": {}  # Champ nécessaire pour éviter les erreurs
         }
+        # ===== FIN MODIF =====
         
         print("[TRAITEMENT] Appel de l'orchestrateur...")
         
@@ -190,13 +196,16 @@ async def ask_bot(request: Request):
             lambda: orchestrator_graph.invoke(orchestrator_input)
         )
         
-        # ===== MISE À JOUR DE LA SESSION =====
-        # Sauvegarde de l'historique et du contexte dans la session
-        # Ces données seront disponibles pour les prochaines requêtes
-        if "history" in final_state:
-            session["history"] = final_state["history"]
-        if "conversation_context" in final_state:
-            session["context"] = final_state["conversation_context"]
+        # ===== DÉBUT MODIF: MISE À JOUR SESSION =====
+        # Remplacer la section existante par ce bloc pour une gestion complète de la session
+        session.update({
+            "history": final_state.get("history", []),
+            "context": final_state.get("conversation_context", {}),
+            "routing_decision": final_state.get("routing_decision", ""),
+            "last_question": question,  # Pour le débogage
+            "last_response": final_state.get("final_response", "")  # Pour le débogage
+        })
+        # ===== FIN MODIF =====
         
         # Préparer la réponse
         response_content = final_state.get(
