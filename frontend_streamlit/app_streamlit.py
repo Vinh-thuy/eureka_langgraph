@@ -103,25 +103,21 @@ st.markdown('</div></div>', unsafe_allow_html=True)
 if submit and question.strip():
     st.session_state['messages'].append({'role': 'user', 'content': question})
     try:
-        # Envoyer uniquement la question, le reste est géré par la session serveur
         response = requests.post(
             'http://localhost:8000/ask',
-            json={'question': question},
-            cookies=st.session_state.get('cookies', {}),  # Envoyer les cookies existants
+            json={
+                'question': question,
+                'history': st.session_state['messages'],
+                'conversation_context': st.session_state['conversation_context']
+            },
             timeout=15
         )
-        
-        # Sauvegarder les cookies de la réponse
-        if response.cookies:
-            st.session_state['cookies'] = response.cookies.get_dict()
-            
         data = response.json()
-        
-        # Mettre à jour l'historique avec la réponse
+        st.session_state['conversation_context'] = data.get('conversation_context', {})
         st.session_state['messages'].append({
             'role': 'bot',
             'content': data.get('final_response', "(Aucune réponse reçue.)"),
-            'image_url': data.get('image_url'),
+            'image_url': data.get('image_url', None),
             'meta': data.get('meta', {})
         })
     except Exception as e:
