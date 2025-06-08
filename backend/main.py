@@ -56,48 +56,50 @@ app.add_middleware(
 # Il est exécuté avant chaque requête HTTP
 @app.middleware("http")
 async def session_middleware(request: Request, call_next):
-    # Récupérer ou créer un ID de session
+    # ===== DÉBUT MODIF: GESTION AMÉLIORÉE DES SESSIONS =====
+    # 1. Récupérer ou créer un ID de session
     session_id = request.cookies.get("session_id")
-    if not session_id:
-        session_id = str(uuid4())
+    session_exists = session_id in sessions
     
-    # ===== DÉBUT MODIF: INITIALISATION SESSION =====
-    # Initialiser la session si elle n'existe pas
-    if session_id not in sessions:
+    if not session_id or not session_exists:
+        session_id = str(uuid4())
         sessions[session_id] = {
             "created_at": datetime.now(),
             "last_activity": datetime.now(),
-            "context": {},  # Pour stocker le contexte de conversation
-            "history": [],  # Pour stocker l'historique des messages
-            "routing_decision": ""  # Pour conserver la décision de routage
+            "context": {},
+            "history": [],
+            "routing_decision": ""
         }
-    # ===== FIN MODIF =====
     
-    # Mettre à jour le timestamp d'activité
-    sessions[session_id]["last_activity"] = datetime.now()
+    # 2. Mettre à jour le timestamp d'activité
+    session_data = sessions[session_id]
+    session_data["last_activity"] = datetime.now()
     
-    # Nettoyer périodiquement les sessions inactives
-    if len(sessions) % 10 == 0:  # Toutes les 10 requêtes
+    # 3. Nettoyage périodique
+    if len(sessions) % 10 == 0:
         cleanup_inactive_sessions()
     
-    # Ajouter la session à l'état de la requête
-    # Ces données seront accessibles dans les routes via request.state
-    request.state.session = sessions[session_id]
+    # 4. Préparer la réponse
+    request.state.session = session_data
     request.state.session_id = session_id
     
-    # Appeler le prochain middleware/route
     response = await call_next(request)
     
-    # Définir le cookie de session dans la réponse
-    # Le cookie est sécurisé avec les attributs httpOnly et SameSite
+    # 5. Mettre à jour le cookie de session
     response.set_cookie(
         key="session_id",
         value=session_id,
-        httponly=True,  # Empêche l'accès via JavaScript
-        max_age=3600,   # Durée de vie du cookie : 1 heure
-        samesite="lax"  # Protection contre les attaques CSRF
+        httponly=True,
+        max_age=3600 * 24 * 7,  # 1 semaine
+        samesite="lax",
+        secure=False,  # Mettre à True en production avec HTTPS
+        path="/"
     )
+    
+    # 6. Sauvegarder les modifications de la session
+    sessions[session_id] = session_data
     return response
+    # ===== FIN MODIF =====
 # ===== FIN MIDDLEWARE DE SESSION FASTAPI =====
 
 
@@ -157,8 +159,8 @@ async def ask_bot(request: Request):
     
     # Récupération des données de session
     # Ces données persistent entre les requêtes pour le même utilisateur
-    history = session.get("history", [])
-    conversation_context = session.get("context", {})
+    history = session.get("history", []).copy()  # Créer une copie pour éviter les références
+    conversation_context = session.get("context", {}).copy()  # Copie du contexte
     
     print(f"[SESSION] ID: {session_id}")
     print(f"[TRAITEMENT] Question: {question[:100]}...")
