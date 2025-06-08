@@ -1,5 +1,8 @@
 from typing import TypedDict, List, Dict, Any
-from langgraph.graph import StateGraph, END, START
+from langgraph.graph import StateGraph, END
+
+# Constante pour le nœud de départ
+START = None
 
 # 1. Définir l'état de l'agent de chatbot générique
 class GenericChatbotAgentState(TypedDict):
@@ -44,7 +47,8 @@ def create_generic_chatbot_graph():
     workflow.add_node("GenericChatbot", GenericChatbot)
     
     # Définir les transitions
-    workflow.add_edge(START, "GenericChatbot")
+    # Le premier nœud est défini sans source, ce qui en fait le point d'entrée
+    workflow.set_entry_point("GenericChatbot")
     workflow.add_edge("GenericChatbot", END)
     
     # Compiler le workflow

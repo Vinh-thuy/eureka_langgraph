@@ -1,7 +1,7 @@
 from typing import TypedDict, List
 import json
 from pathlib import Path
-from langgraph.graph import StateGraph, END, START
+from langgraph.graph import StateGraph, END
 from langchain_core.messages import SystemMessage, HumanMessage
 
 # 1. Définir l'état de l'agent d'analyse d'incident
@@ -202,7 +202,7 @@ def create_incident_analysis_graph():
     workflow.add_node("final_llm_node", final_llm_node)
     
     # Définir le flux de travail
-    workflow.add_edge(START, "map_incident_to_apps")
+    workflow.set_entry_point("map_incident_to_apps")
     workflow.add_edge("map_incident_to_apps", "fetch_app_info")
     workflow.add_edge("fetch_app_info", "find_related_incidents")
     workflow.add_edge("find_related_incidents", "final_llm_node")

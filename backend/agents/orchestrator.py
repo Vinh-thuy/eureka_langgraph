@@ -42,6 +42,7 @@ class OrchestratorState(TypedDict):
     routing_decision: Literal["generic_chatbot", "incident_analysis"]
     final_response: Union[str, dict]  # Pour stocker la réponse finale
     conversation_context: dict  # Pour maintenir le contexte de conversation
+    meta: dict  # Pour stocker les métadonnées de la réponse
 
 
 # Schéma pour la validation de la sortie structurée du LLM
@@ -195,7 +196,9 @@ def invoke_generic_chatbot_agent(state: OrchestratorState):
             "meta": {
                 "use_case": "generic_chatbot",
                 "subgraph": "Generic Chatbot"
-            }
+            },
+            "question": question,
+            "routing_decision": "generic_chatbot"
         }
 
     # --- Ajout de la question courante à l'historique ---
@@ -211,15 +214,17 @@ def invoke_generic_chatbot_agent(state: OrchestratorState):
         print(f"[GENERIC CHATBOT] Réponse générée: {response[:100]}...")
         # Ajout de la réponse à l'historique
         history.append({"role": "assistant", "content": response})
-        # Retourner la réponse et le contexte mis à jour
+        # Retourner uniquement les champs définis dans OrchestratorState
         return {
             "final_response": response,
+            "conversation_context": context,
+            "history": history,
             "meta": {
                 "subgraph": "Chatbot générique",
                 "use_case": "generic_chatbot"
             },
-            "conversation_context": context,
-            "history": history
+            "question": question,  # Conserver la question pour la cohérence
+            "routing_decision": "generic_chatbot"
         }
     except Exception as e:
         print(f"[ERREUR GENERIC CHATBOT] Erreur lors de l'appel à l'agent: {str(e)}")
@@ -229,7 +234,14 @@ def invoke_generic_chatbot_agent(state: OrchestratorState):
         return {
             "final_response": "Désolé, une erreur est survenue lors du traitement de votre demande.",
             "conversation_context": context,
-            "history": history
+            "history": history,
+            "meta": {
+                "use_case": "generic_chatbot",
+                "subgraph": "Generic Chatbot",
+                "error": str(e)
+            },
+            "question": question,
+            "routing_decision": "generic_chatbot"
         }
 
 # ---
@@ -466,36 +478,39 @@ def create_orchestrator_graph():
             state["final_response"] = ""
         return state
     
-    # Envelopper la fonction invoke pour gérer l'initialisation
-    original_invoke = app.invoke
+    # Créer une classe wrapper pour gérer l'invocation
+    class OrchestratorWrapper:
+        def __init__(self, app):
+            self.app = app
+        
+        def invoke(self, input_state):
+            # Initialiser l'état
+            state = _init_state(input_state.copy())
+            print(f"[ORCHESTRATEUR] État initialisé: {state.keys()}")
+            
+            # Appeler la méthode invoke de l'application
+            result = self.app.invoke(state)
+            print(f"[ORCHESTRATEUR] Résultat après invocation: {result.keys() if isinstance(result, dict) else 'N/A'}")
+            
+            # Propagation explicite du champ meta si présent
+            if isinstance(result, dict) and "meta" in result:
+                result["meta"] = result["meta"]
+            elif isinstance(result, dict):
+                # Utilisation du routage réel pour déterminer le meta
+                routing = result.get("routing_decision", state.get("routing_decision", "generic_chatbot"))
+                if routing == "incident_analysis":
+                    result["meta"] = {
+                        "use_case": "incident_analysis",
+                        "subgraph": "Analyse d'incident",
+                        "incident_id": result.get("conversation_context", {}).get("incident_id")
+                    }
+                else:
+                    result["meta"] = {
+                        "use_case": "generic_chatbot",
+                        "subgraph": "Chatbot générique"
+                    }
+            return result
     
-    def wrapped_invoke(input_state):
-        # Initialiser l'état
-        state = _init_state(input_state.copy())
-        print(f"[ORCHESTRATEUR] État initialisé: {state.keys()}")
-        # Appeler la fonction originale
-        result = original_invoke(state)
-        print(f"[ORCHESTRATEUR] Résultat après invocation: {result.keys() if isinstance(result, dict) else 'N/A'}")
-        # Propagation explicite du champ meta si présent
-        if isinstance(result, dict) and "meta" in result:
-            result["meta"] = result["meta"]
-        elif isinstance(result, dict):
-            # Utilisation du routage réel pour déterminer le meta
-            routing = result.get("routing_decision", state.get("routing_decision", "generic_chatbot"))
-            if routing == "incident_analysis":
-                result["meta"] = {
-                    "use_case": "incident_analysis",
-                    "subgraph": "Analyse d'incident",
-                    "incident_id": result.get("conversation_context", {}).get("incident_id")
-                }
-            else:
-                result["meta"] = {
-                    "use_case": "generic_chatbot",
-                    "subgraph": "Chatbot générique"
-                }
-        return result
-    
-    app.invoke = wrapped_invoke
-    
-    return app
+    # Retourner le wrapper au lieu de l'application directement
+    return OrchestratorWrapper(app)
 
