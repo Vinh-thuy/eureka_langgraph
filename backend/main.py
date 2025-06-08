@@ -57,49 +57,57 @@ app.add_middleware(
 @app.middleware("http")
 async def session_middleware(request: Request, call_next):
     # ===== DÉBUT MODIF: GESTION AMÉLIORÉE DES SESSIONS =====
-    # 1. Récupérer ou créer un ID de session
-    session_id = request.cookies.get("session_id")
-    session_exists = session_id in sessions
-    
-    if not session_id or not session_exists:
-        session_id = str(uuid4())
-        sessions[session_id] = {
-            "created_at": datetime.now(),
-            "last_activity": datetime.now(),
-            "context": {},
-            "history": [],
-            "routing_decision": ""
-        }
-    
-    # 2. Mettre à jour le timestamp d'activité
-    session_data = sessions[session_id]
-    session_data["last_activity"] = datetime.now()
-    
-    # 3. Nettoyage périodique
-    if len(sessions) % 10 == 0:
-        cleanup_inactive_sessions()
-    
-    # 4. Préparer la réponse
-    request.state.session = session_data
-    request.state.session_id = session_id
-    
-    response = await call_next(request)
-    
-    # 5. Mettre à jour le cookie de session
-    response.set_cookie(
-        key="session_id",
-        value=session_id,
-        httponly=True,
-        max_age=3600 * 24 * 7,  # 1 semaine
-        samesite="lax",
-        secure=False,  # Mettre à True en production avec HTTPS
-        path="/"
-    )
-    
-    # 6. Sauvegarder les modifications de la session
-    sessions[session_id] = session_data
-    return response
+    try:
+        # 1. Récupérer ou créer un ID de session
+        session_id = request.cookies.get("session_id")
+        
+        if not session_id or session_id not in sessions:
+            session_id = str(uuid4())
+            sessions[session_id] = {
+                "created_at": datetime.now(),
+                "last_activity": datetime.now(),
+                "context": {},
+                "history": [],
+                "routing_decision": ""
+            }
+        
+        # 2. Récupérer les données de session
+        session_data = sessions[session_id]
+        
+        # 3. Mettre à jour le timestamp d'activité
+        session_data["last_activity"] = datetime.now()
+        
+        # 4. Nettoyage périodique (toutes les 10 requêtes)
+        if len(sessions) % 10 == 0:
+            cleanup_inactive_sessions()
+        
+        # 5. Ajouter la session à la requête
+        request.state.session = session_data
+        request.state.session_id = session_id
+        
+        # 6. Traiter la requête
+        response = await call_next(request)
+        
+        # 7. Mettre à jour le cookie de session dans la réponse
+        response.set_cookie(
+            key="session_id",
+            value=session_id,
+            httponly=True,
+            max_age=3600 * 24 * 7,  # 1 semaine
+            samesite="lax",
+            secure=False,  # Mettre à True en production avec HTTPS
+            path="/"
+        )
+        
+        # 8. Sauvegarder les modifications de la session
+        sessions[session_id] = session_data
+        return response
+        
+    except Exception as e:
+        print(f"[ERREUR SESSION] {str(e)}")
+        raise
     # ===== FIN MODIF =====
+# ===== FIN MIDDLEWARE DE SESSION FASTAPI =====
 # ===== FIN MIDDLEWARE DE SESSION FASTAPI =====
 
 
@@ -159,8 +167,8 @@ async def ask_bot(request: Request):
     
     # Récupération des données de session
     # Ces données persistent entre les requêtes pour le même utilisateur
-    history = session.get("history", []).copy()  # Créer une copie pour éviter les références
-    conversation_context = session.get("context", {}).copy()  # Copie du contexte
+    history = session.get("history", [])
+    conversation_context = session.get("context", {})
     
     print(f"[SESSION] ID: {session_id}")
     print(f"[TRAITEMENT] Question: {question[:100]}...")
@@ -199,14 +207,17 @@ async def ask_bot(request: Request):
         )
         
         # ===== DÉBUT MODIF: MISE À JOUR SESSION =====
-        # Remplacer la section existante par ce bloc pour une gestion complète de la session
-        session.update({
-            "history": final_state.get("history", []),
-            "context": final_state.get("conversation_context", {}),
-            "routing_decision": final_state.get("routing_decision", ""),
-            "last_question": question,  # Pour le débogage
-            "last_response": final_state.get("final_response", "")  # Pour le débogage
-        })
+        # Mise à jour de la session avec les nouvelles données
+        if "history" in final_state:
+            session["history"] = final_state["history"]
+        if "conversation_context" in final_state:
+            session["context"] = final_state["conversation_context"]
+        if "routing_decision" in final_state:
+            session["routing_decision"] = final_state["routing_decision"]
+            
+        # Pour le débogage
+        session["last_question"] = question
+        session["last_response"] = final_state.get("final_response", "")
         # ===== FIN MODIF =====
         
         # Préparer la réponse
