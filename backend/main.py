@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import pathlib
@@ -8,7 +8,8 @@ import asyncio
 from agents import create_orchestrator_graph
 from datetime import datetime, timedelta
 from uuid import uuid4
-from typing import Dict, Any
+from typing import Dict, Any, Optional
+from pydantic import BaseModel
 
 load_dotenv()
 
@@ -121,17 +122,39 @@ except ImportError as e:
 except Exception as e:
     print(f"[ERREUR FATALE] Erreur inattendue lors de la création de l'orchestrateur: {e}")
 
+
+class ChatRequest(BaseModel):
+    """Modèle pour la requête de chat"""
+    question: str
+    context: Optional[Dict[str, Any]] = None
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "question": "Bonjour, comment puis-je vous aider ?",
+                "context": {}
+            }
+        }
+
+
 @app.get("/")
 def read_root():
     if orchestrator_graph is None:
         return {"message": "Backend IA démarré, mais ERREUR lors de l'initialisation de l'orchestrateur LangGraph!"}
     return {"message": "Backend IA prêt avec LangGraph Orchestrator!"}
 
+
 @app.post("/ask")
-async def ask_bot(request: Request):
+async def ask_bot(chat_request: ChatRequest, request: Request):
     """
     Endpoint pour poser une question au chatbot.
-    Gère automatiquement le contexte de conversation via les sessions.
+    
+    Args:
+        chat_request (ChatRequest): La requête contenant la question et le contexte optionnel
+        request: La requête HTTP (gérée automatiquement par FastAPI)
+        
+    Returns:
+        dict: La réponse du chatbot avec la clé 'final_response' et des métadonnées
     """
     # ===== GESTION DE SESSION DANS /ask =====
     # Récupération de la session utilisateur depuis le middleware
@@ -150,20 +173,10 @@ async def ask_bot(request: Request):
             content={"error": error_msg}
         )
 
-    # Parser la requête JSON
-    try:
-        data = await request.json()
-        print(f"[REQUEST] Données reçues: {data.keys()}")
-    except Exception as e:
-        error_msg = f"Requête JSON invalide: {str(e)}"
-        print(f"[ERREUR] {error_msg}")
-        return JSONResponse(
-            status_code=400, 
-            content={"error": error_msg}
-        )
-
-    # Extraire la question de la requête
-    question = data.get("question", "").strip()
+    # Utilisation directe du modèle Pydantic
+    question = chat_request.question.strip()
+    if chat_request.context:
+        request.state.session["context"].update(chat_request.context)
     
     # Récupération des données de session
     # Ces données persistent entre les requêtes pour le même utilisateur
@@ -175,13 +188,11 @@ async def ask_bot(request: Request):
     print(f"[TRAITEMENT] Taille de l'historique: {len(history)}")
     print(f"[TRAITEMENT] Contexte de session: {conversation_context}")
 
-    # Valider la question
+    # Validation de la question (gérée par Pydantic, mais on garde une vérification)
     if not question:
-        error_msg = "La question ne peut pas être vide."
-        print(f"[ERREUR] {error_msg}")
-        return JSONResponse(
-            status_code=400, 
-            content={"error": error_msg}
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "La question ne peut pas être vide"}
         )
 
     try:
