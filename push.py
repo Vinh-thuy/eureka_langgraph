@@ -1,6 +1,4 @@
-MATCH (a:Application {auid: "AP853434"})-[r]-(n)
-RETURN 
-  a.auid AS application_auid,
-  type(r) AS relation_type,
-  labels(n)[0] AS neighbor_type,
-  n.id AS neighbor_id
+MATCH (a:Application {auid: "AP853434"})-[:DEPLOYED_ON]->(c:Cluster)
+OPTIONAL MATCH (c)-[:HAS_INCIDENT]->(i:Incident)
+OPTIONAL MATCH (c)-[:HAS_CHANGE]->(ch:Change)
+RETURN DISTINCT c, i, ch
