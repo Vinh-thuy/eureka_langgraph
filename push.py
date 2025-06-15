@@ -8,30 +8,41 @@ CREATE QUERY GetInfraFromApp() FOR GRAPH UKG_V2 {
           WHERE a.auid == "AP85343";
   PRINT Start;
 
-  // Étape 2 : applications techniques en "Production"
-  AppTech = SELECT at FROM Start:a - (USES:e) -> Application:at
-            WHERE at.environment == "Production";
-  PRINT AppTech;
-
-  // Étape 3 : collecte directe des servers et changes
-  FromAppToServer = SELECT s FROM AppTech:at - (USES:e) -> Server:s
+  // Étape 2 : serveurs liés via application technique en Production
+  FromAppToServer = SELECT s 
+                    FROM Start:a - (USES:e1) -> Application:at 
+                                  - (USES:e2) -> Server:s
+                    WHERE at.environment == "Production"
                     ACCUM @@infraSet += s;
   PRINT FromAppToServer;
 
-  ServerChanges = SELECT ch FROM AppTech:at - (USES:e) -> Server:s - (IMPACTS:e2) -> Change:ch
+  // Étape 3 : changes depuis les serveurs
+  ServerChanges = SELECT ch 
+                  FROM Start:a - (USES:e1) -> Application:at 
+                                - (USES:e2) -> Server:s 
+                                - (IMPACTS:e3) -> Change:ch
+                  WHERE at.environment == "Production"
                   ACCUM @@changeSet += ch;
   PRINT ServerChanges;
 
-  // Étape 4 : collecte directe des clusters et changes
-  FromAppToCluster = SELECT c FROM AppTech:at - (USES:e) -> Cluster:c
+  // Étape 4 : clusters liés via application technique en Production
+  FromAppToCluster = SELECT c 
+                     FROM Start:a - (USES:e1) -> Application:at 
+                                   - (USES:e2) -> Cluster:c
+                     WHERE at.environment == "Production"
                      ACCUM @@infraSet += c;
   PRINT FromAppToCluster;
 
-  ClusterChanges = SELECT ch FROM AppTech:at - (USES:e) -> Cluster:c - (IMPACTS:e2) -> Change:ch
+  // Étape 5 : changes depuis les clusters
+  ClusterChanges = SELECT ch 
+                   FROM Start:a - (USES:e1) -> Application:at 
+                                 - (USES:e2) -> Cluster:c 
+                                 - (IMPACTS:e3) -> Change:ch
+                   WHERE at.environment == "Production"
                    ACCUM @@changeSet += ch;
   PRINT ClusterChanges;
 
-  // Résultats
+  // Résultats finaux
   PRINT @@infraSet;
   PRINT @@changeSet;
 }
