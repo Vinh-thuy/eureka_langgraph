@@ -3,40 +3,40 @@ CREATE QUERY GetInfraFromApp() FOR GRAPH UKG_V2 {
   SetAccum<VERTEX> @@infraSet;
   SetAccum<VERTEX> @@changeSet;
 
-  // Étape 1 : récupérer l'application fonctionnelle
-  VertexSet<Application> startApp = 
-    SELECT a FROM Application:a 
-    WHERE a.auid == "AP85343";
+  // Étape 1 : application fonctionnelle
+  startApp = { Application.* };
+  startApp = SELECT a FROM startApp:a
+             WHERE a.auid == "AP85343";
   PRINT startApp;
 
-  // Étape 2 : récupérer les applications techniques en "Production"
-  VertexSet<Application> appTech = 
-    SELECT at FROM startApp - (USES) -> Application:at
-    WHERE at.environment == "Production";
-  PRINT appTech;
+  // Étape 2a : serveurs via app technique en Production
+  serverPaths = SELECT s
+                FROM startApp:s -(USES:e1)-> Application:at -(USES:e2)-> Server:s
+                WHERE at.environment == "Production"
+                ACCUM @@infraSet += s;
+  PRINT serverPaths;
 
-  // Étape 3a : serveurs
-  VertexSet<Server> servers = 
-    SELECT s FROM appTech - (USES) -> Server:s
-    ACCUM @@infraSet += s;
-  PRINT servers;
+  // Étape 2b : clusters via app technique en Production
+  clusterPaths = SELECT c
+                 FROM startApp:s -(USES:e1)-> Application:at -(USES:e2)-> Cluster:c
+                 WHERE at.environment == "Production"
+                 ACCUM @@infraSet += c;
+  PRINT clusterPaths;
 
-  // Étape 3b : clusters
-  VertexSet<Cluster> clusters = 
-    SELECT c FROM appTech - (USES) -> Cluster:c
-    ACCUM @@infraSet += c;
-  PRINT clusters;
-
-  // Étape 4a : changes via serveurs
-  VertexSet<Change> serverChanges = 
-    SELECT ch FROM servers - (IMPACTS) -> Change:ch
-    ACCUM @@changeSet += ch;
+  // Étape 3a : changes depuis serveurs
+  serverChanges = SELECT ch
+                  FROM startApp:s -(USES:e1)-> Application:at -(USES:e2)-> Server:s
+                                 -(IMPACTS:e3)-> Change:ch
+                  WHERE at.environment == "Production"
+                  ACCUM @@changeSet += ch;
   PRINT serverChanges;
 
-  // Étape 4b : changes via clusters
-  VertexSet<Change> clusterChanges = 
-    SELECT ch FROM clusters - (IMPACTS) -> Change:ch
-    ACCUM @@changeSet += ch;
+  // Étape 3b : changes depuis clusters
+  clusterChanges = SELECT ch
+                   FROM startApp:s -(USES:e1)-> Application:at -(USES:e2)-> Cluster:c
+                                  -(IMPACTS:e3)-> Change:ch
+                   WHERE at.environment == "Production"
+                   ACCUM @@changeSet += ch;
   PRINT clusterChanges;
 
   // Résultats finaux
