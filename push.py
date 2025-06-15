@@ -4,27 +4,21 @@ CREATE QUERY GetInfraFromApp(STRING appId) FOR GRAPH UKG_V2 {
 
   // 1) Serveurs + Changes
   ServerPaths = SELECT s
-    FROM Application:a -(USES:e1)-> Application:at,
-         Application:at -(USES:e2)-> Server:s,
-         Server:s -(IMPACTS:e3)-> Change:ch
+    FROM Application:a - (:USES) - Application:at - (:USES) - Server:s - (:IMPACTS) - Change:ch
     WHERE a.auid == appId
       AND at.environment == "Production"
-    ACCUM {
+    ACCUM 
       @@infraSet += s,
-      @@changeSet += ch
-    };
+      @@changeSet += ch;
 
   // 2) Clusters + Changes
   ClusterPaths = SELECT c
-    FROM Application:a -(USES:e1)-> Application:at,
-         Application:at -(USES:e2)-> Cluster:c,
-         Cluster:c -(IMPACTS:e3)-> Change:ch
+    FROM Application:a - (:USES) - Application:at - (:USES) - Cluster:c - (:IMPACTS) - Change:ch
     WHERE a.auid == appId
       AND at.environment == "Production"
-    ACCUM {
+    ACCUM 
       @@infraSet += c,
-      @@changeSet += ch
-    };
+      @@changeSet += ch;
 
   // Résultats finaux
   PRINT @@infraSet;
