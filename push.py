@@ -1,4 +1,20 @@
-MATCH (a:Application {auid: "AP853434"})-[:DEPLOYED_ON]->(c:Cluster)
-OPTIONAL MATCH (c)-[:HAS_INCIDENT]->(i:Incident)
-OPTIONAL MATCH (c)-[:HAS_CHANGE]->(ch:Change)
-RETURN DISTINCT c, i, ch
+CREATE QUERY GetInfraFromApp(STRING appAUID) FOR GRAPH InfraGraph {
+  
+  SetAccum<VERTEX> @@infraSet;
+
+  Start = SELECT a
+          FROM application:a
+          WHERE a.AUID == appAUID;
+
+  // Parcours vers les serveurs
+  ToServeurs = SELECT s
+               FROM Start:a - (use:e) -> serveur:s
+               ACCUM @@infraSet += s;
+
+  // Parcours vers les clusters
+  ToClusters = SELECT c
+               FROM Start:a - (use:e) -> cluster:c
+               ACCUM @@infraSet += c;
+
+  PRINT @@infraSet;
+}
