@@ -6,26 +6,27 @@ CREATE QUERY GetInfraAndChangesForProduction() FOR GRAPH UKG_V2 {
   // Étape 1 : application fonctionnelle
   Start = SELECT a FROM Application:a
           WHERE a.auid == "AP85343";
+  PRINT Start;
 
-  // Étape 2 : applications techniques en environnement "Production"
+  // Étape 2 : applications techniques (env = "Production")
   AppTech = SELECT at FROM Start:a - (USES:e) -> Application:at
             WHERE at.environment == "Production";
+  PRINT AppTech;
 
   // Étape 3 : serveurs liés
-  ToServers = SELECT s FROM AppTech:at - (USES:e) -> Server:s
-              ACCUM @@infraSet += s;
+  TmpServers = SELECT s FROM AppTech:at - (USES:e) -> Server:s
+               ACCUM @@infraSet += s;
+  PRINT TmpServers;
 
   // Étape 4 : clusters liés
-  ToClusters = SELECT c FROM AppTech:at - (USES:e) -> Cluster:c
-               ACCUM @@infraSet += c;
+  TmpClusters = SELECT c FROM AppTech:at - (USES:e) -> Cluster:c
+                ACCUM @@infraSet += c;
+  PRINT TmpClusters;
 
-  // Étape 5 : changes depuis serveurs
-  ServerChanges = SELECT ch FROM ToServers:s - (IMPACTS:e) -> Change:ch
-                  ACCUM @@changeSet += ch;
-
-  // Étape 6 : changes depuis clusters
-  ClusterChanges = SELECT ch FROM ToClusters:c - (IMPACTS:e) -> Change:ch
-                   ACCUM @@changeSet += ch;
+  // Étape 5 : parcours IMPACTS depuis toutes les infrastructures
+  Changes = SELECT ch FROM @@infraSet:v - (IMPACTS:e) -> Change:ch
+            ACCUM @@changeSet += ch;
+  PRINT Changes;
 
   // Résultat final
   PRINT @@infraSet;
