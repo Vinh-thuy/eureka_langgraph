@@ -1,4 +1,4 @@
-CREATE QUERY GetInfraAndChangesForProduction() FOR GRAPH UKG_V2 {
+CREATE QUERY GetInfraForProduction() FOR GRAPH UKG_V2 {
 
   SetAccum<VERTEX> @@infraSet;
   SetAccum<VERTEX> @@changeSet;
@@ -11,23 +11,27 @@ CREATE QUERY GetInfraAndChangesForProduction() FOR GRAPH UKG_V2 {
   AppTech = SELECT at FROM Start:a - (USES:e) -> Application:at
             WHERE at.environment == "Production";
 
-  // Étape 3 : collecte des serveurs
+  // Étape 3 : serveurs liés
   ToServers = SELECT s FROM AppTech:at - (USES:e) -> Server:s
               ACCUM @@infraSet += s;
+  PRINT ToServers;
 
-  // Étape 4 : collecte des clusters
+  // Étape 4 : clusters liés
   ToClusters = SELECT c FROM AppTech:at - (USES:e) -> Cluster:c
                ACCUM @@infraSet += c;
+  PRINT ToClusters;
 
-  // Étape 5 : collecte des changes depuis les serveurs
-  ServerChanges = SELECT ch FROM ToServers:s - (1PACKS:e) -> Change:ch
+  // Étape 5a : changes depuis serveurs (si présents)
+  ServerChanges = SELECT ch FROM AppTech:at - (USES:e1) -> Server:s - (IMPACTS:e2) -> Change:ch
                   ACCUM @@changeSet += ch;
+  PRINT ServerChanges;
 
-  // Étape 6 : collecte des changes depuis les clusters
-  ClusterChanges = SELECT ch FROM ToClusters:c - (1PACKS:e) -> Change:ch
+  // Étape 5b : changes depuis clusters (si présents)
+  ClusterChanges = SELECT ch FROM AppTech:at - (USES:e1) -> Cluster:c - (IMPACTS:e2) -> Change:ch
                    ACCUM @@changeSet += ch;
+  PRINT ClusterChanges;
 
-  // Résultats
+  // Résultats finaux
   PRINT @@infraSet;
   PRINT @@changeSet;
 }
