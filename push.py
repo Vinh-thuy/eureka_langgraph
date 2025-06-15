@@ -1,4 +1,4 @@
-CREATE QUERY GetInfraAndChangesForProduction() FOR GRAPH UKG_V2 {
+CREATE QUERY GetInfraFromApp() FOR GRAPH UKG_V2 {
 
   SetAccum<VERTEX> @@infraSet;
   SetAccum<VERTEX> @@changeSet;
@@ -8,7 +8,7 @@ CREATE QUERY GetInfraAndChangesForProduction() FOR GRAPH UKG_V2 {
           WHERE a.auid == "AP85343";
   PRINT Start;
 
-  // Étape 2 : applications techniques (env = "Production")
+  // Étape 2 : applications techniques en environnement "Production"
   AppTech = SELECT at FROM Start:a - (USES:e) -> Application:at
             WHERE at.environment == "Production";
   PRINT AppTech;
@@ -23,12 +23,17 @@ CREATE QUERY GetInfraAndChangesForProduction() FOR GRAPH UKG_V2 {
                 ACCUM @@infraSet += c;
   PRINT TmpClusters;
 
-  // Étape 5 : parcours IMPACTS depuis toutes les infrastructures
-  Changes = SELECT ch FROM @@infraSet:v - (IMPACTS:e) -> Change:ch
-            ACCUM @@changeSet += ch;
-  PRINT Changes;
+  // Étape 5 : changes depuis servers
+  ServerChanges = SELECT ch FROM TmpServers:s - (IMPACTS:e) -> Change:ch
+                  ACCUM @@changeSet += ch;
+  PRINT ServerChanges;
 
-  // Résultat final
+  // Étape 6 : changes depuis clusters
+  ClusterChanges = SELECT ch FROM TmpClusters:c - (IMPACTS:e) -> Change:ch
+                   ACCUM @@changeSet += ch;
+  PRINT ClusterChanges;
+
+  // Résultats finaux
   PRINT @@infraSet;
   PRINT @@changeSet;
 }
