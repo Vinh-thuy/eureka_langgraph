@@ -1,26 +1,13 @@
-CREATE QUERY GetInfraFromApp(STRING appId) FOR GRAPH UKG_V2 {
-  SetAccum<VERTEX> @@infraSet;
-  SetAccum<VERTEX> @@changeSet;
+MATCH (a:Application {auid: $appId})-[r1:USES]->(at:Application {environment: 'Production'})-[r2:USES]->(s:Server)
+OPTIONAL MATCH (s)-[r3:IMPACTS]->(ch:Change)
+WITH COLLECT(DISTINCT s) AS servers, COLLECT(DISTINCT ch) AS serverChanges
 
-  // 1) Serveurs + Changes
-  ServerPaths = SELECT s
-    FROM Application:a - (:USES) - Application:at - (:USES) - Server:s - (:IMPACTS) - Change:ch
-    WHERE a.auid == appId
-      AND at.environment == "Production"
-    ACCUM 
-      @@infraSet += s,
-      @@changeSet += ch;
+MATCH (a:Application {auid: $appId})-[r4:USES]->(at2:Application {environment: 'Production'})-[r5:USES]->(c:Cluster)
+OPTIONAL MATCH (c)-[r6:IMPACTS]->(ch2:Change)
+WITH servers + COLLECT(DISTINCT c) AS allInfra, 
+     serverChanges + COLLECT(DISTINCT ch2) AS allChanges
 
-  // 2) Clusters + Changes
-  ClusterPaths = SELECT c
-    FROM Application:a - (:USES) - Application:at - (:USES) - Cluster:c - (:IMPACTS) - Change:ch
-    WHERE a.auid == appId
-      AND at.environment == "Production"
-    ACCUM 
-      @@infraSet += c,
-      @@changeSet += ch;
-
-  // Résultats finaux
-  PRINT @@infraSet;
-  PRINT @@changeSet;
-}
+UNWIND allInfra AS infra
+UNWIND allChanges AS change
+RETURN COLLECT(DISTINCT infra) AS infrastructure, 
+       COLLECT(DISTINCT change) AS changes
