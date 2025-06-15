@@ -1,43 +1,23 @@
 CREATE QUERY GetInfraFromApp() FOR GRAPH UKG_V2 {
 
+  SumAccum<INT> @dummy;  // juste pour permettre les ACCUM
+
   SetAccum<VERTEX> @@infraSet;
   SetAccum<VERTEX> @@changeSet;
 
-  // Étape 1 : application fonctionnelle
-  startApp = { Application.* };
-  startApp = SELECT a FROM startApp:a
-             WHERE a.auid == "AP85343";
-  PRINT startApp;
+  // 1) Parcours Serveurs + Changes
+  ServerPaths = SELECT s
+                FROM Application:a -(USES:e1)- Application:at -(USES:e2)- Server:s -(IMPACTS:e3)- Change:ch
+                WHERE a.auid == "AP85343" AND at.environment == "Production"
+                ACCUM @@infraSet += s, @@changeSet += ch;
+  PRINT ServerPaths;
 
-  // Étape 2a : serveurs via app technique en Production
-  serverPaths = SELECT s
-                FROM startApp:s -(USES:e1)-> Application:at -(USES:e2)-> Server:s
-                WHERE at.environment == "Production"
-                ACCUM @@infraSet += s;
-  PRINT serverPaths;
-
-  // Étape 2b : clusters via app technique en Production
-  clusterPaths = SELECT c
-                 FROM startApp:s -(USES:e1)-> Application:at -(USES:e2)-> Cluster:c
-                 WHERE at.environment == "Production"
-                 ACCUM @@infraSet += c;
-  PRINT clusterPaths;
-
-  // Étape 3a : changes depuis serveurs
-  serverChanges = SELECT ch
-                  FROM startApp:s -(USES:e1)-> Application:at -(USES:e2)-> Server:s
-                                 -(IMPACTS:e3)-> Change:ch
-                  WHERE at.environment == "Production"
-                  ACCUM @@changeSet += ch;
-  PRINT serverChanges;
-
-  // Étape 3b : changes depuis clusters
-  clusterChanges = SELECT ch
-                   FROM startApp:s -(USES:e1)-> Application:at -(USES:e2)-> Cluster:c
-                                  -(IMPACTS:e3)-> Change:ch
-                   WHERE at.environment == "Production"
-                   ACCUM @@changeSet += ch;
-  PRINT clusterChanges;
+  // 2) Parcours Clusters + Changes
+  ClusterPaths = SELECT c
+                 FROM Application:a -(USES:e1)- Application:at -(USES:e2)- Cluster:c -(IMPACTS:e3)- Change:ch
+                 WHERE a.auid == "AP85343" AND at.environment == "Production"
+                 ACCUM @@infraSet += c, @@changeSet += ch;
+  PRINT ClusterPaths;
 
   // Résultats finaux
   PRINT @@infraSet;
