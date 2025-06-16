@@ -1,7 +1,11 @@
 CREATE QUERY GetInfraFromApp(STRING auid, STRING env) FOR GRAPH UKG_V2 SYNTAX v2 {
-  // Pattern multi-hop sans FROM, syntaxe V2
+  // Déclaration des sets pour V2
+  // On déclare tous les vertices nécessaires en amont si on veut optimiser, mais ici on peut directement référencer les types
+
+  // Pattern matching multi-hop avec FROM + PATTERN (V2)
   pathRes = SELECT a, b, c
-            PATTERN (Application:a)-[USES:e1]->(Application:b)-[USES:e2]->(Cluster:c)
+            FROM Application:a, Application:b, Cluster:c
+            PATTERN (a)-[e1:USES]->(b)-[e2:USES]->(c)
             WHERE a.auid == auid
               AND b.environment == env;
 
