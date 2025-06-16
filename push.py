@@ -1,13 +1,18 @@
-CREATE QUERY GetInfraFromApp(STRING auid, STRING env) FOR GRAPH UKG_V2 SYNTAX v2 {
-  // Sélection multi-hop directe en V2 sans INTO
-  pathRes = SELECT a, b, c
-            FROM Application:a-(USES:e1)->Application:b-(USES:e2)->Cluster:c
-            WHERE a.auid == auid
-              AND b.environment == env;
+CREATE QUERY GetInfraFromApp(STRING auid, STRING env) FOR GRAPH UKG_V2 {
+  // 1. Handle V1 : ensemble de tous les vertices Application
+  startApps = { Application.* };
 
+  // 2. Requête multi-hop V1 avec INTO
+  SELECT a, b, c
+  INTO pathRes
+  FROM startApps:a -(USES:e1)-> Application:b,
+       Application:b -(USES:e2)-> Cluster:c
+  WHERE a.auid == auid
+    AND b.environment == env;
+
+  // 3. Affichage des chemins complets
   PRINT pathRes;
 }
-
 
 
 
