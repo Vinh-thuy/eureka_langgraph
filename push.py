@@ -14,12 +14,14 @@ CREATE QUERY GetInfraFromApp() FOR GRAPH UKG_V2 {
   // Deuxième étape : trouver les clusters liés
   ClusterPaths = SELECT c 
                  FROM ProdApps:at - (USES) -> Cluster:c
-                 ACCUM @@infraSet += c;
+                 POST-ACCUM
+                   @@infraSet += c;
   
   // Troisième étape : trouver les changements liés
   Changes = SELECT ch 
             FROM ClusterPaths:c - (IMPACTS) -> Change:ch
-            ACCUM @@changeSet += ch;
+            POST-ACCUM 
+              @@changeSet += ch;
 
   // Résultats finaux
   PRINT @@infraSet;
