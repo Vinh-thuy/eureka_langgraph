@@ -1,13 +1,47 @@
-Je cherche à construire une requête GSQL à partir d’un nœud Application dont l’attribut auid est "AP85343".
+Subject: Request for GSQL Query Logic to Traverse from Application to Incidents/Changes, with Infrastructure Context
 
-L’objectif est de parcourir les vertex de type Application, Cluster, Incident, et Change, et de récupérer :
-	•	tous les incidents (Incident) et changements (Change) atteignables depuis cette application,
-	•	mais aussi tous les vertex du chemin emprunté pour les atteindre (y compris les clusters ou autres applications traversées).
+Hi [Name],
 
-Je te laisse libre sur les choix de sens de parcours ou de modélisation, mais l’idée est bien d’avoir une vue complète sur les éléments traversés pour aboutir aux incidents et changements liés à l’application.
+As part of a broader initiative to feed knowledge into a multi-agent LLM system, I’d like to request your support in building a GSQL query that captures the full technical and contextual path between a specific application and its associated infrastructure and operational events.
 
-Merci d’avance pour ton aide !
+⸻
 
+🔹 Use Case #1 – From an Application to Related Changes and Incidents
+
+Objective:
+Starting from a specific node of type Application (with attribute auid = "AP85343"), I want to:
+	•	Traverse the infrastructure graph to reach all associated Incident and Change nodes.
+	•	Retrieve the full path, including all intermediate nodes like Cluster, Application, etc.
+	•	Get all attributes of the traversed nodes, especially for the infrastructure layer (i.e., CMDB context).
+
+This will allow us to reconstruct a complete infrastructure and operational lineage associated with the application. The resulting subgraph will then be integrated into a graph-based memory for LLM agents to reason upon.
+
+⸻
+
+🔹 Toward a General Query Logic – Reusable Traversal Patterns
+
+While this first query focuses on traversing from an Application to Incidents/Changes, our broader goal is to build a general GSQL query logic that we can reuse for other traversal types. For example:
+
+Use Case #2 – From an Incident Back to Impacted Applications
+
+In this variant:
+	•	The starting point is an Incident.
+	•	We want to traverse back through the infrastructure (e.g., via Cluster nodes),
+	•	And identify the Applications that are associated with the incident, either directly or indirectly.
+
+The logic is similar in spirit to Use Case #1, with the starting vertex type changed and the traversal inverted, but it should follow the same principles:
+	•	Preserve all intermediate nodes in the traversal path.
+	•	Return all relevant node attributes to reconstruct the full context.
+
+⸻
+
+I would like your help not only to write the first query, but also to help us define a clean and reusable GSQL pattern for such path-based traversal logic across the CMDB.
+
+Let me know if you need any input regarding the schema or relationships.
+
+Thanks a lot for your help!
+
+Best regards,
 
 
 
