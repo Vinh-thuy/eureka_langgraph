@@ -1,12 +1,13 @@
 CREATE QUERY GetInfraPaths(STRING auid, STRING env) FOR GRAPH UKG_V2 {
-  // Sélection de tous les chemins via PATTERN
+  // 1. Pattern matching multi-hop via PATTERN (V2)
   pathRes =
     SELECT a, b, c
-    FROM Application AS a
+    FROM Application:a                  // source doit être un vertex set simple
     PATTERN (a) -[e1:USES]-> (b) -[e2:USES]-> (c)
     WHERE a.auid == auid
       AND b.environment == env;
 
+  // 2. Affichage des chemins complets (triplets a,b,c)
   PRINT pathRes;
 }
 
