@@ -1,11 +1,19 @@
-MATCH (a:Application {auid: "AP85343"})-[:USES]->(at:Application)
-WHERE at.environment = "Production"
-MATCH (at)-[:USES]->(cl:Cluster)
-OPTIONAL MATCH (c:Change)-[:IMPACTS]->(cl)
-OPTIONAL MATCH (i:Incident)-[:IMPACTS]->(cl)
-RETURN
-  a.auid AS app_code,
-  at.environment AS env,
-  cl.name AS cluster_name,
-  c.change_id AS change_id,
-  i.incident_id AS incident_id
+CREATE QUERY GetInfraFromApp() FOR GRAPH UKG_V2 {
+  SetAccum<VERTEX> @@infraSet;
+  SetAccum<VERTEX> @@changeSet;
+
+  // 1) Clusters + Changes
+  ClusterPaths = SELECT c
+    FROM (a:Account)-[:isLocatedIn]->(at:City),
+         (at)<-[:isLocatedIn]-(c:Cluster),
+         (c)-[:IMPACTS]->(ch:Change)
+    WHERE a.auid == "AP85343"
+      AND at.environment == "Production"
+    ACCUM 
+      @@infraSet += c,
+      @@changeSet += ch;
+
+  // Résultats finaux
+  PRINT @@infraSet;
+  PRINT @@changeSet;
+}
