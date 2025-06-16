@@ -1,6 +1,6 @@
-USE GRAPH MyGraph
+USE GRAPH UKG_V2
 
-CREATE QUERY GetClustersForApplication(STRING auid, STRING env) FOR GRAPH MyGraph {
+CREATE QUERY GetInfraFromApp(STRING auid, STRING env) FOR GRAPH UKG_V2 {
   // 1. Récupération de tous les vertices Application
   startApps = { Application.* };
   
@@ -26,4 +26,4 @@ CREATE QUERY GetClustersForApplication(STRING auid, STRING env) FOR GRAPH MyGrap
 }
 
 // Exemple d'exécution :
-RUN QUERY GetClustersForApplication("AP85343", "Production");
+RUN QUERY GetInfraFromApp("AP85343", "Production");
