@@ -1,3 +1,17 @@
+Je cherche à construire une requête GSQL à partir d’un nœud Application dont l’attribut auid est "AP85343".
+
+L’objectif est de parcourir les vertex de type Application, Cluster, Incident, et Change, et de récupérer :
+	•	tous les incidents (Incident) et changements (Change) atteignables depuis cette application,
+	•	mais aussi tous les vertex du chemin emprunté pour les atteindre (y compris les clusters ou autres applications traversées).
+
+Je te laisse libre sur les choix de sens de parcours ou de modélisation, mais l’idée est bien d’avoir une vue complète sur les éléments traversés pour aboutir aux incidents et changements liés à l’application.
+
+Merci d’avance pour ton aide !
+
+
+
+
+
 CREATE DISTRIBUTED QUERY app_to_incidents_and_changes() FOR GRAPH UKG_V2 {
 
     MinAccum<INT> @distance = 1000;
