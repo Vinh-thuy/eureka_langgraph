@@ -1,13 +1,10 @@
-CREATE QUERY GetInfraPaths(STRING auid, STRING env) FOR GRAPH UKG_V2 {
-  // 1. Pattern matching multi-hop via PATTERN (V2)
-  pathRes =
-    SELECT a, b, c
-    FROM Application:a                  // source doit être un vertex set simple
-    PATTERN (a) -[e1:USES]-> (b) -[e2:USES]-> (c)
-    WHERE a.auid == auid
-      AND b.environment == env;
+CREATE QUERY GetInfraFromApp(STRING auid, STRING env) FOR GRAPH UKG_V2 SYNTAX v2 {
+  // Pattern multi-hop sans FROM, syntaxe V2
+  pathRes = SELECT a, b, c
+            PATTERN (Application:a)-[USES:e1]->(Application:b)-[USES:e2]->(Cluster:c)
+            WHERE a.auid == auid
+              AND b.environment == env;
 
-  // 2. Affichage des chemins complets (triplets a,b,c)
   PRINT pathRes;
 }
 
