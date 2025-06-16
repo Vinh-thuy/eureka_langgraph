@@ -1,11 +1,12 @@
-CREATE QUERY GetInfraPaths(STRING auid, STRING env) FOR GRAPH UKG_V2 {
-  // 1. Handle de tous les vertices Application
+CREATE QUERY GetInfraFromApp(STRING auid, STRING env) FOR GRAPH UKG_V2 {
+  // 1. Création d'un handle pour tous les vertices Application
   appVertices = { Application.* };
 
-  // 2. Sélection de tous les chemins Application->Application(env)->Cluster
+  // 2. Sélection des chemins : Application -> Application(env) puis -> Cluster
   SELECT a, b, c
   INTO paths
-  FROM appVertices:a -(USES:e1)-> appVertices:b -(USES:e2)-> Cluster:c
+  FROM (appVertices:a) -(USES:e1)-> (appVertices:b),
+       (appVertices:b) -(USES:e2)-> (Cluster:c)
   WHERE a.auid == auid
     AND b.environment == env;
 
