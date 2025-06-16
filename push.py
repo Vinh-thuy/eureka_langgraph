@@ -3,11 +3,11 @@ CREATE QUERY GetInfraPaths(STRING auid, STRING env) FOR GRAPH UKG_V2 {
   appVertices = { Application.* };
 
   // 2. Sélection de tous les chemins Application->Application(env)->Cluster
-  paths =
-    SELECT a, b, c
-    FROM appVertices:a -(USES:e1)-> appVertices:b -(USES:e2)-> Cluster:c
-    WHERE a.auid == auid
-      AND b.environment == env;
+  SELECT a, b, c
+  INTO paths
+  FROM appVertices:a -(USES:e1)-> appVertices:b -(USES:e2)-> Cluster:c
+  WHERE a.auid == auid
+    AND b.environment == env;
 
   // 3. Affichage des chemins complets
   PRINT paths;
