@@ -1,39 +1,42 @@
-CREATE DISTRIBUTED QUERY bfs_AppToIssues() FOR GRAPH UKG_V2 SYNTAX v1 {
-  // Accumulateurs
-  MinAccum<INT> @dist;
-  SetAccum<VERTEX> @@issues;
-  @@issues = {};
+CREATE DISTRIBUTED QUERY app_to_incidents_and_changes() FOR GRAPH UKG_V2 {
 
-  // 1. Démarrage BFS : vertex Application filtré
-  frontier =
-    SELECT s
-    FROM Application:s
-    WHERE s.auid == "AP85343"
-    POST-ACCUM s.@dist = 0;
+    MinAccum<INT> @distance = 1000;
+    SumAccum<INT> @@target_visit_count;
 
-  // 2. Hop 1 : Application -> Cluster via USES
-  frontier =
-    SELECT cl
-    FROM frontier:s - USES -> Cluster:cl
-    WHERE cl.@dist > s.@dist
-    ACCUM cl.@dist = s.@dist + 1;
+    // Définition des types de nœuds et de relations autorisés
+    SetAccum<STRING> @@v_types;
+    SetAccum<STRING> @@e_types;
 
-  // 3. Hop 2 : Cluster -> Change via IMPACTS
-  SELECT ch
-  INTO tempIssues
-  FROM frontier:s - IMPACTS -> Change:ch
-  ACCUM ch.@dist = s.@dist + 1,
-        @@issues += ch;
+    @@v_types += "Application";
+    @@v_types += "Cluster";
+    @@v_types += "Incident";
+    @@v_types += "Change";
 
-  // 4. Hop 3 : Cluster -> Incident via IMPACTS
-  SELECT inc
-  INTO tempIncidents
-  FROM frontier:s - IMPACTS -> Incident:inc
-  ACCUM inc.@dist = s.@dist + 1,
-        @@issues += inc;
+    @@e_types += "USES";
+    @@e_types += "IMPACTS";
 
-  // 5. Affichage des Change et Incident collectés
-  PRINT @@issues;
+    // Point de départ : Application avec l'attribut auid = "AP85343"
+    verts = SELECT a
+            FROM Application:a
+            WHERE a.auid == "AP85343"
+            POST-ACCUM a.@distance = 0;
+
+    // Parcours BFS sans sens imposé sur les arêtes
+    WHILE verts.size() > 0 LIMIT 10 DO
+        verts = 
+            SELECT t
+            FROM verts:s -(@@e_types)-@@v_types:t
+            WHERE t.@distance == 1000
+            ACCUM t.@distance = s.@distance + 1;
+    END;
+
+    // Récupération des cibles atteintes : Incident et Change
+    targets = 
+        SELECT x
+        FROM {Incident, Change}:x
+        WHERE x.@distance < 1000;
+
+    PRINT targets[x.@distance];
 }
 
 
