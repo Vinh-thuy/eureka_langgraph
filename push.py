@@ -4,8 +4,8 @@ CREATE QUERY GetInfraFromApp() FOR GRAPH UKG_V2 {
 
   // 1) Clusters + Changes
   ClusterPaths = SELECT c
-    FROM (a:Account)-[:isLocatedIn]->(at:City),
-         (at)<-[:isLocatedIn]-(c:Cluster),
+    FROM (a:Application)-[:USES]->(at:Application),
+         (at)-[:USES]->(c:Cluster),
          (c)-[:IMPACTS]->(ch:Change)
     WHERE a.auid == "AP85343"
       AND at.environment == "Production"
