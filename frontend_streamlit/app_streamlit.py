@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 import plotly.express as px
 import pandas as pd
+import json # Ajout de l'import pour JSON
+import plotly.io as pio # Import pour la gestion des objets Plotly
 
 st.set_page_config(page_title="Stream Digital Twin", page_icon="📊", layout="wide")
 
@@ -153,19 +155,21 @@ with main_container:
     with col_graph:
         st.markdown('<div class="section-title">📊 Tableau de bord analytique</div>', unsafe_allow_html=True)
         
-        # Premier graphique
-        st.plotly_chart(generate_sample_plot(), use_container_width=True)
-        
-        # Deuxième graphique (exemple avec un graphique à barres)
-        data = pd.DataFrame({
-            'Catégorie': ['A', 'B', 'C', 'D', 'E'],
-            'Valeur': [45, 37, 52, 28, 41]
-        })
-        fig = px.bar(data, x='Catégorie', y='Valeur', 
-                    title='Répartition par catégorie',
-                    color='Catégorie',
-                    color_discrete_sequence=px.colors.qualitative.Pastel)
-        st.plotly_chart(fig, use_container_width=True)
+        # Afficher les graphiques générés dynamiquement
+        if 'generated_charts' in st.session_state and st.session_state['generated_charts']:
+            for chart_json_str in st.session_state['generated_charts']:
+                try:
+                    fig = pio.from_json(chart_json_str)
+                    st.plotly_chart(fig, use_container_width=True)
+                except Exception as e:
+                    st.error(f"Erreur lors de l'affichage du graphique: {e}")
+        else:
+            st.info("Aucun graphique généré pour le moment. Posez une question pour en créer un !")
+            # Vous pouvez laisser les exemples de graphiques statiques ici si vous voulez un affichage par défaut
+            # st.plotly_chart(generate_sample_plot(), use_container_width=True)
+            # data = pd.DataFrame({'Catégorie': ['A', 'B', 'C', 'D', 'E'], 'Valeur': [45, 37, 52, 28, 41]})
+            # fig = px.bar(data, x='Catégorie', y='Valeur', title='Répartition par catégorie', color='Catégorie', color_discrete_sequence=px.colors.qualitative.Pastel)
+            # st.plotly_chart(fig, use_container_width=True)
     
     # --- Colonne de droite : Chat ---
     with col_chat:
@@ -215,10 +219,17 @@ if submit and question.strip():
 
         st.session_state['messages'].append({
             'role': 'bot',
-            'content': data.get('final_response', "(Aucune réponse reçue.)"),
+            'content': data.get('final_response', "(Aucune réponse reçue.)"), # Utiliser 'final_response' comme clé de réponse
             'image_url': data.get('image_url', None),
             'meta': data.get('meta', {})
         })
+
+        # Gérer le graphique généré
+        generated_chart_json = data.get('generated_chart', None)
+        if generated_chart_json:
+            if 'generated_charts' not in st.session_state:
+                st.session_state['generated_charts'] = []
+            st.session_state['generated_charts'].append(generated_chart_json)
     except Exception as e:
         st.session_state['messages'].append({'role': 'bot', 'content': f"Erreur lors de la requête au backend: {e}"})
     

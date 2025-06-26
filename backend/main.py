@@ -243,7 +243,8 @@ async def ask_bot(chat_request: ChatRequest, request: Request):
         # Retourner la réponse au format standard
         return {
             "final_response": response_content,
-            "meta": final_state.get("meta", {})
+            "meta": final_state.get("meta", {}),
+            "generated_chart": final_state.get("generated_chart", None)
         }
 
     except Exception as e:

@@ -12,6 +12,7 @@ from langchain_core.output_parsers import JsonOutputParser
 # Importer les fonctions de création des graphes des sous-agents
 from .generic_chatbot_agent import create_generic_chatbot_graph # GenericChatbotAgentState n'est pas utilisé directement ici
 from .incident_analysis_agent import create_incident_analysis_graph # IncidentAnalysisAgentState n'est pas utilisé directement ici
+from .chart_generation_agent import create_chart_generation_graph # Import du nouvel agent de génération de graphiques
 
 load_dotenv()
 
@@ -25,31 +26,24 @@ llm = ChatOpenAI(
 )
 
 
-# Définir le schéma de sortie pour LangChain
-class RouteDecision(BaseModel):
-    step: Literal["generic_chatbot", "incident_analysis"] = Field(
-        ...,  
-        description="Détermine si la demande doit être routée vers 'generic_chatbot' ou 'incident_analysis'."
-    )
 
-# Créer le parseur de sortie
-output_parser = JsonOutputParser(pydantic_object=RouteDecision)
 
 # 1. Définir l'état de l'orchestrateur
 class OrchestratorState(TypedDict):
     question: str
     history: List[dict]  # Pour l'historique de chat
-    routing_decision: Literal["generic_chatbot", "incident_analysis"]
+    routing_decision: Literal["generic_chatbot", "incident_analysis", "chart_generation"]
     final_response: Union[str, dict]  # Pour stocker la réponse finale
     conversation_context: dict  # Pour maintenir le contexte de conversation
     meta: dict  # Pour stocker les métadonnées de la réponse
+    generated_chart: Union[str, dict, None] # Pour stocker le graphique généré (JSON Plotly)
 
 
-# Schéma pour la validation de la sortie structurée du LLM
+# Définir le schéma de sortie pour LangChain
 class Route(BaseModel):
-    step: Literal["generic_chatbot", "incident_analysis"] = Field(
+    step: Literal["generic_chatbot", "incident_analysis", "chart_generation"] = Field(
         ...,  # Le champ est maintenant obligatoire
-        description="Détermine si la demande doit être routée vers 'generic_chatbot' ou 'incident_analysis'."
+        description="Détermine si la demande doit être routée vers 'generic_chatbot', 'incident_analysis' ou 'chart_generation'."
     )
 
 # Configuration du routeur avec validation de la sortie
@@ -68,13 +62,20 @@ Voici les deux possibilités à considérer :
    - "analyse moi l'incident INC2309845"
    - "Explique moi l'incident INC2309846"
    
-2. Pour toutes les autres questions générales, informations, demandes de renseignements ou conversations courantes,
+2. Si la question concerne la génération d'un graphique ou la visualisation de données, 
+   réponds : "chart_generation".
+   Exemples : 
+   - "Fais-moi un graphique des ventes par région."
+   - "Montre-moi l'évolution du stock de produits sur les 6 derniers mois."
+   - "Crée un histogramme des âges de nos clients."
+   
+3. Pour toutes les autres questions générales, informations, demandes de renseignements ou conversations courantes,
    réponds : "generic_chatbot".
    Exemples :
    - "Bonjour, comment allez-vous ?"
    - "Explique moi le fonctionnement de la voiture électrique"
 
-Ta réponse doit être UNIQUEMENT un des deux mots suivants : "generic_chatbot" ou "incident_analysis".
+Ta réponse doit être UNIQUEMENT un des trois mots suivants : "generic_chatbot", "incident_analysis" ou "chart_generation".
 """
 
 # 2. Définir les nœuds de l'orchestrateur
@@ -118,13 +119,15 @@ def route_question(state: OrchestratorState) -> dict:
             HumanMessage(content=question),
         ])
         
-        print(f"[ROUTEUR] Décision de routage: {decision.step}")
+        print(f"[DEBUG ROUTER] Type de décision: {type(decision)}")
+        print(f"[DEBUG ROUTER] Décision brute: {decision}")
+        print(f"[ROUTEUR] Décision de routage: {decision['step']}")
         
         # Mise à jour de l'état avec la décision de routage
-        state["routing_decision"] = decision.step
+        state["routing_decision"] = decision['step']
         
         # Si on commence une analyse d'incident, on marque le contexte
-        if decision.step == "incident_analysis":
+        if decision['step'] == "incident_analysis":
             print("[ROUTEUR] Détection d'une demande d'analyse d'incident")
             context["in_incident_conversation"] = True
             
@@ -139,7 +142,8 @@ def route_question(state: OrchestratorState) -> dict:
         return state
         
     except Exception as e:
-        print(f"[ERREUR ROUTEUR] Erreur lors du routage: {str(e)}")
+        print(f"[ERREUR ROUTEUR] Erreur lors du routage: {type(e).__name__} - {e}")
+        print(f"[ERREUR ROUTEUR] Détails de l'erreur: {e.args}")
         # Fallback en cas d'échec
         state["routing_decision"] = "generic_chatbot"
         
@@ -392,9 +396,53 @@ def invoke_incident_analysis_agent(state: OrchestratorState):
                 "conversation_context": context
             }
 
+def invoke_chart_generation_agent(state: OrchestratorState):
+    print("---ORCHESTRATEUR: INVOCATION DE L'AGENT GENERATION GRAPHIQUE---")
+    
+    # Initialiser les champs manquants
+    if "question" not in state:
+        state["question"] = ""
+    if "conversation_context" not in state:
+        state["conversation_context"] = {}
+    
+    question = state["question"]
+    context = state["conversation_context"]
+
+    try:
+        chart_generation_graph = create_chart_generation_graph()
+        chart_output = chart_generation_graph.invoke({"question": question, "conversation_context": context})
+        print(f"[ORCHESTRATEUR] Sortie brute de l'agent de graphique: {chart_output}")
+
+        # L'agent de génération de graphique retourne le JSON du graphique
+        generated_chart = chart_output.get("chart_data")
+        print(f"[ORCHESTRATEUR] 'generated_chart' extrait: {generated_chart is not None and len(generated_chart) > 0}")
+        final_response = chart_output.get("final_response", "")
+
+        return {
+            "final_response": final_response,
+            "generated_chart": generated_chart,
+            "meta": {
+                "use_case": "chart_generation",
+                "subgraph": "Chart Generation"
+            },
+            "conversation_context": context
+        }
+    except Exception as e:
+        print(f"[ERREUR CHART AGENT] Erreur lors de l'appel à l'agent de graphique: {str(e)}")
+        return {
+            "final_response": "Désolé, une erreur est survenue lors de la génération du graphique.",
+            "generated_chart": None,
+            "meta": {
+                "use_case": "chart_generation",
+                "subgraph": "Chart Generation",
+                "error": str(e)
+            },
+            "conversation_context": context
+        }
+
 def fallback_node(state: OrchestratorState):
     print("---ORCHESTRATEUR: NŒUD PAR DÉFAUT (FALLBACK)---")
-    return {"final_response": "Désolé, je ne peux pas traiter ce type de demande pour le moment. Essayez une recherche de recette ou d'appartement."}
+    return {"final_response": "Désolé, je ne peux pas traiter ce type de demande pour le moment. Essayez une recherche de recette ou d'appartement."} 
 
 # 3. Définir les arêtes conditionnelles
 def decide_next_node(state: OrchestratorState):
@@ -430,6 +478,10 @@ def decide_next_node(state: OrchestratorState):
         
         return "incident_analysis_agent"  # Retourne le nom du nœud tel que défini dans create_orchestrator_graph
     
+    elif state["routing_decision"] == "chart_generation":
+        print("[DECIDE NEXT NODE] Routage vers la génération de graphique")
+        return "chart_generation_agent" # Retourne le nom du nœud tel que défini dans create_orchestrator_graph
+
     # Par défaut, on utilise le chatbot générique
     print("[DECIDE NEXT NODE] Utilisation du chatbot générique par défaut")
     return "generic_chatbot_agent"  # Retourne le nom du nœud tel que défini dans create_orchestrator_graph
@@ -442,6 +494,7 @@ def create_orchestrator_graph():
     workflow.add_node("router", route_question)
     workflow.add_node("generic_chatbot_agent", invoke_generic_chatbot_agent)
     workflow.add_node("incident_analysis_agent", invoke_incident_analysis_agent)
+    workflow.add_node("chart_generation_agent", invoke_chart_generation_agent)
     workflow.add_node("fallback", fallback_node)
 
     # Définir le point d'entrée
@@ -454,13 +507,15 @@ def create_orchestrator_graph():
         {
             "generic_chatbot_agent": "generic_chatbot_agent",
             "incident_analysis_agent": "incident_analysis_agent",
-            "fallback": "fallback",
-        },
+            "chart_generation_agent": "chart_generation_agent",
+            "fallback": "fallback"
+        }
     )
 
     # Ajouter les arêtes de sortie
     workflow.add_edge("generic_chatbot_agent", END)
     workflow.add_edge("incident_analysis_agent", END)
+    workflow.add_edge("chart_generation_agent", END)
     workflow.add_edge("fallback", END)
     
     # Compiler le workflow
