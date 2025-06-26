@@ -46,8 +46,8 @@ with col2:
             if msg.get('image_url'):
                 st.image(msg['image_url'])
     
-    # Zone de saisie
-    with st.form("chat_form"):
+    # Zone de saisie avec effacement automatique
+    with st.form("chat_form", clear_on_submit=True):
         question = st.text_input("Votre message", "", key="input_msg")
         submit = st.form_submit_button("Envoyer")
 
@@ -89,5 +89,6 @@ if submit and question.strip():
         })
     
     # Rechargement de la page pour afficher les nouveaux messages
+    # La zone de saisie sera vide grâce à clear_on_submit=True dans le formulaire
     st.rerun()
 
