@@ -244,7 +244,7 @@ async def ask_bot(chat_request: ChatRequest, request: Request):
         return {
             "final_response": response_content,
             "meta": final_state.get("meta", {}),
-            "generated_chart": final_state.get("generated_chart", None)
+            "generated_chart": final_state.get("generated_chart", []) # S'attendre à une liste de graphiques
         }
 
     except Exception as e:

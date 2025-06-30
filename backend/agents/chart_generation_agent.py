@@ -1,10 +1,9 @@
 import os
-from typing import TypedDict, Literal, List, Union
-from langgraph.graph import StateGraph, END
+from typing import TypedDict, Union
+import plotly.express as px
+import pandas as pd
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_core.output_parsers import JsonOutputParser
-from pydantic import BaseModel, Field
+from langgraph.graph import StateGraph, END
 
 # Définir l'état spécifique à l'agent de génération de graphiques
 class ChartGenerationAgentState(TypedDict):
@@ -35,24 +34,50 @@ def generate_chart(state: ChartGenerationAgentState):
     # 2. Utiliser le LLM pour structurer la demande de données ou le type de graphique.
     # 3. Exécuter du code Python pour générer le graphique avec Plotly.
 
-    # Exemple simple: simuler la génération d'un graphique Plotly
-    import plotly.express as px
-    import pandas as pd
+    # Fonction utilitaire pour générer des données de graphique et la figure Plotly
+    def _generate_plot_data(chart_type):
+        data = {'Category': ['A', 'B', 'C', 'D'], 'Value': [10, 20, 15, 25]}
+        df = pd.DataFrame(data)
+        fig = None
 
-    data = {'Category': ['A', 'B', 'C', 'D'], 'Value': [10, 20, 15, 25]}
-    df = pd.DataFrame(data)
-    fig = px.bar(df, x='Category', y='Value', title='Exemple de graphique généré')
+        if chart_type == 'bar':
+            fig = px.bar(df, x='Category', y='Value', title='Exemple de Bar Plot')
+        elif chart_type == 'pie':
+            fig = px.pie(df, values='Value', names='Category', title='Exemple de Pie Chart')
+        # Ajoutez d'autres types de graphiques ici
+        
+        return fig
 
-    # Convertir le graphique en JSON pour le passer à Streamlit
-    chart_json = fig.to_json()
-    print(f"[CHART AGENT] Taille du JSON du graphique généré: {len(chart_json)} caractères")
+    # Simuler l'extraction des types de graphiques de la question
+    # Dans une application réelle, cela impliquerait une analyse NLP plus sophistiquée
+    def _extract_chart_types_from_question(question_text):
+        chart_types = []
+        if "bar" in question_text.lower():
+            chart_types.append('bar')
+        if "pie" in question_text.lower():
+            chart_types.append('pie')
+        if not chart_types:
+            chart_types.append('bar') # Par défaut, générer un bar chart
+        return chart_types
+
+
+
+    requested_chart_types = _extract_chart_types_from_question(question)
+    generated_charts_json = []
+
+    for chart_type in requested_chart_types:
+        fig = _generate_plot_data(chart_type)
+        if fig:
+            chart_json = fig.to_json()
+            generated_charts_json.append(chart_json)
+            print(f"[CHART AGENT] Taille du JSON du {chart_type} généré: {len(chart_json)} caractères")
 
     return {
         "question": question, # Passer la question pour maintenir l'état
-        "chart_data": chart_json,
-        "chart_type": "bar",
+        "chart_data": generated_charts_json, # Maintenant une liste de JSON de graphiques
+        "chart_type": requested_chart_types, # Peut être une liste de types
         "data_source": None, # Pas de source de données dynamique pour l'instant
-        "final_response": "Voici le graphique que j'ai généré pour vous.",
+        "final_response": "Voici les graphiques que j'ai générés pour vous.",
         "conversation_context": context
     }
 

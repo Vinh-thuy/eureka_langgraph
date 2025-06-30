@@ -411,10 +411,11 @@ def invoke_chart_generation_agent(state: OrchestratorState):
     try:
         chart_generation_graph = create_chart_generation_graph()
         chart_output = chart_generation_graph.invoke({"question": question, "conversation_context": context})
-        print(f"[ORCHESTRATEUR] Sortie brute de l'agent de graphique: {chart_output}")
+        #print(f"[ORCHESTRATEUR] Sortie brute de l'agent de graphique: {chart_output}")
 
         # L'agent de génération de graphique retourne le JSON du graphique
         generated_chart = chart_output.get("chart_data")
+        #print(f"[ORCHESTRATEUR] Contenu de 'generated_chart': {generated_chart}") # Nouveau débogage
         print(f"[ORCHESTRATEUR] 'generated_chart' extrait: {generated_chart is not None and len(generated_chart) > 0}")
         final_response = chart_output.get("final_response", "")
 

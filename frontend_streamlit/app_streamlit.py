@@ -2,8 +2,9 @@ import streamlit as st
 import requests
 import plotly.express as px
 import pandas as pd
-import json # Ajout de l'import pour JSON
+
 import plotly.io as pio # Import pour la gestion des objets Plotly
+
 
 st.set_page_config(page_title="Stream Digital Twin", page_icon="📊", layout="wide")
 
@@ -144,32 +145,31 @@ def generate_sample_plot():
 # --- Titre centré ---
 st.markdown('<h1 style="text-align:center;margin-bottom:30px;">Stream Digital Twin</h1>', unsafe_allow_html=True)
 
-# --- Mise en page principale avec deux colonnes ---
+# --- Mise en page principale ---
 main_container = st.container()
 
 with main_container:
-    # Création des colonnes (60% pour les graphiques, 40% pour le chat)
-    col_graph, col_chat = st.columns([0.6, 0.4])
     
-    # --- Colonne de gauche : Graphiques ---
-    with col_graph:
-        st.markdown('<div class="section-title">📊 Tableau de bord analytique</div>', unsafe_allow_html=True)
-        
-        # Afficher les graphiques générés dynamiquement
-        if 'generated_charts' in st.session_state and st.session_state['generated_charts']:
+    has_charts = 'generated_charts' in st.session_state and st.session_state['generated_charts']
+
+    if has_charts:
+        # Deux colonnes si des graphiques sont présents
+        col_graph, col_chat = st.columns([0.6, 0.4])
+    else:
+        # Une seule colonne pour le chat si aucun graphique
+        col_chat = st.columns([1])[0] # Crée une seule colonne qui prend toute la largeur
+        col_graph = None # Il n'y a pas de colonne de graphique
+
+    # --- Colonne de gauche : Graphiques (conditionnelle) ---
+    if col_graph:
+        with col_graph:
+            st.markdown('<div class="section-title">📊 Tableau de bord analytique</div>', unsafe_allow_html=True)
             for chart_json_str in st.session_state['generated_charts']:
                 try:
                     fig = pio.from_json(chart_json_str)
                     st.plotly_chart(fig, use_container_width=True)
                 except Exception as e:
-                    st.error(f"Erreur lors de l'affichage du graphique: {e}")
-        else:
-            st.info("Aucun graphique généré pour le moment. Posez une question pour en créer un !")
-            # Vous pouvez laisser les exemples de graphiques statiques ici si vous voulez un affichage par défaut
-            # st.plotly_chart(generate_sample_plot(), use_container_width=True)
-            # data = pd.DataFrame({'Catégorie': ['A', 'B', 'C', 'D', 'E'], 'Valeur': [45, 37, 52, 28, 41]})
-            # fig = px.bar(data, x='Catégorie', y='Valeur', title='Répartition par catégorie', color='Catégorie', color_discrete_sequence=px.colors.qualitative.Pastel)
-            # st.plotly_chart(fig, use_container_width=True)
+                    st.error(f"Erreur lors de l'affichage du graphique: {e}\nJSON reçu: {chart_json_str}")
     
     # --- Colonne de droite : Chat ---
     with col_chat:
@@ -217,6 +217,7 @@ if submit and question.strip():
         response.raise_for_status()  # Lève une exception pour les codes d'état HTTP 4xx/5xx
         data = response.json()
 
+
         st.session_state['messages'].append({
             'role': 'bot',
             'content': data.get('final_response', "(Aucune réponse reçue.)"), # Utiliser 'final_response' comme clé de réponse
@@ -224,12 +225,14 @@ if submit and question.strip():
             'meta': data.get('meta', {})
         })
 
-        # Gérer le graphique généré
-        generated_chart_json = data.get('generated_chart', None)
-        if generated_chart_json:
+        # Gérer les graphiques générés
+        generated_charts_json = data.get('generated_chart', []) # S'attendre à une liste
+        if generated_charts_json:
             if 'generated_charts' not in st.session_state:
                 st.session_state['generated_charts'] = []
-            st.session_state['generated_charts'].append(generated_chart_json)
+            # Ajouter tous les nouveaux graphiques à la liste existante
+            st.session_state['generated_charts'].extend(generated_charts_json)
+
     except Exception as e:
         st.session_state['messages'].append({'role': 'bot', 'content': f"Erreur lors de la requête au backend: {e}"})
     
