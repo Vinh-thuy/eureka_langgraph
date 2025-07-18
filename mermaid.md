@@ -1,32 +1,20 @@
-Écris un script Python qui interroge un graphe NetworkX représentant une architecture Kubernetes.
-Les nœuds du graphe contiennent les types suivants : Cluster, Namespace, Deployment, Pod, Container, Image.
-Les arêtes représentent les relations :
-	•	asNamespace (Cluster ➔ Namespace)
-	•	asDeployment (Namespace ➔ Deployment)
-	•	asPod (Deployment ➔ Pod)
-	•	asContainer (Pod ➔ Container)
-	•	asImage (Container ➔ Image).
+graph TD
 
-Le script doit :
+  %% Clusters
+  subgraph Cluster_prod-cluster
+    C1["Cluster: prod-cluster"]
+    NS1["Namespace: default"]
+    NS2["Namespace: monitoring"]
+  end
 
-1️⃣ Identifier tous les clusters présents.
-2️⃣ Pour chaque cluster, lister les namespaces qui lui sont associés.
-3️⃣ Pour chaque namespace, lister les deployments qui lui sont associés.
-4️⃣ Pour chaque deployment, calculer :
-	•	le nombre de pods associés,
-	•	le nombre de containers associés à ces pods,
-	•	le nombre d’images distinctes utilisées par ces containers.
+  C1 --> NS1
+  C1 --> NS2
 
-Générer en sortie un diagramme Mermaid au format graph TD, en respectant les règles suivantes :
-	•	Chaque Cluster est représenté comme un subgraph intitulé Cluster_<cluster_name>.
-	•	Chaque Namespace est représenté par un nœud Namespace: <namespace_name>.
-	•	Les liens Cluster ➔ Namespace et Namespace ➔ Deployment sont explicites (-->).
-	•	Pour chaque Deployment, afficher les métriques sous forme compacte dans le label du nœud, par exemple :
-web-app (Pods: 2, Containers: 3, Images: 2).
-	•	Ne pas afficher les Pods, Containers ni Images individuellement : uniquement des comptages agrégés sous forme d’attributs textuels dans le nœud Deployment.
+  %% Deployments avec summary inline
+  D1["web-app (Pods: 2, Containers: 3, Images: 2)"]
+  D2["api-service (Pods: 1, Containers: 1, Images: 1)"]
+  D3["prometheus (Pods: 1, Containers: 1, Images: 1)"]
 
-La sortie attendue du script doit être une chaîne de caractères contenant le code Mermaid prêt à être utilisé.
-
-🔹 Contrainte supplémentaire :
-	•	Le code doit être propre, lisible, bien structuré et prêt à être intégré dans une application Python existante.
-	•	Tu peux utiliser des structures f-string Python pour formater dynamiquement les labels Mermaid.
+  NS1 --> D1
+  NS1 --> D2
+  NS2 --> D3
