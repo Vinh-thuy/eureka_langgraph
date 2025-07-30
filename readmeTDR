@@ -1,0 +1,106 @@
+# 🧠 Technical Design README – Évaluation de LightRAG vs RAG Classique
+
+## 1. 🎯 Contexte & Objectif
+
+Dans le cadre du développement de notre Digital Twin pour l’infrastructure IT, nous cherchons à améliorer les performances du système de question-réponse sur documentation technique (ITSM, exploitation, Confluence, procédures incidents, etc.).
+
+Ce PoC vise à comparer **LightRAG** (graphe dynamique + reranking + vector search local) avec notre **approche RAG classique** (chunking statique + re-ranker + base vectorielle).
+
+**Objectif** : Déterminer si LightRAG permet une meilleure pertinence, rapidité de réponse, traçabilité ou interprétabilité que le RAG classique.
+
+---
+
+## 2. 🧰 Cas d’usage cible
+
+- Type de questions : *"Quel est le processus de rollback sur XYZ ?", "Quelles sont les étapes pour valider un change réseau ?"*
+- Sources documentaires : fichiers Confluence exportés, procédures IT, playbooks internes, contrats de support.
+- Contraintes : 
+  - Cohérence des réponses (pas d’hallucinations)
+  - Traçabilité des documents sources
+  - Réduction du temps de configuration
+
+---
+
+## 3. 🔍 Solutions évaluées
+
+| Critère                         | RAG Classique                      | LightRAG                             |
+|----------------------------------|------------------------------------|--------------------------------------|
+| Base vectorielle                | FAISS (persistée)                 | Local temporaire (in-memory)         |
+| Reranking                       | ColBERT                           | reranking Graphe + ReAct             |
+| Structuration de données        | Chunking linéaire                 | Graphe orienté contexte              |
+| Pertinence                      | Moyenne (top 3 souvent bruité)    | Bonne (focus sur noeuds liés)        |
+| Interprétabilité / logs         | Limitée                           | Très forte (graph des documents)     |
+| Facilité d’intégration          | Élevée (langchain standard)       | Moyenne (custom repo, à adapter)     |
+| Temps de développement          | Rapide                            | Moyen / Besoin d’ingénierie          |
+| Scalabilité / persistance       | Bonne                             | À industrialiser                     |
+
+---
+
+## 4. 🧪 Implémentation du PoC
+
+📁 Dossiers :
+- `/experiments/rag_classic/` → pipeline avec FAISS + LangChain
+- `/experiments/lightrag/` → pipeline LightRAG avec graphe dynamique
+- `/data/docs/` → jeux de documents sources (extraits réels anonymisés)
+
+Langages : Python 3.10  
+LLM utilisé : Mistral-Medium / GPT-4o (API)  
+Evaluation : grille manuelle + test utilisateurs
+
+---
+
+## 5. 📊 Résultats & Benchmarks
+
+### 🔹 Pertinence (sur 10 requêtes IT)
+| Méthode       | Moyenne score utilisateur /5 |
+|---------------|-------------------------------|
+| RAG Classique | 3.1                           |
+| LightRAG      | 4.4                           |
+
+### 🔹 Temps moyen de réponse (sur corpus moyen)
+| Méthode       | Latence moyenne |
+|---------------|-----------------|
+| RAG Classique | 1.2s            |
+| LightRAG      | 2.0s            |
+
+### 🔹 Traçabilité des sources
+- RAG classique : sources visibles mais peu explicites
+- LightRAG : graphe navigable par utilisateur, meilleures justifications
+
+---
+
+## 6. ✅ Décision & Justification
+
+> **LightRAG est retenu** pour les cas d’usage nécessitant :
+> - Un haut niveau d’interprétabilité
+> - Une explicabilité forte (audit bancaire, traçabilité documentaire)
+> - Une sémantique fine dans des corpus flous (docs internes non standardisées)
+
+> **RAG Classique est conservé** pour :
+> - Les cas simples, scalables ou à fort besoin de performance
+> - Les pipelines standardisés (tâches génériques, FAQ automatisée)
+
+---
+
+## 7. ⚠️ Risques & Points Ouverts
+
+- LightRAG nécessite :
+  - Une phase de pré-processing spécifique (relations inter-docs)
+  - Une couche d’industrialisation pour graphe persistant (TigerGraph ?)
+- Complexité d’intégration avec notre pipeline infra actuel (ServiceNow / Dynatrace ?)
+
+---
+
+## 8. 🚀 Prochaines Étapes
+
+- Intégration LightRAG dans notre agent Eureka (chatbot IT)
+- Étude complémentaire sur la **persistance du graphe** (Neo4j vs TigerGraph)
+- Ajout d’un **semantic router** pour router RAG vs LightRAG en fonction de la requête
+
+---
+
+## 9. 📎 Annexes
+
+- `notebooks/benchmark_results.ipynb` → résultats bruts
+- `scripts/lightrag_graph_debug.py` → visualisation du graphe
+- Liens : [Repo LightRAG officiel](https://github.com/lightgraph-ai/lightrag)
