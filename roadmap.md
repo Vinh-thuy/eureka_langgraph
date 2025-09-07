@@ -252,3 +252,137 @@
 ### 🔹 Opus – Prompt to Chart
 - Génération à la volée de graphiques, courbes ou indicateurs à partir d’un prompt
 - Suppression du besoin de dashboards statiques, adaptabilité aux besoins métier
+
+
+
+
+
+Layer – Data Integration & Foundation   |███████|----------------------
+Layer – Knowledge Graph & State Stores  ---|███████|-------------------
+Layer – Intelligence Engine Enabler     ------|███████|----------------
+Layer – Agent Orchestration             |███████|----------------------
+Layer – AI Services Exposure Platform   --|███████|--------------------
+Layer – Interaction & Experience        --------|███████|--------------
+
+Use Case – Solveum                      -----------|███████|-----------
+Use Case – SATS (Tech & Security Archi) ----------------|███████|------
+
+
+Décomposition par Layer
+
+Layer – Data Integration & Foundation
+	•	Epic 1 : Infrastructure Objects & Topology Mapping
+	•	Story : Identifier les solutions candidates (Discovery, API Cloud, CMDB, K8s API).
+	•	Story : Modéliser VMs / on-prem (serveurs, OS, réseau physique).
+	•	Story : Modéliser Kubernetes / cloud (clusters, namespaces, pods, ingress).
+	•	Story : Construire graphe de relations.
+	•	Story : Définir contrats de données (schéma, refresh).
+	•	Epic 2 : Event Captation & Monitoring Design
+	•	Story : Identifier solutions de captation (Dynatrace, Prometheus, Elastic, logs).
+	•	Story : Définir événements & métriques critiques (VMs).
+	•	Story : Définir événements & métriques critiques (Kubernetes).
+	•	Story : Prioriser la captation.
+	•	Story : Standardiser format (contrat événement).
+	•	Story : Créer catalogue validé par IT Ops.
+
+⸻
+
+Layer – Knowledge Graph & State Stores
+	•	Epic 1 : Knowledge Graph Foundations (TigerGraph)
+	•	Story : Analyse existant (modèles déjà présents).
+	•	Story : Identifier entités & relations critiques.
+	•	Story : Aligner avec use cases Solveum/SATS.
+	•	Story : Définir schéma graph V1.
+	•	Epic 2 : Vector Store & RAG Exploration
+	•	Story : Analyser Elastic (index vecteurs).
+	•	Story : Identifier besoins RAG.
+	•	Story : Étudier LightRAG.
+	•	Story : Choisir techno cible.
+	•	Epic 3 : Document Store Foundations (MongoDB/Autre)
+	•	Story : Identifier besoins documentaires (runbooks, configs).
+	•	Story : Évaluer MongoDB vs Elastic JSON.
+	•	Story : Définir scénarios d’accès.
+	•	Story : Modèle minimal stockage documentaire.
+
+⸻
+
+Layer – Intelligence Engine Enabler
+	•	Epic 1 : Correlation Engine
+	•	Story : Définir dataset, features, entraînement modèle, endpoint /predict.
+	•	Epic 2 : Explore Engine
+	•	Story : Définir besoins exploration (troubleshooting/log search).
+	•	Story : Prototyper algorithme.
+	•	Epic 3 : Risk Engine
+	•	Story : Définir métriques de risque, prototyper scoring.
+	•	Epic 4 : Impact Engine
+	•	Story : Définir scénarios d’impact, propagation sur graph.
+	•	Epic 5 : CI/CD for Engines
+	•	Story : Repo Git Engines, pipeline build/test/deploy, monitoring modèles.
+
+⸻
+
+Layer – Agent Orchestration
+	•	Epic 1 : Agentic Framework Identification & Setup
+	•	Story : Étudier frameworks, choisir LangGraph, déployer.
+	•	Epic 2 : Agent Foundations
+	•	Story : Conversation Loop.
+	•	Story : Prompt System.
+	•	Story : Memory Contextuelle.
+	•	Story : Tools standards (query KG, call Engine, retrieve doc).
+	•	Story : Agent générique de base.
+	•	Epic 3 : Domain-Specific Agents (futur)
+	•	Epic 4 : Advanced Orchestration (futur)
+	•	Epic 5 : CI/CD for Agents
+	•	Story : Repo Git Agents, pipeline build/test/deploy, versioning/rollback.
+
+⸻
+
+Layer – AI Services Exposure Platform
+	•	Epic 1 : Platform Identification & Validation
+	•	Story : Étudier options, POC, licences LangGraph.
+	•	Epic 2 : Platform Deployment & Setup
+	•	Story : Déploiement on-prem, configuration sécurité.
+	•	Epic 3 : Endpoint Creation & API Exposure
+	•	Story : Standard API, publier premier agent/engine, catalogue API interne.
+	•	Epic 4 : Monitoring & Observability
+	•	Story : Intégrer OpenTelemetry, Dynatrace, Elastic.
+	•	Epic 5 : Industrialisation & CI/CD for Exposure
+	•	Story : Repo Git Exposure, pipeline auto déploiement agents/engines exposés.
+
+⸻
+
+Layer – Interaction & Experience
+	•	Epic 1 : Chatbot Démo
+	•	Epic 2 : Copilot ITSM
+	•	Epic 3 : Multicanal UX (Teams/Web/SNOW)
+	•	Epic 4 : UX enrichie & Analytics
+
+⸻
+
+3️⃣ Use Cases (transverses)
+
+Use Case – Solveum
+
+Prototype de résolution d’incidents par corrélation + agent RCA.
+
+	•	Dépend de :
+	•	Data Integration V1 (captation incidents),
+	•	Knowledge Graph V1 (topology graph),
+	•	Correlation Engine,
+	•	Agent Foundations,
+	•	Exposure V2 (endpoints agents+engines),
+	•	Chatbot Démo.
+
+⸻
+
+Use Case – SATS (Schéma d’Architecture Technique & Sécurité)
+
+Génération et validation d’architectures IT + sécurité à partir du graphe et des documents.
+
+	•	Dépend de :
+	•	Knowledge Graph enrichi (Doc Graph + Org Graph),
+	•	Vector Store (LightRAG, Elastic),
+	•	Document Store,
+	•	Domain-Specific Agents,
+	•	Exposure V3 (catalogue complet),
+	•	Copilot ITSM / Multicanal UX.
