@@ -1,22 +1,368 @@
-# Guide Complet de Visualisation d'Architecture avec NetworkX et Graphviz
+# Guide Complet de Visualisation d'Architecture
 
 ## Table des Matières
-1. [Prérequis](#prérequis)
-2. [Structure de Données Requise](#structure-de-données-requise)
-3. [Code de Base](#code-de-base)
-4. [Exemples Complets](#exemples-complets)
-5. [Personnalisation Avancée](#personnalisation-avancée)
-6. [Dépannage](#dépannage)
-7. [Bonnes Pratiques](#bonnes-pratiques)
-8. [Ressources](#ressources)
+1. [Présentation](#présentation)
+2. [Prérequis](#prérequis)
+3. [Structure du Projet](#structure-du-projet)
+4. [Utilisation de Base](#utilisation-de-base)
+5. [Application Streamlit](#application-streamlit)
+6. [Personnalisation Avancée](#personnalisation-avancée)
+7. [Exemples Complets](#exemples-complets)
+8. [Dépannage](#dépannage)
+
+## Présentation
+
+Ce guide explique comment créer des visualisations d'architecture à partir de graphes NetworkX en utilisant Graphviz, avec une interface web interactive via Streamlit.
 
 ## Prérequis
 
 ```bash
-# Création d'un environnement conda (recommandé)
-conda create -n archi-viz python=3.10
-conda activate archi-viz
-conda install -c conda-forge networkx pygraphviz
+# Installation des dépendances
+pip install networkx graphviz streamlit
+```
+
+## Structure du Projet
+
+```
+architecture-viz/
+├── app.py              # Application Streamlit principale
+├── requirements.txt    # Dépendances
+└── assets/            # Dossiers pour les ressources
+    └── examples/      # Exemples de graphes
+```
+
+## Utilisation de Base
+
+### Création d'un Graphe Simple
+
+```python
+import networkx as nx
+
+# Initialisation
+G = nx.DiGraph()
+
+# Ajout de nœuds avec attributs
+G.add_node("web01", 
+          type="web", 
+          label="Serveur Web", 
+          tier="front", 
+          cluster="frontend")
+
+# Ajout d'arêtes avec attributs
+G.add_edge("web01", "api01", 
+          protocol="HTTPS",
+          port=443,
+          critical=True)
+```
+
+### Attributs des Nœuds
+
+| Attribut | Type    | Description                    | Exemple          |
+|----------|---------|--------------------------------|------------------|
+| type     | String  | Type du composant             | "web", "db", "app"|
+| label    | String  | Libellé affiché               | "API Gateway"    |
+| tier     | String  | Niveau dans l'architecture    | "front", "middle", "back" |
+| cluster  | String  | Groupe logique                | "frontend", "backend" |
+
+### Attributs des Arêtes
+
+| Attribut | Type    | Description                    | Exemple          |
+|----------|---------|--------------------------------|------------------|
+| protocol | String  | Protocole de communication    | "HTTP/2", "gRPC" |
+| port     | Integer | Port de connexion             | 443, 8080        |
+| critical | Boolean | Connexion critique            | true/false       |
+
+## Application Streamlit
+
+### Fichier `app.py`
+
+```python
+import streamlit as st
+import networkx as nx
+import graphviz
+from pathlib import Path
+
+# Configuration de la page
+st.set_page_config(
+    page_title="Visualisateur d'Architecture",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Fonction de visualisation
+def visualize_networkx_graph(G, output_file="architecture"):
+    # Configuration du graphe
+    dot = graphviz.Digraph(
+        comment='Architecture',
+        format='svg',
+        graph_attr={
+            'rankdir': 'LR',
+            'splines': 'ortho',
+            'nodesep': '0.4',
+            'ranksep': '0.8',
+            'fontname': 'Arial'
+        },
+        node_attr={
+            'shape': 'box',
+            'style': 'rounded,filled',
+            'fontname': 'Arial',
+            'fontsize': '10'
+        },
+        edge_attr={
+            'fontname': 'Arial',
+            'fontsize': '8',
+            'labelfloat': 'true',
+            'decorate': 'true'
+        }
+    )
+    
+    # Styles par type de nœud
+    type_to_shape = {
+        "web": "ellipse",
+        "app": "box",
+        "db": "cylinder",
+        "lb": "hexagon",
+        "gateway": "diamond"
+    }
+    
+    type_to_fill = {
+        "web": "#e0f3ff",
+        "app": "#e8ffe8",
+        "db": "#fff2cc",
+        "lb": "#f0f0f0",
+        "gateway": "#f3e0ff"
+    }
+    
+    # Création des clusters
+    clusters = {}
+    for node, attrs in G.nodes(data=True):
+        if 'cluster' in attrs:
+            cluster_name = attrs['cluster']
+            clusters.setdefault(cluster_name, []).append(node)
+    
+    # Ajout des nœuds aux clusters
+    for cluster_name, node_ids in clusters.items():
+        with dot.subgraph(name=f'cluster_{cluster_name}') as c:
+            c.attr(
+                label=cluster_name,
+                style='rounded,dashed',
+                color='#cccccc',
+                fontsize='10'
+            )
+            for node_id in node_ids:
+                attrs = G.nodes[node_id]
+                node_type = attrs.get('type', '')
+                c.node(
+                    str(node_id),
+                    label=attrs.get('label', str(node_id)),
+                    shape=type_to_shape.get(node_type, 'box'),
+                    fillcolor=type_to_fill.get(node_type, '#eeeeee')
+                )
+    
+    # Ajout des nœuds hors cluster
+    for node, attrs in G.nodes(data=True):
+        if 'cluster' not in attrs:
+            node_type = attrs.get('type', '')
+            dot.node(
+                str(node),
+                label=attrs.get('label', str(node)),
+                shape=type_to_shape.get(node_type, 'box'),
+                fillcolor=type_to_fill.get(node_type, '#eeeeee')
+            )
+    
+    # Ajout des arêtes
+    for u, v, attrs in G.edges(data=True):
+        edge_attrs = {
+            'xlabel': attrs.get('protocol', ''),
+            'fontsize': '8',
+            'penwidth': '2' if attrs.get('critical') else '1',
+            'color': '#cc0000' if attrs.get('critical') else '#888888'
+        }
+        dot.edge(str(u), str(v), **{k: v for k, v in edge_attrs.items() if v})
+    
+    # Organisation par niveau (tier)
+    tiers = {}
+    for node, attrs in G.nodes(data=True):
+        if 'tier' in attrs:
+            tier = attrs['tier']
+            tiers.setdefault(tier, []).append(node)
+    
+    for tier, nodes in tiers.items():
+        with dot.subgraph() as s:
+            s.attr(rank='same')
+            for node in nodes:
+                s.node(str(node))
+    
+    # Génération du fichier
+    dot.render(output_file, cleanup=True)
+    return f"{output_file}.svg"
+
+# Interface utilisateur
+st.title("🖥️ Visualisateur d'Architecture")
+
+# Éditeur de code pour le graphe
+graph_code = st.text_area(
+    "Définissez votre graphe NetworkX",
+    height=300,
+    help="Utilisez la syntaxe NetworkX pour définir votre architecture"
+)
+
+# Bouton de génération
+if st.button("Générer le diagramme", type="primary"):
+    try:
+        # Exécution du code
+        local_vars = {}
+        exec(graph_code, {"nx": nx}, local_vars)
+        G = local_vars.get('G')
+        
+        if G and isinstance(G, (nx.Graph, nx.DiGraph)):
+            # Génération du diagramme
+            output_file = visualize_networkx_graph(G)
+            
+            # Affichage
+            with open(output_file, 'r') as f:
+                svg = f.read()
+                st.components.v1.html(
+                    f"""
+                    <div style="width: 100%; overflow: auto;">
+                        {svg}
+                    </div>
+                    """,
+                    height=600
+                )
+                
+            # Téléchargement du SVG
+            with open(output_file, 'rb') as f:
+                st.download_button(
+                    label="Télécharger le SVG",
+                    data=f,
+                    file_name="architecture.svg",
+                    mime="image/svg+xml"
+                )
+        else:
+            st.error("Aucun graphe NetworkX valide n'a été trouvé dans le code.")
+            
+    except Exception as e:
+        st.error(f"Une erreur est survenue : {str(e)}")
+
+# Exemple dans la barre latérale
+with st.sidebar:
+    st.header("Aide")
+    st.markdown("""
+    ### Exemple de graphe
+    ```python
+    import networkx as nx
+    
+    G = nx.DiGraph()
+    G.add_node("web", type="web", label="Serveur Web", tier="front")
+    G.add_node("api", type="app", label="API", tier="middle")
+    G.add_edge("web", "api", protocol="HTTPS")
+    ```
+    """)
+```
+
+## Personnalisation Avancée
+
+### Ajouter des Types de Nœuds
+
+```python
+type_to_shape = {
+    "web": "ellipse",
+    "app": "box",
+    "db": "cylinder",
+    "queue": "folder",
+    "cache": "doublecircle",
+    "gateway": "diamond"
+}
+
+type_to_fill = {
+    "web": "#e0f3ff",
+    "app": "#e8ffe8",
+    "db": "#fff2cc",
+    "queue": "#ffe0e0",
+    "cache": "#fff0f5",
+    "gateway": "#f3e0ff"
+}
+```
+
+### Styles des Arêtes
+
+```python
+edge_attrs = {
+    'xlabel': attrs.get('protocol', ''),
+    'fontsize': '8',
+    'penwidth': '2' if attrs.get('critical') else '1',
+    'color': '#cc0000' if attrs.get('critical') else '#888888',
+    'fontcolor': '#333333',
+    'arrowsize': '0.8'
+}
+```
+
+## Exemples Complets
+
+### Architecture Microservices
+
+```python
+G = nx.DiGraph()
+
+# Frontend
+G.add_node("cdn", type="gateway", label="CDN", tier="front", cluster="frontend")
+G.add_node("lb", type="lb", label="Load Balancer", tier="front", cluster="frontend")
+
+# Services
+services = ["users", "products", "orders", "auth"]
+for svc in services:
+    G.add_node(f"svc_{svc}", type="app", label=f"Service {svc.capitalize()}", tier="middle", cluster="backend")
+
+# Bases de données
+G.add_node("db_primary", type="db", label="PostgreSQL", tier="back", cluster="database")
+G.add_node("cache", type="cache", label="Redis", tier="back", cluster="database")
+
+# Connexions
+G.add_edge("cdn", "lb", protocol="HTTPS")
+G.add_edge("lb", "svc_users", protocol="HTTP/2")
+G.add_edge("lb", "svc_products", protocol="HTTP/2")
+G.add_edge("lb", "svc_orders", protocol="HTTP/2")
+G.add_edge("lb", "svc_auth", protocol="HTTP/2")
+
+for svc in services:
+    G.add_edge(f"svc_{svc}", "db_primary", protocol="SQL")
+    G.add_edge(f"svc_{svc}", "cache", protocol="TCP")
+```
+
+## Dépannage
+
+### Problèmes Courants
+
+1. **Graphviz non trouvé**
+   ```bash
+   # Sur macOS
+   brew install graphviz
+   
+   # Sur Ubuntu/Debian
+   sudo apt-get install graphviz
+   ```
+
+2. **Erreurs de rendu**
+   - Vérifiez les noms des attributs
+   - Assurez-vous que tous les nœuds référencés existent
+
+3. **Problèmes de performance**
+   - Limitez le nombre de nœuds à quelques centaines
+   - Utilisez `splines="ortho"` pour de meilleures performances
+
+### Améliorations Possibles
+
+1. Ajouter l'export en PNG/PDF
+2. Implémenter le glisser-déposer des nœuds
+3. Ajouter la sauvegarde/chargement de configurations
+4. Intégrer avec des outils comme Prometheus pour des métriques en temps réel
+
+## Conclusion
+
+Ce guide fournit une base solide pour créer des visualisations d'architecture professionnelles. N'hésitez pas à personnaliser les styles et les fonctionnalités selon vos besoins spécifiques.
+
+Pour toute question ou problème, consultez la documentation de [NetworkX](https://networkx.org/) et [Graphviz](https://graphviz.org/).
 
 # Ou avec pip
 pip install networkx pygraphviz
