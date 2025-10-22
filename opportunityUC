@@ -1,0 +1,68 @@
+#
+Fonctionnalité / Besoin IA
+Description
+Type d’intelligence recommandé
+1
+Incident Summarization
+Provide agents with a summarization of incident notes and history
+LLM agentique (synthèse et contextualisation du langage naturel)
+2
+Incident Resolution Notes Generation
+Reduce agents’ “wrap time” by generating accurate resolution notes based on actions taken and solution achieved. Reduce troubleshooting time as future agents can easily reference past incidents.
+LLM agentique (génération de texte structurée à partir de logs et notes)
+3
+Knowledge Article Generation
+Auto-generate draft knowledge articles via conversational experience based on incident records. Deflect future incidents with improved, comprehensive knowledge articles for employee end users.
+LLM agentique (génération de contenu rédigé et contextualisé)
+4
+Investigate IT problems
+Assist agent in identifying the root cause of a problem, assessing its impact and risks, and providing a clear and actionable resolution plan.
+Hybride LLM + Graph reasoning / GNN (analyse de causes racines et corrélations topologiques)
+5
+Investigate and resolve ITSM incidents BNPP customization
+Provides recommendations for a resolution using catalog, knowledge, changes, and past incidents and sends the information to the agent.
+LLM + moteur de règles ou ML supervisé (recommandation guidée par historique et base de connaissance)
+6
+Triager and categorize ITSM incidents BNPP customization
+Enables agents to determine the category, subcategory, and configuration item automatically for a given incident. After categorizing, it looks for related major incidents or known problems and links them automatically. Ask for agent approval before updating.
+ML supervisé ou deep learning (classification NLP et similarité)
+7
+Analyze incident trends BNPP customization
+Retrieve incident clusters, analyze data, identify recurring issues and root causes, and provide actionable recommendations. Provide the list of incidents for each cluster.
+ML non supervisé ou GNN (clustering et détection de patterns récurrents)
+8
+Generate the PIR (Delivered by ISPL)
+Reduce incident manager “wrap time” by generating a draft of PIR via conversational experience based on incident details.
+LLM agentique (génération de rapport synthétique et conversationnel)
+9
+Activate OOTB recommended actions
+Agents can quickly check related search results or similar records and perform AI-suggested actions (linking parent/child, copying notes, etc.).
+Moteur de règles + ML de similarité (détection de similarité et déclenchement automatique)
+10
+Activate recommended prediction of fields
+Agents can choose a recommended value when they need to set the Service or the CI for an incident. Suggested value is derived from historical data based on same entity and description.
+ML supervisé ou deep learning tabulaire (prédiction de champs à partir du contexte et de l’historique)
+11
+Small adjustments on predictive / task intelligence models
+Improve calculation of similarity or timing based on new criteria.
+Optimisation de modèles ML existants (réglage d’hyperparamètres ou pondération)
+12
+Custom recommended action to link incidents as children
+Provides agents with the possibility to group and link similar incidents into child/parent hierarchies.
+GNN ou ML de corrélation (détection de liens topologiques dans le graphe d’incidents)
+13
+Setup of experts on-call feature (not configured)
+Service desk managers can define on-call shifts and agents can contact experts directly for resolution of complex incidents.
+LLM agentique + moteur de règles (orchestration contextuelle et suggestion d’experts)
+14
+Setup of email template
+Agents can quickly compose new emails from predefined templates. Templates can be personalized by Entity.
+LLM léger ou moteur de template (rédaction automatique guidée)
+15
+Setup of announcements
+Agents can quickly see highlighted P1/P2 incidents to be aware of ongoing critical events.
+Moteur de règles ou logique événementielle (notification automatique selon criticité)
+16
+Enhance the workspace with BNPP fields
+The custom fields created by BNPP have been added to the Service Operations Workspace to give them an equivalent experience.
+Aucune IA spécifique (configuration UI / modèle de données)
