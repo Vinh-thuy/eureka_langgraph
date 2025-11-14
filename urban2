@@ -1,0 +1,105 @@
+ PILIER 1 — The Digital Twin (Unified Source of Truth)
+
+Why it helps other projects
+
+Because every project — Changeum, Solvium, LogListing, MIA — needs to understand the infrastructure, dependencies, and context to work properly.
+
+How it helps
+	•	Provides one shared, accurate IT map instead of each team rebuilding their own view
+	•	Eliminates inconsistencies between projects (everyone sees the same infra reality)
+	•	Gives direct access to dependencies, impact paths, topology and runtime context
+	•	Enables context-aware AI, which drastically improves quality and relevance
+
+Marketing Promise
+
+“All teams rely on a single, consistent, authoritative view of IT to build smarter solutions faster.”
+
+⸻
+
+⭐ PILIER 2 — Technical Architecture (Structured AI Pipeline)
+
+Why it helps other projects
+
+Because teams shouldn’t have to rebuild pipelines, ingestion logic, validation layers, or orchestration frameworks.
+
+How it helps
+	•	Provides ready-made infrastructure for ingestion, normalization and validation
+	•	Ensures consistent quality across all data feeding models & agents
+	•	Gives clear places to plug in (API layer, ingestion points, graph access)
+	•	Allows teams to focus on business logic, not infrastructure plumbing
+
+Marketing Promise
+
+“A shared AI production pipeline that removes complexity so projects can focus on value.”
+
+⸻
+
+⭐ PILIER 3 — Shared AI Services (Smart Engines + Graph APIs + Agent Platform)
+
+Why it helps other projects
+
+Because no team should have to reimplement correlation engines, anomaly engines, risk scoring, or their own graph reasoning.
+
+How it helps
+	•	Gives every project access to battle-tested AI engines via API
+	•	Provides instant intelligence: correlation, anomaly, risk, impact analysis
+	•	Avoids rebuilding algorithms or training isolated models
+	•	Ensures uniformity: every product uses the same intelligence core
+
+Marketing Promise
+
+“Intelligence-as-a-Service: plug-and-play AI capabilities available to all teams.”
+
+⸻
+
+⭐ PILIER 4 — Doc-to-Knowledge Platform (IDP)
+
+Why it helps other projects
+
+Because all teams struggle with the same problem: extracting value from huge volumes of documents.
+
+How it helps
+	•	Ingests and analyzes PDFs, diagrams, charts, images, schemas automatically
+	•	Converts documents into structured knowledge enriched by the graph
+	•	Avoids each project building its own OCR/VLM tooling
+	•	Provides a massive, unified RAG that all agents and engines can rely on
+
+Marketing Promise
+
+“Turn every document into structured, queryable knowledge accessible to any team.”
+
+⸻
+
+⭐ PILIER 5 — Agentic Platform Urbanization (Shared Agent Framework)
+
+Why it helps other projects
+
+Because each project wants its own agent(s), but uncontrolled growth creates chaos, duplication, and incompatibilities.
+
+How it helps
+	•	Provides a shared, standardized way to build agents
+	•	Allows cross-team agent cooperation (Change Mentor ↔ RCA Agent ↔ Infra Expert)
+	•	Gives instant access to shared capabilities (graph, engines, RAG)
+	•	Ensures that agents built by any team remain compatible and reusable
+
+Marketing Promise
+
+“A shared agent ecosystem where every agent can collaborate, no matter who built it.”
+
+⸻
+
+⭐ PILIER 6 — Governance & Collaboration (The Operating Model)
+
+Why it helps other projects
+
+Because without common rules, everyone reinvents and diverges — and interoperability collapses.
+
+How it helps
+	•	Provides clear development standards
+	•	Defines API contracts, versioning rules, prompt governance
+	•	Ensures safe use of LLM/VLM, compliance, observability
+	•	Offers a contribution model to share engines, agents, pipelines across teams
+
+Marketing Promise
+
+“A clear operating framework that ensures consistency, security, and sustainable growth.”
