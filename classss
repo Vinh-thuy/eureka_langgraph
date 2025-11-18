@@ -1,0 +1,171 @@
+COLONNE 1 — Agents d’Assistance & Connaissance
+1. FAQ Agent
+2. Glossaire
+3. DocMaster
+4. Explainer Agent
+5. Compagnon Support N1/N2
+6. Mentor
+7. Tech Explainer
+8. Tech Expert (lite)
+
+COLONNE 2 — Agents Contextuels
+1. Inventory Reader
+2. Topology Reader
+3. EventLog Interpreter
+4. Performance Reader
+5. Configuration Reader
+6. Behavior Modeler
+7. Dependency Contextualizer
+8. Hybrid Context Agent
+
+COLONNE 3 — Agents de Gestion Opérationnelle
+1. Incident Management Advisor
+2. Change Booking Advisor
+3. Runbook Assistant
+4. Obsolescence Advisor
+5. Capacity Advisor
+6. Service Status Reporter
+7. Ops Coordinator
+8. Change Impact Pre-Checker
+
+COLONNE 4 — Agents Analystes
+1. Incident Classifier
+2. Pattern Detector
+3. Change Risk Mitigator
+4. Root Cause Analyst
+5. Propagation Simulator
+6. Incident Predictor
+7. Graph Reasoning Agent
+8. Anomaly Correlator (multi-sources)
+
+COLONNE 5 — Agents d’Exécution & Automatisation
+1. Doc Updater
+2. Task Automator
+3. Remediation Proposer
+4. Low-Risk Change Executor
+5. Workflow Trigger
+6. Self-Healing Suggestor
+7. Runbook Executor
+8. Infra Tuner
+
+COLONNE 6 — Agents Stratégiques & Gouvernance
+1. Policy Checker
+2. Governance Reporter
+3. Compliance Validator
+4. Projection long-terme
+5. Budget Forecaster
+6. Roadmap Suggestor
+7. Orchestrateur Multi-Agents
+8. Agent IA Validation UC
+
+
+
+🎯 Cas d’usage choisi : “Mon application critique X est lente. Quelle est la cause et que faire ?”
+
+C’est le cas d’usage le plus universel :
+	•	performance
+	•	disponibilité
+	•	diagnostic
+	•	logs
+	•	dépendances
+	•	incident/change
+	•	réseau/infra/app
+	•	actions automatiques
+	•	gouvernance
+Exactement ce qu’un Digital Twin doit résoudre.
+
+⸻
+
+⭐ QUESTION UTILISATEUR (unique pour les 6 niveaux)
+
+🗣️ “L’application X est lente depuis ce matin. Peux-tu m’aider à comprendre pourquoi ?”
+
+⸻
+
+🟦 1) Agents d’Assistance & Connaissance
+
+Réponse attendue : informer, expliquer, guider
+
+“La lenteur d’une application peut venir de la base de données, du réseau, d’un changement récent ou d’un pic de charge.
+Je peux te montrer la documentation sur comment diagnostiquer une lenteur.”
+
+🎯 Apporte du contexte simple, mais pas d’analyse réelle.
+
+⸻
+
+🟦 2) Agents Contextuels & Compréhension
+
+Réponse attendue : décrire le contexte technique
+
+“Voici le contexte actuel :
+
+	•	le service X dépend de 12 composants,
+	•	la latence réseau a augmenté de 20% depuis 07h12,
+	•	un déploiement a eu lieu hier soir sur le backend,
+	•	la base SQL montre un temps de réponse en hausse.”
+
+🎯 Compréhension passive, aucune conclusion.
+
+⸻
+
+🟦 3) Agents de Gestion Opérationnelle
+
+Réponse attendue : orchestrer, organiser les investigations
+
+“Je te recommande d’ouvrir un ticket Incident Major.
+Je peux notifier l’équipe applicative.
+Les derniers changements liés à X sont :
+
+	•	Change #48299 (mise à jour du backend)
+	•	Change #48302 (patch sécurité DB).
+Je te propose un plan d’investigation pas à pas.”
+
+🎯 Coordonne, prépare, structure sans analyser en profondeur.
+
+⸻
+
+🟦 4) Agents d’Analyse & Diagnostic
+
+Réponse attendue : identifier une cause probable
+
+“Analyse terminée :
+La lenteur provient dans 87% des signaux corrélés d’un problème sur la base SQL.
+Il y a une saturation CPU à 95% depuis 08h03,
+corrélée au patch sécurité appliqué hier soir.
+Incident classifié :
+Root Cause probable = surcharge CPU DB.”
+
+🎯 Diagnostic, corrélation, analyse multi-sources, résultat clair.
+
+⸻
+
+🟦 5) Agents d’Exécution & Automatisation
+
+Réponse attendue : proposer une action ou agir
+
+“Je peux exécuter l’une des actions suivantes :
+
+	•	redémarrer le pool DB (faible risque),
+	•	augmenter temporairement le nombre de workers,
+	•	déployer une règle de throttling.
+Recommandation : Action 2.
+Souhaites-tu que je l’exécute ?”
+
+🎯 Il agit (avec contrôle humain).
+
+⸻
+
+🟦 6) Agents Stratégiques & Gouvernance
+
+Réponse attendue : vision long-terme, risques, recommandations stratégique
+
+“Ce type d’incident est le 6e en 2 mois.
+La capacité DB atteint régulièrement ses limites.
+Je recommande :
+
+	•	une revue de capacité,
+	•	un budget de scaling du cluster SQL,
+	•	une mise à jour des politiques de change (contrôle renforcé après patch).
+Je peux générer un rapport complet pour le CTO.”
+
+🎯 Vision globale, gouvernance, tendance long-terme.
