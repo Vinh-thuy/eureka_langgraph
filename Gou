@@ -1,0 +1,118 @@
+1. IDENTIFICATION & ASSESSMENT
+
+(Cadrage, faisabilité, conformité initiale)
+
+Objectifs : définir le périmètre, la valeur attendue et les contraintes.
+
+Éléments clés :
+	•	Identification du cas d’usage
+	•	Outcome attendu
+	•	Faisabilité (technique, data, sécurité)
+	•	Timeline & complexité
+	•	Data maturity / accessibilité
+	•	Sécurité & inclusivité
+	•	Conformité (charte AI / RGPD)
+
+Livrables :
+	•	Fiche d’Assessment
+	•	Feuille de route initiale
+
+⸻
+
+2. PRIORISATION & ROADMAP
+
+(Décision, valeur, investissement)
+
+Objectifs : sélectionner les projets à plus forte valeur et maîtriser l’investissement.
+
+Éléments clés :
+	•	Roadmap & arbitrage
+	•	Finance / budget
+	•	Criticité IT et impact business
+	•	Alignement CTO / Directions Infra
+
+Instances :
+	•	STEERCO
+	•	Demand Board
+
+⸻
+
+3. CONTROL & COMPLIANCE
+
+(Qualité, robustesse, auditabilité)
+
+Objectifs : assurer un niveau de confiance élevé et un fonctionnement transparent.
+
+Contrôles intégrés :
+	•	Return (gains mesurés)
+	•	Explicabilité & interprétabilité
+	•	Traçabilité (prompts, modèles, versions)
+	•	Auditabilité (GitLab, logs, décisions)
+	•	Observabilité (Dynatrace, Elastic, métriques AI)
+	•	Conformité continue (charte, sécurité, RGPD)
+
+Livrables :
+	•	AI Control Checklist
+	•	Rapport de conformité
+
+⸻
+
+4. DELIVERY & MONITORING
+
+(Exécution, stabilité, qualité opérationnelle)
+
+Objectifs : industrialiser le delivery et piloter la performance réelle.
+
+Éléments clés :
+	•	Delivery & intégration
+	•	Satisfaction utilisateurs
+	•	Lifespan (maintenabilité / drift)
+	•	Release Notes
+	•	Gestion des versions agents (catalogage, lifecycle)
+
+Outils :
+	•	GitLab
+	•	Confluence
+	•	Dynatrace
+	•	Observabilité Twin
+
+⸻
+
+5. OPERATIONAL FOLLOW-UP
+
+(Pilotage, décision, communication)
+
+Objectifs : aligner les décisions, les actions et le reporting.
+
+Instances & activités :
+	•	OPCO
+	•	STEERCO
+	•	Decision Board
+	•	Démo / Présentations
+	•	Reporting & KPIs
+
+KPIs clés :
+	•	MTTR / MTTI
+	•	Satisfaction utilisateurs
+	•	Qualité des prédictions
+	•	Taux d’automatisation
+
+⸻
+
+6. PROCESS & SUPPORT SYSTEM
+
+(Outils, documentation, pipelines)
+
+Objectifs : garantir un cadre fiable et industrialisé.
+
+Outils & Process :
+	•	JIRA (workflow projet & AI Ops)
+	•	ServiceNow (incidents / change / CMDB)
+	•	Catalogue Agents (versions, statut, modes d’usage)
+	•	GitLab (CI/CD, audit)
+	•	Confluence (documentation)
+
+Support :
+	•	Support N2/N3 AI Ops
+	•	Support technique modèles & agents
+	•	Support plateforme Digital Twin
