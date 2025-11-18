@@ -1,0 +1,130 @@
+Agents d’Assistance & Support (Assistants Ops)
+
+Objectif : aider les équipes, accélérer la résolution et la compréhension.
+UC typiques : support L1→L2, documentation, explications, guidage.
+
+🔹 Agents inclus
+	•	Compagnon L1–L2
+	•	Doc Master
+	•	Mentor
+	•	Explainer / Knowledge Assistant (explication des incidents, règles, procédures)
+
+🔹 Priorité IT
+
+Moyenne → forte (gain de productivité immédiat).
+
+🔹 Pourquoi cette catégorie ?
+
+→ Ce sont les agents les plus simples à déployer, avec faible risque mais fort impact.
+
+⸻
+
+2️⃣ Agents de Gestion Opérationnelle (Ops Managers)
+
+Objectif : organiser, détecter, orchestrer les actions liées à l’exploitation.
+UC typiques : gestion de charge, incidents, coordination entre équipes.
+
+🔹 Agents inclus
+	•	Incident Manager
+	•	Change Validator
+	•	Obsolescence Advisor
+	•	Expert Applicatif
+	•	Expert Infrastructure
+
+🔹 Priorité IT
+
+Forte (amélioration directe des processus ITSM & production).
+
+🔹 Pourquoi cette catégorie ?
+
+→ Ils touchent les processus coeur IT : incident, change, obsolescence.
+
+⸻
+
+3️⃣ Agents d’Analyse & Diagnostic (Analytical Agents)
+
+Objectif : analyser, corréler, prioriser, diagnostiquer.
+UC typiques : root cause, corrélations Dynatrace/SNOW, pattern detection.
+
+🔹 Agents inclus
+	•	Root Cause Analyst
+	•	Change Risk Mitigator
+	•	Incident Classifier
+	•	Pattern Detector
+	•	Impact Forecaster (analyse propagation service → infra)
+
+🔹 Priorité IT
+
+Très forte (réduction MTTR / MTTI, cœur du Digital Twin).
+
+🔹 Pourquoi cette catégorie ?
+
+→ Ils portent le cœur du raisonnement graph + LLM, la valeur la plus haute du Twin.
+
+⸻
+
+4️⃣ Agents d’Automatisation & Exécution (Action Agents)
+
+Objectif : automatiser les actions répétitives ou à faible risque.
+UC typiques : mise à jour de doc, logique ITSM, scripts low-risk.
+
+🔹 Agents inclus
+	•	Change Executor (faible risque)
+	•	Doc Updater
+	•	Remediation Proposer (suggestion → validation humaine)
+	•	Task Automator
+
+🔹 Priorité IT
+
+Progressive (nécessite contrôle IA + risques).
+
+🔹 Pourquoi cette catégorie ?
+
+→ Automation = ROI mais nécessite gouvernance stricte, garde-fous & validation.
+
+⸻
+
+5️⃣ Agents de Gouvernance & Validation (Control Agents)
+
+Objectif : garantir cohérence, sécurité, conformité, interopérabilité.
+UC typiques : validation des nouveaux UC, conformité sécurité, duplications.
+
+🔹 Agents inclus
+	•	Agent IA de Validation (nouveaux UC)
+	•	Compliance Checker (charte AI, sécurité, RGPD)
+	•	Duplicate Hunter (éviter création d’agents redondants)
+	•	Quality Gate (tests, gouvernance, cohérence Twin)
+
+🔹 Priorité IT
+
+Très forte (pilier indispensable de l’écosystème Agentic).
+
+🔹 Pourquoi cette catégorie ?
+
+→ Sans gouvernance, les agents dérivent ; c’est ton backbone de contrôle.
+
+⸻
+
+📊 **Résumé pour PPT :
+
+Catégorisation des Agents LLM (Vision UC Driven – Digital Twin IT)**
+
+1. Agents d’Assistance & Support
+
+→ L1/L2, Doc Master, Mentor, Explainer
+
+2. Agents de Gestion Opérationnelle
+
+→ Incident Manager, Expert Infra/App, Change Validator, Obsolescence Advisor
+
+3. Agents d’Analyse & Diagnostic
+
+→ Root Cause Analyst, Change Risk Mitigator, Pattern Detector, Impact Forecaster
+
+4. Agents d’Automatisation & Exécution
+
+→ Task Automator, Doc Updater, Remediation Proposer, Change Executor
+
+5. Agents de Gouvernance & Validation
+
+→ Agent IA de validation, Compliance Checker, Quality Gate, Duplicate Hunter
