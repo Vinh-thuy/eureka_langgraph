@@ -59,113 +59,107 @@ COLONNE 6 — Agents Stratégiques & Gouvernance
 8. Agent IA Validation UC
 
 
+) Agents d’Assistance & Connaissance (TECHNIQUE)
 
-🎯 Cas d’usage choisi : “Mon application critique X est lente. Quelle est la cause et que faire ?”
+👉 Connaissent l’infrastructure, la topologie, les serveurs, les logs, les comportements.
 
-C’est le cas d’usage le plus universel :
-	•	performance
-	•	disponibilité
-	•	diagnostic
-	•	logs
-	•	dépendances
-	•	incident/change
-	•	réseau/infra/app
-	•	actions automatiques
-	•	gouvernance
-Exactement ce qu’un Digital Twin doit résoudre.
+Réponse attendue :
+« Voici la situation technique de l’application X :
 
-⸻
+	•	Topologie : composants A, B, C
+	•	Serveurs : CPU, mémoire, I/O, états
+	•	Logs : erreurs fréquentes, timeouts
+	•	Événements : derniers déploiements, alertes
+	•	Performance : latence +40% depuis 08h12
+Je peux t’expliquer chaque élément si tu le souhaites. »
 
-⭐ QUESTION UTILISATEUR (unique pour les 6 niveaux)
-
-🗣️ “L’application X est lente depuis ce matin. Peux-tu m’aider à comprendre pourquoi ?”
+🎯 Objectif : montrer l’état technique réel. Sans conclusion métier, sans analyse profonde.
 
 ⸻
 
-🟦 1) Agents d’Assistance & Connaissance
+🟦 2) Agents Contextuels & Compréhension (MÉTIER + FONCTIONNEL)
 
-Réponse attendue : informer, expliquer, guider
+👉 Comprennent CE QUE FAIT l’application, POUR QUI, POUR QUOI, SON RÔLE METIER.
 
-“La lenteur d’une application peut venir de la base de données, du réseau, d’un changement récent ou d’un pic de charge.
-Je peux te montrer la documentation sur comment diagnostiquer une lenteur.”
+Réponse attendue :
+« L’application X sert à [fonction métier : ex. virements SEPA].
+Elle supporte les utilisateurs [type], et ses processus clés sont :
 
-🎯 Apporte du contexte simple, mais pas d’analyse réelle.
+	•	Transaction Y
+	•	Service Z
+Actuellement :
+	•	Impact métier : transactions SEPA ralenties
+	•	Niveau de criticité : élevé pour la production
+	•	Délai acceptable : <120 ms → actuellement 450 ms
+Je peux détailler l’impact utilisateur. »
 
-⸻
-
-🟦 2) Agents Contextuels & Compréhension
-
-Réponse attendue : décrire le contexte technique
-
-“Voici le contexte actuel :
-
-	•	le service X dépend de 12 composants,
-	•	la latence réseau a augmenté de 20% depuis 07h12,
-	•	un déploiement a eu lieu hier soir sur le backend,
-	•	la base SQL montre un temps de réponse en hausse.”
-
-🎯 Compréhension passive, aucune conclusion.
+🎯 Objectif : donner la lecture métier + fonctionnelle de la panne.
 
 ⸻
 
-🟦 3) Agents de Gestion Opérationnelle
+🟦 3) Agents de Gestion Opérationnelle (ITSM)
 
-Réponse attendue : orchestrer, organiser les investigations
+👉 Gèrent l’incident, le workflow, les changements, les équipes à prévenir.
 
-“Je te recommande d’ouvrir un ticket Incident Major.
-Je peux notifier l’équipe applicative.
-Les derniers changements liés à X sont :
+Réponse attendue :
+« D’après ITSM :
 
-	•	Change #48299 (mise à jour du backend)
-	•	Change #48302 (patch sécurité DB).
-Je te propose un plan d’investigation pas à pas.”
+	•	Un incident est déjà ouvert : INC45782
+	•	Derniers changements liés : CHG48299 (patch DB hier), CHG48303 (mise à jour backend)
+Je te propose :
+	•	d’escalader en Major Incident
+	•	de notifier les équipes Applicative & Infra
+	•	de suivre le runbook ‘Dégradation performance DB’. »
 
-🎯 Coordonne, prépare, structure sans analyser en profondeur.
-
-⸻
-
-🟦 4) Agents d’Analyse & Diagnostic
-
-Réponse attendue : identifier une cause probable
-
-“Analyse terminée :
-La lenteur provient dans 87% des signaux corrélés d’un problème sur la base SQL.
-Il y a une saturation CPU à 95% depuis 08h03,
-corrélée au patch sécurité appliqué hier soir.
-Incident classifié :
-Root Cause probable = surcharge CPU DB.”
-
-🎯 Diagnostic, corrélation, analyse multi-sources, résultat clair.
+🎯 Objectif : organiser la réponse opérationnelle.
 
 ⸻
 
-🟦 5) Agents d’Exécution & Automatisation
+🟦 4) Agents d’Analyse & Diagnostic (AI/ML + graph reasoning)
 
-Réponse attendue : proposer une action ou agir
+👉 Corrèlent, analysent, identifient la cause probable.
 
-“Je peux exécuter l’une des actions suivantes :
+Réponse attendue :
+« Après analyse multi-sources :
 
-	•	redémarrer le pool DB (faible risque),
-	•	augmenter temporairement le nombre de workers,
-	•	déployer une règle de throttling.
-Recommandation : Action 2.
-Souhaites-tu que je l’exécute ?”
+	•	La saturation CPU sur le serveur DB1 est corrélée à 92% avec la dégradation.
+	•	Le pic a commencé 10 minutes après le patch CHG48299.
+	•	Graph reasoning → propagation confirmée vers le service X.
+Cause probable : surcharge CPU liée au patch DB. »
 
-🎯 Il agit (avec contrôle humain).
+🎯 Objectif : donner le DIAGNOSTIC.
 
 ⸻
 
-🟦 6) Agents Stratégiques & Gouvernance
+🟦 5) Agents d’Exécution & Automatisation (actions)
 
-Réponse attendue : vision long-terme, risques, recommandations stratégique
+👉 Proposent ou exécutent des actions correctrices.
 
-“Ce type d’incident est le 6e en 2 mois.
-La capacité DB atteint régulièrement ses limites.
-Je recommande :
+Réponse attendue :
+« Je peux :
 
-	•	une revue de capacité,
-	•	un budget de scaling du cluster SQL,
-	•	une mise à jour des politiques de change (contrôle renforcé après patch).
-Je peux générer un rapport complet pour le CTO.”
+	1.	Redémarrer le pool DB (faible risque)
+	2.	Activer un scaling temporaire
+	3.	Déployer une règle de throttling
+Recommandation : option 2 (plus efficace selon l’historique).
+Souhaites-tu que je l’exécute ? »
 
-🎯 Vision globale, gouvernance, tendance long-terme.
+🎯 Objectif : proposer + exécuter une remédiation contrôlée.
+
+⸻
+
+🟦 6) Agents Stratégiques & Gouvernance (CTO-level)
+
+👉 Vision long-terme, tendances, budgets, risques structurels.
+
+Réponse attendue :
+« Ce problème est récurrent (6 occurrences sur 2 mois).
+La capacité DB atteint souvent un seuil critique.
+Recommandations stratégiques :
+
+	•	revoir la capacité du cluster SQL
+	•	ajuster les politiques de déploiement après patch
+	•	prévoir un budget de scaling
+Je peux générer un rapport pour le CTO. »
+
+🎯 Objectif : décision stratégique, amélioration structurelle.
