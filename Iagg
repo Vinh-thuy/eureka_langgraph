@@ -1,0 +1,178 @@
+1. IDENTIFICATION & ASSESSMENT
+
+(Use-case, faisabilité data & LLM, risques)
+
+🔍 Objectifs
+
+Définir si le cas d’usage est pertinent, faisable et conforme au cadre IA.
+
+🔹 Éléments classiques
+	•	Identification du besoin
+	•	Outcome attendu
+	•	Faisabilité (data, sécurité, conformité)
+	•	Timeline & complexité
+	•	Conformité initiale (charte AI / RGPD)
+
+🔹 Éléments spécifiques IA & Agents
+	•	Vérification disponibilité des connaissances (Knowledge Graph, Discovery, SNOW, Dynatrace)
+	•	Existence ou non de patterns verb–noun / anomalies / relations graph
+	•	Besoin d’un LLM ? d’un agent ? d’un moteur symbolique ?
+	•	Type d’agent (reactif, planificateur, orienteur, extraction, classification…)
+	•	Risques LLM (hallucinations, erreurs critiques, biais)
+	•	Nécessité fine-tuning ? prompt-engineering ? RAG ? GraphRAG ?
+	•	Besoin de scopes LLM (projets, domaines, environnements sensibles)
+
+📄 Livrables
+	•	Fiche d’Assessment (AI + LLM + graph)
+	•	Matrice des risques LLM
+	•	Décision : Agent / LLM / graph reasoning / classique
+
+⸻
+
+2. PRIORISATION & ROADMAP
+
+(Valeur, criticité IT, coût GPU, complexité agents)
+
+🔹 Critères classiques
+	•	Valeur business / IT
+	•	Criticité du service
+	•	Budget / charge
+	•	Roadmap CTO Infra / TWIN
+
+🔹 Critères LLM & Agents
+	•	Coût d’exécution (GPU/CPU, tokenisation, RAG)
+	•	Complexité multi-agents (orchestrations LangGraph)
+	•	Maturité des données pour RAG / GraphRAG
+	•	Impact sur opérations (automatisation, risques IA)
+	•	Exigence de supervisions humaines (HITL)
+
+⸻
+
+3. CONTROL & COMPLIANCE
+
+(Qualité IA, explicabilité, traçabilité LLM, sécurité)
+
+🔹 Contrôles classiques
+	•	Explicabilité & auditabilité
+	•	Observabilité & logs
+	•	Conformité charte AI / RGPD
+	•	Traçabilité
+
+🔹 Contrôles spécifiques IA & Agents
+	•	Traçabilité des prompts, chaines d’agents, décisions
+	•	Versioning LLM, prompts, agents, graphes
+	•	Contrôle anti-hallucination :
+	•	filters
+	•	guardrails
+	•	règles symboliques
+	•	factual consistency checks
+	•	Alignement modèle / charte éthique BNP
+	•	Règles de sécurité LLM :
+	•	pas de fuite de données
+	•	vérification PII / PHI
+	•	politiques de redaction & minimisation
+	•	Validation des RAG / GraphRAG :
+	•	qualité index
+	•	couverture du graphe
+	•	cohérence ontologique
+	•	Test robustesse agents (fail loops, deadlocks)
+
+📄 Livrables
+	•	LLM Control Checklist
+	•	Log décisionnel agents
+	•	Rapport de conformité AI & LLM
+
+⸻
+
+4. DELIVERY & MONITORING (MLOps + AIOps + AgentOps)
+
+(Industrialisation, stabilité, gestion du drift)
+
+🔹 Delivery classique
+	•	CI/CD via GitLab
+	•	Documentation Confluence
+	•	Test & validation
+	•	Release Notes
+
+🔹 Delivery Agents / LLM
+	•	Pipelines MLOps
+	•	Pipelines AgentOps (LangGraph)
+	•	Tests automatiques :
+	•	performance modèle
+	•	fiabilité réponses
+	•	absence de hallucination
+	•	Shadow-mode / split testing avant production
+	•	Gestion des erreurs agents (fallbacks, retry, escalade)
+
+🔹 Monitoring & Observabilité IA
+	•	KPIs LLM :
+	•	coût par requête
+	•	qualité des réponses
+	•	taux hallucinations
+	•	taux de refus
+	•	KPIs agents :
+	•	temps de résolution
+	•	nombre d’itérations agentiques
+	•	cohérence décisionnelle
+	•	Monitoring infrastructure TWIN :
+	•	Dynatrace
+	•	Elastic
+	•	Graph drift detection
+	•	Memory & token utilisation
+
+⸻
+
+5. OPERATIONAL FOLLOW-UP & DECISION BOARDS
+
+(Alignement stratégique, gouvernance continue)
+
+🔹 Instances
+	•	OPCO (opérationnel IA / TWIN)
+	•	STEERCO (stratégique)
+	•	Decision Board (release & risques)
+	•	Demos / présentations
+
+🔹 Pilotage AI & Agents
+	•	Roadmap trimestrielle
+	•	Ajustements des modèles (fine-tuning / RAG updates)
+	•	Mise à jour du graphe (CMDB enrichie)
+	•	Post-mortem IA (erreurs / incidents / dérives)
+	•	Approche HITL (Human-In-The-Loop)
+
+🔹 KPIs orientés IA
+	•	MTTR / MTTI via agents
+	•	Qualité des prédictions
+	•	Cohérence graph / knowledge base
+	•	Taux d’automatisation
+	•	Satisfaction utilisateurs (Teams, Web App TWIN)
+
+⸻
+
+6. PROCESS, DOCUMENTATION & SUPPORT
+
+(Industrialisation complète du cycle de vie IA)
+
+🔹 Process
+	•	JIRA → workflow AI
+	•	SNOW → incidents / changements / catalogue services
+	•	Catalogue Agents :
+	•	versions
+	•	owners
+	•	modes d’usage
+	•	niveaux de maturité
+	•	risques liés
+	•	GitLab : CI/CD + audit log
+
+🔹 Documentation
+	•	Confluence :
+	•	fiches agents
+	•	prompts versionnés
+	•	ontologies
+	•	règles symboliques
+	•	modèles utilisés
+
+🔹 Support
+	•	Support N2/N3 AI Ops
+	•	Support agents (monitoring, drift, incidents)
+	•	Runbook agents & LLM
+	•	Procédure de rollback versions
