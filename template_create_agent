@@ -1,0 +1,213 @@
+📝 FORMULAIRE “CRÉER VOTRE ÉQUIPE” (AVEC LES 5 BLOCS CACHÉS DERRIÈRE DES NOTIONS RH)
+
+⸻
+
+🔵 PARTIE 0 – LA MISSION À CONFIER À L’ÉQUIPE
+
+0.1 Décrivez en une phrase la mission que vous confieriez à une équipe humaine :
+
+Exemple : “Comprendre pourquoi nos applications tombent en panne et proposer des actions pour réduire les incidents.”
+
+0.2 Quel résultat concret attendez-vous de cette mission ?
+
+Exemple : un rapport, des recommandations, une analyse régulière, un tableau de bord…
+
+0.3 Pensez-vous qu’une seule personne suffirait ou qu’il faudrait une équipe ?
+	•	Une seule personne
+	•	Une petite équipe (2–3 personnes)
+	•	Une équipe plus complète (4+ personnes)
+
+⸻
+
+🟣 PARTIE 1 – DÉFINITION DE L’ÉQUIPE
+
+1.1 Listez les “profils métiers” que vous imaginez dans cette équipe (sans penser IA, juste des humains) :
+
+Exemple :
+– “Un analyste qui lit les incidents et fait une synthèse”
+– “Un spécialiste des performances techniques”
+– “Un coordinateur qui fait la synthèse pour le management”
+
+1.2 Donnez un nom de rôle à chaque profil :
+
+Exemple :
+– Profil 1 : “Analyste Incidents”
+– Profil 2 : “Spécialiste Performance”
+– Profil 3 : “Chef d’Équipe / Coordinateur”
+
+👉 Ensuite, on remplit une fiche par profil.
+Chaque fiche = 1 futur agent, structuré selon les 5 blocs, mais en vocabulaire RH.
+
+⸻
+
+🟩 PARTIE 2 – FICHE DE POSTE PAR PERSONNE (1 FICHE = 1 AGENT)
+
+Tu peux dupliquer ce bloc autant de fois que nécessaire (Profil 1, Profil 2, Profil 3, etc.).
+
+⸻
+
+🧑‍💼 PROFIL X – “FICHE DE POSTE”
+
+⸻
+
+2.1 IDENTITÉ DU PROFIL
+
+(→ Bloc SYSTEM : Identity)
+
+2.1.1 Intitulé du poste / rôle :
+
+Exemple : “Analyste Incidents Senior”, “Expert Performance”, “Coordinateur Technique”.
+
+2.1.2 Si c’était une vraie personne, quel métier ferait-elle ?
+
+Exemple : ingénieur de production, SRE, chef de projet, consultant ITSM…
+
+2.1.3 Quel niveau d’expérience doit-elle avoir ?
+	•	Junior
+	•	Confirmé
+	•	Senior
+	•	Expert
+
+2.1.4 Comment décririez-vous son “style professionnel” ?
+
+Exemple : très pédagogique, très direct, ultra rigoureux, synthétique, orienté action…
+
+⸻
+
+2.2 CE QUE CETTE PERSONNE SAIT / DOIT FAIRE
+
+(→ Bloc SYSTEM : Capacity)
+
+2.2.1 Quelles sont ses responsabilités principales ?
+
+Exemple :
+– analyser les incidents et les classer,
+– relier des événements techniques entre eux,
+– proposer des plans d’action, etc.
+
+2.2.2 Quelles tâches concrètes lui confieriez-vous au quotidien ?
+
+Exemple :
+– lire les données,
+– repérer les signaux anormaux,
+– préparer un résumé pour les équipes,
+– proposer des pistes d’explication.
+
+2.2.3 Quelles “compétences métier / techniques” doit-elle avoir ?
+(sans parler d’outils IA, pense métier)
+
+Exemple : compréhension des logs, compréhension des incidents IT, notions de performance, de réseau, d’infra, etc.
+
+2.2.4 Sur quels types de problèmes cette personne sera-t-elle “référente” dans l’équipe ?
+
+Exemple : incidents applicatifs, réseau, base de données, disponibilité, etc.
+
+⸻
+
+2.3 CE QUE CETTE PERSONNE NE DOIT PAS FAIRE
+
+(→ Bloc SYSTEM : Constraints)
+
+2.3.1 Quelles sont les limites de son rôle ?
+
+Exemple :
+– ne pas prendre de décision business,
+– ne pas modifier directement les systèmes,
+– ne pas sortir de l’IT, etc.
+
+2.3.2 Y a-t-il des sujets sur lesquels vous ne voulez PAS qu’elle donne d’avis ?
+
+Exemple : juridique, RH, finances…
+
+2.3.3 Y a-t-il des comportements que vous refuserez de sa part ?
+
+Exemple :
+– inventer des chiffres,
+– masquer des incertitudes,
+– donner une réponse sans vérifier.
+
+2.3.4 Quand cette personne doit-elle passer la main à un autre membre de l’équipe ?
+
+Exemple :
+– si le problème devient trop réseau → passer au “Spécialiste Réseau”,
+– si la décision doit être managériale → passer au “Coordinateur”.
+
+⸻
+
+2.4 COMMENT CETTE PERSONNE REND SON TRAVAIL
+
+(→ Bloc SYSTEM : Output Format)
+
+2.4.1 Sous quel format souhaiteriez-vous qu’elle vous rende son travail ?
+	•	Un résumé en quelques points
+	•	Une analyse structurée en plusieurs sections
+	•	Un tableau avec colonnes (problème / contexte / analyse / action)
+	•	Une liste d’actions à exécuter
+	•	Une synthèse pour un responsable
+
+2.4.2 Pour chaque intervention, que doit-elle systématiquement inclure ?
+
+Exemple :
+– un résumé du problème,
+– ce qu’elle a compris,
+– ses hypothèses,
+– ses recommandations.
+
+2.4.3 À qui s’adresse ce livrable ?
+	•	Technicien / opérationnel
+	•	Ingénieur / expert
+	•	Manager
+	•	Direction / CTO
+
+2.4.4 Vous préférez un style de communication plutôt :
+	•	Très simple et vulgarisé
+	•	Intermédiaire
+	•	Très détaillé et technique
+
+⸻
+
+2.5 DANS QUEL ENVIRONNEMENT CETTE PERSONNE TRAVAILLE
+
+(→ Bloc SYSTEM : Domain Context)
+
+2.5.1 Dans quel type d’organisation / contexte cette personne travaille-t-elle ?
+
+Exemple : grande banque, équipe de production IT, contexte multi-datacenter, cloud, etc.
+
+2.5.2 Sur quels types de systèmes ou d’environnements techniques travaille-t-elle ?
+
+Exemple : systèmes bancaires, serveurs applicatifs, réseau, cloud, etc.
+
+2.5.3 Avec quels “outils métiers” cette personne a le droit de consulter des informations ?
+(formulé humain, même si toi derrière tu le maps à Dynatrace / ServiceNow / Elastic…)
+
+Exemple :
+– outils de suivi d’incidents,
+– outils de supervision des performances,
+– journaux / logs,
+– documentation interne, etc.
+
+2.5.4 Quelles sont les grandes règles de fonctionnement de cet environnement ?
+
+Exemple : procédures ITIL, validation par changement, règles de sécurité fortes, etc.
+
+⸻
+
+🧩 PARTIE 3 – RELATIONS ENTRE LES PROFILS (COOPÉRATION ENTRE AGENTS)
+
+(On reste dans l’analogie équipe humaine, mais toi tu pourras le traduire en “instructions de coopération entre agents”.)
+
+3.1 Comment ces personnes travaillent-elles ensemble ?
+
+Exemple :
+– l’Analyste Incidents fait une première lecture,
+– puis le Spécialiste Performance approfondit,
+– puis le Coordinateur prépare la synthèse.
+
+3.2 Qui fait la synthèse finale pour “le client interne” (CTO, équipe, direction…) ?
+
+3.3 Dans quels cas souhaites-tu que l’un consulte l’autre ?
+
+Exemple :
+– si la cause n’est pas claire, l’Analyste demande l’avis du Spécialiste,
+– si l’impact est fort, tout remonte au Coordinateur.
