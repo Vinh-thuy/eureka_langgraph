@@ -1,0 +1,144 @@
+SCÉNARIO FONCTIONNEL – VM « Correlation Engine »
+
+(Version sans acronyme FIM, avec explication claire)
+
+1. Contexte
+
+La VM « Correlation Engine » exécute :
+	•	RHEL 9, avec les configurations et politiques de sécurité ITGP
+	•	Apache HTTPD, qui expose l’API interne du Correlation Engine
+	•	Elastic Agent, configuré pour surveiller les fichiers du système.
+→ Cet agent permet uniquement de détecter si un fichier a été créé, modifié ou supprimé,
+→ mais sans accès au contenu du fichier ni aux lignes de logs.
+
+(Techniquement, c’est une fonctionnalité de surveillance d’intégrité des fichiers — File Integrity Monitoring — mais on ne garde pas l’acronyme.)
+
+⸻
+
+2. Timeline des événements techniques
+
+02:04 — Patch OS automatique
+Fichier modifié :
+	•	/var/log/dnf.log
+
+02:06 — Modification des paramètres réseau
+Fichier modifié :
+	•	/etc/sysctl.d/90-network.conf
+
+02:10 — Reload firewalld
+Fichiers potentiellement mis à jour :
+	•	/etc/firewalld/zones/*.xml
+
+03:20–03:21 — Modification de la configuration Apache
+Fichiers modifiés :
+	•	/etc/httpd/conf.d/correlation-engine-api.conf
+	•	/etc/httpd/conf/httpd.conf
+Reload probable du service httpd.
+
+08:15 — Symptômes
+	•	L’API du Correlation Engine devient très lente
+	•	Apparition d’erreurs HTTP 504 Gateway Timeout
+
+⸻
+
+3. Agents impliqués (DeepAgents / LangGraph)
+
+3.1 Superviseur (DeepAgent)
+
+Rôle :
+	•	reçoit le problème signalé
+	•	récupère la liste des fichiers modifiés
+	•	envoie les informations aux agents experts
+	•	consolide leurs analyses
+	•	produit le diagnostic final
+
+⸻
+
+3.2 Agent Red Hat (expert OS / réseau)
+
+Fichiers analysés :
+	•	/var/log/dnf.log
+	•	/etc/sysctl.d/90-network.conf
+	•	/etc/firewalld/zones/*.xml
+	•	/etc/sysctl.conf
+	•	/etc/resolv.conf (si modifié)
+
+Interprétation OS :
+	•	un patch nocturne a modifié des composants système
+	•	des paramètres réseau ont été ajustés (TCP, buffers, conntrack)
+	•	le rechargement de firewalld peut influencer les flux réseau
+
+Hypothèse OS :
+→ Les flux backend utilisés par l’API du Correlation Engine sont potentiellement dégradés.
+
+⸻
+
+3.3 Agent Apache (expert reverse proxy / API)
+
+Fichiers analysés :
+	•	/etc/httpd/conf.d/correlation-engine-api.conf
+	•	/etc/httpd/conf/httpd.conf
+	•	/etc/httpd/conf.modules.d/*.conf
+	•	/var/log/httpd/access_log (timestamps seulement)
+	•	/var/log/httpd/error_log (timestamps seulement)
+
+Interprétation Apache :
+	•	la configuration de l’API CE a été modifiée tard dans la nuit
+	•	des timeouts ou routes ProxyPass ont pu être changés
+	•	l’API devient plus sensible à la moindre latence réseau
+
+Hypothèse Apache :
+→ Les modifications Apache amplifient les effets des changements réseau OS.
+
+⸻
+
+4. Interaction entre agents (messages)
+
+A. Superviseur → Agent Red Hat
+
+« Voici les fichiers système modifiés cette nuit. Quelle analyse peux-tu en faire ? »
+
+Agent Red Hat → Superviseur :
+
+« Les changements réseau peuvent dégrader la connectivité backend → futurs 504. »
+
+⸻
+
+B. Superviseur → Agent Apache
+
+« Voici les fichiers Apache modifiés. Quel impact sur l’API du Correlation Engine ? »
+
+Agent Apache → Superviseur :
+
+« Les modifications Apache peuvent entraîner des timeouts ou routes incorrectes → 504. »
+
+⸻
+
+C. Superviseur : Diagnostic final
+
+Le superviseur consolide les deux analyses :
+
+« L’incident résulte d’un enchaînement logique :
+	1.	des paramètres réseau ont été modifiés pendant le patch OS (02h),
+	2.	la configuration Apache de l’API CE a été modifiée (03h),
+	3.	sous charge, la combinaison réseau + reverse proxy entraîne des 504 le matin. »
+
+⸻
+
+5. Plan d’action recommandé
+
+OS (Red Hat)
+	•	vérifier les paramètres réseau (sysctl) modifiés
+	•	tester la connectivité backend du Correlation Engine
+	•	rollback si nécessaire
+
+Apache
+	•	vérifier la configuration API (correlation-engine-api.conf)
+	•	auditer ProxyPass, Timeout
+	•	recharger Apache après correction
+
+⸻
+
+6. Synthèse finale (à copier)
+
+Un patch OS a modifié des paramètres réseau, puis une modification de la configuration Apache de l’API du Correlation Engine a accru la sensibilité aux latences. Sous charge, Apache n’a plus pu joindre correctement son backend, entraînant des erreurs 504.
