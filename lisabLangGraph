@@ -1,0 +1,53 @@
+Architecture cible : Lisab ↔ TWIN (plateforme agentique LangGraph)
+
+Pour clarifier le modèle et rassurer tout le monde sur la répartition des rôles et des stacks techniques :
+
+⸻
+
+🔹 Rôle de Lisab (Django)
+	•	Connecteur natif Teams → @TWIN
+	•	Gestion identité / droits / contexte utilisateur (via Azure AD / Teams)
+	•	Construction et transmission vers TWIN de :
+	•	un user_id (utilisateur métier)
+	•	un thread_id (fil de conversation Teams)
+	•	Logs d’audit applicatif vers les outils groupe (Elastic / SIEM)
+
+👉 Lisab ne gère pas la mémoire conversationnelle, il fournit les identifiants qui permettront à la plateforme TWIN de le faire proprement.
+
+⸻
+
+🔹 Rôle de la plateforme TWIN (LangGraph / LangChain)
+	•	Cerveau agentique : DeepAgent + sous-agents (Infra, Metrics, ITSM, etc.)
+	•	Persistance des sessions :
+	•	Session de conversation (par thread_id) : état du graphe, contexte du fil @TWIN
+	•	Session utilisateur (par user_id) : mémoire long terme propre à chaque utilisateur
+	•	Gestion :
+	•	du raisonnement, du routing, des workflows techniques
+	•	de l’historique des échanges et du contexte LLM
+
+👉 Toute la mémoire (intra-session et inter-session) vit côté TWIN / LangGraph.
+
+⸻
+
+🔹 Gestion des sessions : qui fait quoi ?
+	•	Session de conversation (@TWIN dans un thread Teams)
+	•	Identifiant : thread_id construit par Lisab
+	•	Persistance : gérée par LangGraph (checkpoints + historique)
+	•	Session utilisateur (mémoire cross-conversation)
+	•	Identifiant : user_id fourni par Lisab
+	•	Persistance : gérée par LangChain / LangGraph via des mécanismes de Memory / MessageHistory
+
+⸻
+
+🔹 Stacks techniques & briques utilisables côté TWIN
+	•	LangGraph
+	•	Gestion de l’état du graphe (GraphState)
+	•	Checkpoints persistés dans Postgres (ou Redis / autre backend)
+	•	Support natif des thread_id pour les sessions
+	•	LangChain
+	•	Memory : ConversationSummaryMemory, ConversationBufferMemory, etc.
+	•	MessageHistory stores : Postgres / Redis pour historiser les messages par user_id / thread_id
+	•	Infra persistance
+	•	Postgres : stockage des checkpoints et de l’historique
+	•	Redis (optionnel) : cache / historique court terme
+	•	LangSmith : observabilité, tracing des runs agents / LLM
