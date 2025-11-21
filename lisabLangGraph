@@ -51,3 +51,54 @@ Pour clarifier le modèle et rassurer tout le monde sur la répartition des rôl
 	•	Postgres : stockage des checkpoints et de l’historique
 	•	Redis (optionnel) : cache / historique court terme
 	•	LangSmith : observabilité, tracing des runs agents / LLM
+
+
+
+
+
+
+
+
+
+Architecture cible : Lisab ↔ TWIN (plateforme agentique LangGraph)
+
+Nous confirmons l’architecture cible suivante pour l’intégration entre Lisab et la plateforme TWIN, avec PostgreSQL comme unique backend de persistance.
+
+⸻
+
+🔹 Rôle de Lisab (Django)
+	•	Connecteur natif Teams → @TWIN
+	•	Gestion de l’identité et des droits (Azure AD / Teams)
+	•	Construction et transmission vers TWIN de :
+	•	un user_id (identifiant utilisateur applicatif)
+	•	un thread_id (identifiant de la session de conversation Teams)
+	•	Envoi des logs d’audit vers les outils groupe (Elastic / SIEM / Data Lake)
+
+👉 Lisab ne gère pas la mémoire conversationnelle : il fournit les identifiants (user + thread) qui permettent à TWIN de le faire côté LangGraph.
+
+⸻
+
+🔹 Rôle de la plateforme TWIN (LangGraph / LangChain)
+	•	Cerveau agentique : DeepAgent + sous-agents (Infra, Metrics, ITSM, etc.)
+	•	Persistance des sessions dans PostgreSQL :
+	•	Session de conversation (par thread_id) : état du graphe, historique du fil @TWIN, contexte LLM
+	•	Session utilisateur (par user_id) : mémoire longue durée propre à chaque utilisateur (contexte, préférences, historique fonctionnel)
+	•	Gestion du :
+	•	raisonnement, du routing multi-agents et des workflows techniques
+	•	contexte intra- et inter-session (ce qui s’est passé avant, dans ce thread ou avec ce user)
+
+👉 Toute la mémoire (conversationnelle et utilisateur) est centralisée côté TWIN, avec une persistance unique dans PostgreSQL.
+
+⸻
+
+🔹 Stacks techniques retenues côté TWIN
+	•	LangGraph : graph d’agents, gestion de l’état (GraphState), checkpoints persistés dans PostgreSQL, utilisation de thread_id pour suivre les sessions
+	•	LangChain : Memory (ConversationSummaryMemory, etc.) et MessageHistory stockées dans PostgreSQL (messages user / assistant / tools)
+	•	PostgreSQL : backend unique pour les checkpoints, l’historique des messages et la mémoire utilisateur
+	•	LangSmith (si activé) : observabilité, tracing des runs (prompts, appels d’outils, décisions d’agents)
+
+⸻
+
+🎯 Objectif
+
+Simplifier Lisab, centraliser toute la mémoire et la persistance des sessions dans LangGraph / LangChain avec PostgreSQL, et garantir une architecture claire, scalable et conforme pour le déploiement de TWIN dans Teams.
