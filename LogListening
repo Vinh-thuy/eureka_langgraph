@@ -1,0 +1,180 @@
+TWIN × Log Listening × Knowledge Graph
+
+⸻
+
+🎯 Objectif de la réunion
+
+Aligner TWIN et Log Listening sur une vision commune :
+	•	Log Listening devient le fournisseur d’événements enrichis, en s’appuyant sur le Knowledge Graph pour comprendre le contexte technique (domaine + techno).
+	•	TWIN reste responsable du Knowledge Graph, de la topologie, des vertex et des relations.
+	•	Les événements enrichis sont réinjectés dans le Graph, où ils servent à la fois :
+	•	aux utilisateurs humains (lecture, analyse, navigation SI),
+	•	et aux agents (DeepAgents + sous-agents techniques) pour identifier automatiquement le bon expert pour le bon événement.
+
+⸻
+
+1️⃣ Contexte & Vision
+
+Côté TWIN (Digital Twin IT)
+	•	TWIN modélise le SI dans TigerGraph : composants, dépendances, environnements, criticité.
+	•	Pour analyser un incident ou un événement, il doit savoir :
+	•	où cela se produit (quel composant),
+	•	dans quel domaine technique (web, OS, DB, réseau, sécurité…),
+	•	sur quelle techno précise (Apache, RHEL, F5, Postgres…),
+	•	quel type de symptôme (4xx/5xx, timeout, OOM, port bloqué…).
+
+Côté Log Listening
+	•	Log Listening collecte les logs bruts via la stack Elastic + agents.
+	•	Il dispose déjà de briques de :
+	•	normalisation,
+	•	parsing,
+	•	ML / détection de patterns.
+	•	Il est positionné idéalement pour transformer des logs bruts en événements enrichis.
+
+👉 L’enjeu : que Log Listening et TWIN se complètent au lieu de dupliquer les efforts.
+
+⸻
+
+2️⃣ Rôle de Log Listening (mis à jour avec le KG)
+
+Log Listening devient le “Event Enrichment Provider” du Digital Twin.
+
+2.1. Consommer le Knowledge Graph pour comprendre le contexte
+
+Pour chaque événement :
+	•	Log Listening utilise des identifiants techniques (hostname, service, CIID, etc.) pour interroger le Knowledge Graph.
+	•	Le Graph renvoie le composant concerné et ses attributs, par exemple :
+	•	domain : ex. web, os, db, network, security
+	•	tech_type : ex. apache, rhel, f5, postgres, paloalto
+	•	role : ex. frontend, backend, api_gateway, proxy…
+
+Ces deux notions sont fondamentales :
+	•	domain → aligne avec le niveau DeepAgent de domaine (Web, OS, DB, Réseau…).
+	•	tech_type → aligne avec les sous-agents techniques experts (ApacheAgent, RedHatAgent, FirewallAgent…).
+
+2.2. Produire un événement enrichi structuré
+
+À partir des logs + du contexte KG, Log Listening enrichit l’événement avec :
+	•	tech_type (niveau expert technique)
+	•	domain (niveau agent de domaine)
+	•	symptom_class (type d’incident : errors_4xx_5xx, timeout, oom, port_blocked…)
+	•	component_id / hostname / service_name
+	•	env (PROD / PREPROD / DEV)
+	•	severity (P0 / P1 / P2…)
+	•	source_system (elastic, dynatrace, etc.)
+	•	confidence (score ML sur la classification)
+	•	raw_message, raw_fields (trace brute)
+
+2.3. Exposer ces événements enrichis
+	•	Log Listening expose ces events dans un alias Elastic unique, par exemple :
+twin-events-enriched-v1
+	•	La gestion interne (1 ou plusieurs index physiques) reste transparente pour TWIN.
+
+👉 Log Listening n’écrit pas dans TigerGraph, mais s’appuie sur TigerGraph pour enrichir les événements.
+
+⸻
+
+3️⃣ Rôle de TWIN
+
+TWIN reste responsable du jumeau numérique et de toute la logique d’analyse :
+
+3.1. Ingestion
+	•	Pipelines Airflow / Graflo lisent l’alias twin-events-enriched-v1.
+	•	Chaque document JSON contient déjà :
+	•	domain, tech_type, symptom_class, component_id, etc.
+
+3.2. Mapping vers le Knowledge Graph
+
+Pour chaque événement enrichi :
+	•	TWIN mappe component_id / hostname / service_name vers le bon vertex Component dans TigerGraph.
+	•	Crée un vertex Event.
+	•	Crée la relation (:Event)-[:OCCURS_ON]->(:Component).
+
+Les attributs domain, tech_type, symptom_class, env, etc. sont stockés dans le Graph :
+	•	soit sur le vertex Event,
+	•	soit en partie remontés / recopiés sur le Component (si pertinents).
+
+3.3. Orchestration agentique
+
+À partir du Graph + de ces attributs enrichis :
+	•	Le DeepAgent Global identifie :
+	•	les domaines impliqués (domain),
+	•	les composants et leur contexte,
+	•	les sous-agents techniques pertinents (tech_type + capabilities des agents).
+	•	Les DeepAgents de domaine (Web, OS, DB, Réseau…) :
+	•	appliquent leur méthode d’analyse standardisée,
+	•	construisent leur plan de diagnostic (Todo list),
+	•	orchestrent les sous-agents techniques (ApacheAgent, RedHatAgent, etc.).
+	•	Les sous-agents techniques :
+	•	exploitent leur RAG technique (documentation + incidents passés),
+	•	produisent des diagnostics détaillés et des actions.
+
+⸻
+
+4️⃣ Contrat d’interface – Index Elastic
+
+Un contrat logique unique :
+	•	Alias : twin-events-enriched-v1
+
+Champs clés :
+	•	@timestamp
+	•	event_id
+	•	source_system
+	•	env
+	•	component_id
+	•	hostname
+	•	service_name
+	•	tech_type (apache, rhel, postgres, f5…)
+	•	domain (web, os, db, network, security…)
+	•	role (frontend, backend, proxy…)
+	•	symptom_class (errors_4xx_5xx, timeout, oom…)
+	•	severity
+	•	confidence
+	•	raw_message
+	•	raw_fields
+
+⸻
+
+5️⃣ Valeur ajoutée des indicateurs domain & tech_type dans le Knowledge Graph
+
+L’enrichissement domain / tech_type ne sert pas uniquement au routage agentique.
+Une fois stockés dans le Knowledge Graph, ces attributs deviennent une force pour deux publics :
+
+5.1. Pour les utilisateurs humains (lecteurs du Graph / outils de visualisation)
+	•	Ils peuvent facilement :
+	•	filtrer les composants et événements par domaine (ex. “tous les incidents web en PROD”),
+	•	filtrer par techno (ex. “tous les incidents sur Apache / RHEL / F5”),
+	•	comprendre visuellement où se concentrent les problèmes (par domaine, par techno, par environnement).
+	•	Les vues Graph deviennent :
+	•	plus lisibles,
+	•	plus pédagogiques,
+	•	plus utiles pour les équipes Ops, SRE, architectes, sécurité.
+
+5.2. Pour les agents (DeepAgents & sous-agents techniques)
+	•	domain → permet aux agents d’identifier le bon DeepAgent de domaine à activer (Web, OS, DB, Réseau…).
+	•	tech_type → permet de sélectionner le bon expert technique (ApacheAgent, RedHatAgent, FirewallAgent, etc.).
+	•	Ces attributs deviennent des features explicites pour :
+	•	le matching dynamique,
+	•	le scoring agents ↔ événements,
+	•	la priorisation des actions.
+
+👉 En résumé :
+Les indicateurs domain et tech_type, issus de l’enrichissement par Log Listening et stockés dans le Graph, font le lien entre :
+	•	la compréhension humaine du SI (lecture du Graph),
+	•	et la compréhension “machine” (agents qui choisissent automatiquement le bon expert pour le bon événement).
+
+⸻
+
+6️⃣ Le cercle vertueux
+	1.	Log Listening consomme le Knowledge Graph pour contextualiser l’événement → fournit domain, tech_type, symptom_class, etc.
+	2.	TWIN ingère cet événement enrichi et le rattache au bon composant dans TigerGraph.
+	3.	DeepAgent Global + DeepAgents de domaine utilisent ces attributs pour orchestrer les bons sous-agents techniques.
+	4.	Les diagnostics et actions issus de TWIN peuvent, à terme, être réutilisés pour améliorer les modèles et les règles de Log Listening.
+
+🎯 Résultat : un pipeline auto-améliorant, cohérent, et aligné sur la topologie réelle du SI.
+
+⸻
+
+7️⃣ Phrase d’ouverture pour ton meeting
+
+« L’idée clé, c’est que Log Listening devient le fournisseur d’événements enrichis, en s’appuyant sur notre Knowledge Graph pour tagger chaque événement avec le bon domaine et la bonne techno. TWIN utilise ensuite ces événements enrichis pour les rattacher à la topologie, activer automatiquement les bons agents experts, et alimenter à son tour le Graph. On crée ainsi un cercle vertueux entre logs, graph et intelligence. »
