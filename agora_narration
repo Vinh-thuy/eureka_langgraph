@@ -1,0 +1,529 @@
+Agenda AGORA TWIN – Version restructurée
+
+08:30 – 09:00
+
+Accueil et petit-déjeuner
+
+⸻
+
+09:05 – 10:05
+
+Introduction & Démonstration
+Pourquoi commencer par une démonstration ?
+Nous avons choisi de démarrer cette journée par une démonstration volontairement simple.
+Pas parce que le sujet est simple, mais parce que cette démonstration porte en elle toute la philosophie du Digital Twin.
+
+Elle montre qu’à partir d’un fait isolé, presque anodin — ici, un changement technique —
+TWIN est capable de reconstruire une vision globale, cohérente et explicable.
+
+Cette démonstration n’est pas là pour présenter une fonctionnalité.
+Elle est là pour illustrer un principe fondateur :
+dans un système jumeau, rien n’existe seul.
+
+⸻
+
+La philosophie que cette démonstration illustre
+Un événement n’a de sens que replacé dans son contexte.
+Une infrastructure n’a de valeur que si elle est comprise dans sa globalité.
+
+Une donnée isolée ne raconte rien ;
+mais reliée à ses dépendances, à son environnement, à son historique,
+elle devient une connaissance exploitable.
+
+Ce que vous allez voir, c’est la mise en scène de cette idée :
+
+👉 La donnée brute devient compréhensible une fois réinsérée dans le système qui l’a produite.
+
+Cette philosophie est le socle du Digital Twin.
+
+⸻
+
+Pourquoi c’est important pour la suite de la journée
+Cette première démonstration pose la pierre angulaire de tout ce que nous allons explorer :
+	•	elle illustre le passage de la donnée à la connaissance ;
+	•	elle montre que le SI n’est pas une somme de composants, mais un système vivant ;
+	•	elle rappelle que la valeur ne se trouve pas dans la captation des données, mais dans leur interprétation ;
+	•	elle montre pourquoi nous avons besoin de structurer la topologie, les événements et la documentation.
+
+Cette logique va nous accompagner toute la journée.
+Tout ce que nous ferons ensuite — construction du Knowledge Graph, transformation documentaire, émergence des agents, vision cible — est une extension naturelle de ce principe.
+
+⸻
+
+La démonstration comme miroir du futur
+Ce que vous allez voir n’est qu’une petite scène,
+mais elle représente le futur du système TWIN :
+	•	un environnement où chaque événement trouve automatiquement sa place,
+	•	où chaque modification s’explique dans un contexte large,
+	•	où la connaissance devient un actif exploitable,
+	•	et où l’IT gagne en lisibilité, en cohérence et en capacité d’action.
+
+⸻
+
+Message essentiel avant de lancer la démonstration
+Nous ne commençons pas par une démo pour faire “effet”.
+Nous commençons par une démo parce qu’elle résume à elle seule :
+	•	ce qu’est un jumeau numérique ;
+	•	comment l’IT peut devenir compréhensible ;
+	•	et pourquoi la transformation data → connaissance est indispensable avant de pouvoir parler d’intelligence ou d’agents.
+
+Ce que vous allez voir, c’est une philosophie incarnée.
+
+⸻
+
+🎬 Phrase de transition pour lancer la démo
+
+“Regardons maintenant comment TWIN transforme un simple fait technique en une connaissance qui fait sens dans le système global.”
+
+⸻
+
+10:05 – 10:25
+
+Q&A
+
+⸻
+
+10:30
+
+Pause
+
+⸻
+
+10:45 – 11:45
+
+“De la Data à la Connaissance : la philosophie du Digital Twin”
+Lorsque l’on parle de Digital Twin dans l’IT, beaucoup imaginent une réplique virtuelle de l’infrastructure.
+Dans TWIN, ce n’est pas ce que nous faisons.
+
+Nous allons plus loin : nous transformons l’ensemble des données dont dispose déjà l’IT — des données éparpillées, hétérogènes, souvent dormantes — en un système de connaissance capable de comprendre, d’expliquer et d’agir.
+
+L’IT possède déjà toute la matière première nécessaire :
+	•	la topologie, c’est-à-dire la carte de l’infrastructure ;
+	•	les événements, qui en sont la respiration quotidienne ;
+	•	des documents techniques, qui sont la mémoire collective et les savoir-faire métiers.
+
+Mais toutes ces données sont brutes, difficiles à exploiter directement et encore plus difficiles à connecter entre elles. Elles existent, mais elles ne “parlent pas”.
+
+Notre philosophie est simple :
+
+un Digital Twin ne naît pas de la donnée, il naît de la transformation de cette donnée en connaissance structurée et exploitable.
+
+Pour y parvenir, nous distinguons deux formes de connaissance, qui jouent deux rôles très différents dans TWIN.
+
+⸻
+
+1. La connaissance structurelle : le Knowledge Graph
+C’est le socle, l’ossature du jumeau numérique.
+
+À partir des données topologiques et des événements, nous construisons progressivement un graph de connaissance qui représente l’infrastructure telle qu’elle existe réellement, avec toutes ses relations et toutes les dynamiques qui l’animent.
+
+La topologie brute devient une connaissance formelle :
+	•	elle nous dit quels serveurs existent,
+	•	qui dépend de qui,
+	•	quel service repose sur quel composant,
+	•	où se trouvent les points critiques,
+	•	et quelles relations un incident peut traverser.
+
+Les événements, eux, deviennent plus que des lignes de logs :
+ils s’inscrivent dans ce graph, expliquent ce qui se produit, sur quelle partie de l’infrastructure, et avec quelles conséquences possibles.
+
+Cette interconnexion — entre la carte (topologie) et la vie de cette carte (événements) — donne naissance au Knowledge Graph TWIN :
+une représentation unifiée, cohérente, dynamique de notre système d’information.
+
+Ce n’est plus un simple inventaire.
+Ce n’est plus un flux de logs.
+C’est une connaissance vivante, un réseau de sens.
+
+⸻
+
+2. La connaissance experte : la Knowledge Base documentaire
+La seconde forme de connaissance est d’une autre nature :
+elle ne décrit pas l’infrastructure, elle décrit comment on la comprend, comment on la configure, comment on l’entretient, comment on la rétablit.
+
+Cette connaissance est dans :
+	•	les manuels Red Hat,
+	•	les guides Kubernetes,
+	•	les procédures internes,
+	•	les runbooks,
+	•	les pages Confluence,
+	•	les PDF accumulés depuis vingt ans.
+
+Mais elle est textuelle, non structurée, parfois ambiguë, souvent difficile à naviguer.
+Elle n’est pas utilisable telle quelle par un système, et encore moins par des agents.
+
+L’objectif n’est donc pas de numériser ces documents — ils le sont déjà.
+L’objectif est de les transformer en Knowledge Bases : des graphes de connaissances construits à partir de textes, où chaque concept, chaque règle, chaque contrainte, chaque procédure devient une entité exploitable, interrogeable, connectable.
+
+GraphRAG n’est pas là pour faire des résumés, mais pour extraire la structure de la connaissance contenue dans les documents.
+On n’obtient plus un texte, mais une connaissance organisée, prête à être utilisée par les agents TWIN.
+
+Chaque document devient en quelque sorte un livre augmenté, un “volume” de la bibliothèque technique de l’entreprise, désormais navigable, interconnecté et compréhensible par le système.
+
+⸻
+
+Pourquoi cette transformation est essentielle ?
+Parce que TWIN n’est pas conçu pour être un moteur de recherche.
+Il est conçu pour être un moteur de raisonnement.
+
+Un moteur de raisonnement n’a pas besoin de données :
+il a besoin de connaissance.
+
+La donnée brute est un matériau inerte.
+La connaissance structurée est actionnable :
+	•	elle permet d’expliquer,
+	•	de diagnostiquer,
+	•	de prédire,
+	•	de recommander,
+	•	et demain de déclencher des actions assistées ou autonomes.
+
+Le Knowledge Graph (topologie + événements) permet de comprendre ce qu’est le système et ce qu’il vit.
+Les Knowledge Bases documentaires permettent de comprendre ce que l’on doit faire et pourquoi.
+
+C’est l’union des deux — structure + expertise — qui donne au Digital Twin sa véritable dimension :
+un système capable d’éclairer les décisions, de guider les opérations et d’accélérer la résolution.
+
+⸻
+
+Les technologies ne sont alors qu’un support
+TigerGraph, GraphRAG, Airflow, GraphFlow…
+Ce ne sont pas des arguments marketing, mais des briques au service d’une idée :
+
+structurer ce que nous savons, relier ce que nous voyons,
+et rendre l’ensemble intelligible pour les humains comme pour les agents.
+
+La plateforme est importante, mais elle est secondaire.
+Ce que nous voulons transmettre ici, c’est la vision :
+
+une IT qui ne se contente plus d’observer son système,
+mais qui le comprend, le formalise,
+et opère sur la base d’une connaissance consolidée.
+
+⸻
+
+Message final à faire passer pendant cette session
+
+« L’innovation n’est pas dans la collecte de données :
+elle est dans la transformation de ces données en connaissance exploitable.
+
+TWIN transforme la topologie, les événements et les documents
+→ en un système de connaissance cohérent, dynamique et interconnecté,
+capable d’expliquer, diagnostiquer et recommander. »
+
+⸻
+
+11:45 – 11:55
+
+Q&A
+
+⸻
+
+12:00 – 13:55
+
+Pause méridienne
+
+⸻
+
+14:00 – 15:00
+
+Introduction agentique
+“De la connaissance à l’intelligence : donner vie au Digital Twin grâce aux agents”
+
+Ce matin, nous avons vu comment TWIN transforme la data brute — topologie, événements, documentation — en connaissance structurée.
+	•	le Knowledge Graph offre une compréhension cohérente de l’infrastructure : composants, relations, versions, états, événements ;
+	•	les Knowledge Bases documentaires, issues du Doc-to-Knowledge, encapsulent notre expertise technique : règles Red Hat, bonnes pratiques Kubernetes, processus internes, modèles de résolution d’incidents.
+
+À ce stade, nous avons un système qui comprend ce qu’est l’IT et ce qu’il faut savoir pour l’opérer.
+Mais un Digital Twin qui ne fait que comprendre n’est qu’une encyclopédie vivante.
+
+L’après-midi, nous passons à la seconde partie de l’histoire :
+
+comment TWIN utilise cette connaissance pour produire de l’intelligence opérationnelle.
+
+Cette intelligence, ce sont les agents qui la portent.
+
+⸻
+
+1. Pourquoi créer des agents ?
+Un agent n’est pas seulement un programme :
+c’est une entité de compétence.
+
+On le crée pour lui confier :
+	•	un rôle,
+	•	une compréhension,
+	•	une expertise.
+
+Dans l’IT, un agent peut :
+	•	analyser des logs,
+	•	comprendre un incident,
+	•	interpréter un changement,
+	•	appliquer une procédure,
+	•	détecter une anomalie,
+	•	simuler une propagation,
+	•	recommander une action de remédiation.
+
+Chaque agent est spécialisé.
+Il possède une intention, un périmètre, une expertise, une manière d’interagir avec la connaissance.
+
+Créer un agent, c’est créer un expert numérique.
+
+⸻
+
+2. Les agents s’appuient d’abord sur le Knowledge Graph
+Lorsqu’un agent reçoit une question ou une intention —
+“diagnostique cet incident”, “analyse cette application”, “évalue l’impact de ce changement” —
+sa première tâche est de comprendre sur quoi il doit raisonner.
+
+Cette compréhension vient du Knowledge Graph :
+	•	identifier la topologie concernée,
+	•	localiser les serveurs, composants, versions, clusters,
+	•	connaître les dépendances,
+	•	contextualiser avec les événements présents ou récents.
+
+C’est le cadre de situation, la carte mentale que l’agent construit avant de réfléchir.
+
+Sans ce contexte, un agent serait aveugle.
+Avec le Knowledge Graph, il devient contextuellement intelligent.
+
+⸻
+
+3. Les agents utilisent ensuite les Knowledge Bases pour acquérir de l’expertise
+Une fois que l’agent sait où il est, il doit savoir quoi faire.
+
+C’est là que les Knowledge Bases entrent en scène.
+
+Exemple :
+
+Un agent Red Hat doit analyser un incident sur une application donnée.
+Si le Knowledge Graph lui indique que l’application repose sur des serveurs Red Hat 9,
+l’agent va immédiatement invoquer la Knowledge Base Red Hat 9.
+
+Il ne consulte pas toute la documentation Red Hat.
+Il utilise précisément le corpus structuré qui correspond à l’environnement réel.
+
+De même :
+	•	un agent Kubernetes utilisera la Knowledge Base Kubernetes ;
+	•	un agent réseau utilisera la base réseau ;
+	•	un agent de processus utilisera la base “processus de changement” ou “processus d’incident”.
+
+Chaque agent puise dynamiquement dans la bonne connaissance,
+adaptée au contexte détecté dans le Knowledge Graph.
+
+Ce mécanisme — contexte + expertise — donne aux agents leur intelligence effective.
+
+⸻
+
+4. L’orchestration : la coopération d’une équipe d’experts numériques
+Un agent seul ne résout pas tout.
+
+Dans la vraie vie, face à un incident complexe, on constitue une équipe :
+	•	expert système,
+	•	expert réseau,
+	•	expert applicatif,
+	•	expert sécurité,
+	•	coordinateur,
+	•	référent processus ITSM.
+
+Ces experts discutent, partagent, se contredisent parfois, collaborent souvent.
+
+Avec les agents, c’est exactement la même philosophie.
+
+Nous ne créons pas un “super agent” omniscient.
+Nous créons une équipe numérique orchestrée, où chaque agent apporte sa compétence et où l’orchestrateur compose une réponse cohérente.
+
+L’orchestration, c’est :
+	•	répartir l’intention entre plusieurs agents,
+	•	faire dialoguer leurs analyses,
+	•	résoudre leurs divergences,
+	•	fusionner leurs recommandations,
+	•	produire une réponse structurée.
+
+Ce qui est naturel pour les humains devient naturel pour le système agentique.
+
+⸻
+
+5. La maîtrise en production : comment s’assurer qu’un système d’agents reste fiable
+Dès qu’on donne de l’autonomie à un système, une question se pose :
+
+Comment garantir que les agents restent fiables, contrôlés, sécurisés, non dérivants ?
+
+On gère les agents comme un système vivant.
+
+Des plateformes comme LangChain, LangSmith, et des outils d’évaluation online/offline permettent :
+	•	de surveiller le comportement des agents,
+	•	de comprendre leurs raisonnements,
+	•	d’identifier les dérives,
+	•	de mesurer leur consommation et leur coût,
+	•	de tracer chaque décision,
+	•	de simuler des comportements avant la production,
+	•	de vérifier l’alignement avec les règles de gouvernance.
+
+L’objectif n’est pas la sophistication technologique.
+L’objectif, c’est la maîtrise :
+savoir ce que fait un agent, pourquoi, sur quelle connaissance il s’appuie,
+et comment aligner son comportement avec la sécurité et la conformité.
+
+⸻
+
+🌱 En résumé, l’introduction agentique doit transmettre trois idées simples :
+	1.	L’intelligence n’est pas dans la technologie — elle est dans la connaissance structurée.
+Les agents ne sont intelligents que parce qu’ils sont connectés aux Knowledge Graphs et aux Knowledge Bases.
+	2.	Un agent est un expert numérique, une équipe d’agents est une équipe d’experts numériques.
+Avec des rôles, des intentions, des interactions, une orchestration.
+	3.	TWIN crée cette intelligence sans sacrifier la maîtrise.
+Chaque agent reste observable, explicable, contrôlable, gouvernable.
+
+⸻
+
+Comment on accède à TWIN – l’Interface Intelligentielle
+Nous venons de voir comment les agents acquièrent de la connaissance, comment ils coopèrent et orchestrent leur expertise.
+Mais tout cela n’a de valeur que si l’intelligence de TWIN est simplement accessible.
+
+Dans TWIN, l’interface n’est pas seulement un “front”.
+C’est une porte d’entrée intelligente, conçue pour comprendre :
+	•	qui est l’utilisateur,
+	•	son rôle,
+	•	ses besoins,
+	•	son contexte opérationnel.
+
+TWIN peut être utilisé via un portail web, une interface analytique,
+ou plus simplement via Teams, avec un @TWIN.
+
+Un @TWIN permet de solliciter l’ensemble de la plateforme :
+les agents, la connaissance, le Knowledge Graph, tout ce que nous construisons.
+
+Ce qui rend cette expérience unique, c’est la dimension personnalisée.
+
+Deux personnes peuvent poser la même question et obtenir des réponses différentes.
+Parce que TWIN sait :
+	•	qui pose la question,
+	•	quel est son rôle,
+	•	quel est son périmètre applicatif,
+	•	quelles sont ses applications, ses serveurs, son historique.
+
+TWIN ne se contente pas de répondre :
+il comprend à qui il répond.
+
+Il mémorise :
+	•	ce que vous lui avez déjà dit,
+	•	ce que vous lui avez déjà demandé,
+	•	votre niveau de détail préféré,
+	•	votre vocabulaire,
+	•	votre manière de travailler.
+
+Comme un collègue qui apprend avec vous, au fil des conversations.
+
+L’interface TWIN n’est pas un outil :
+c’est un agent conversationnel pivot, un méta-agent,
+qui :
+	•	interprète vos intentions,
+	•	invoque les bons agents spécialisés,
+	•	agrège leurs réponses,
+	•	et vous restitue une réponse adaptée à vous,
+pas à un utilisateur générique.
+
+C’est ce lien humain → interface → agents → connaissance
+qui fait de TWIN un véritable système intelligent.
+
+Et maintenant que vous voyez comment TWIN sera utilisé au quotidien,
+il est temps d’aller plus loin et de définir ensemble les agents eux-mêmes,
+ceux qui rendront cette expérience possible.
+
+⸻
+
+15:00
+
+Move to workshop
+
+⸻
+
+15:10 – 15:55
+ 
+Workshop 1 – Challenger les classes d’agents
+Dans ce premier atelier, l’objectif n’est pas d’entrer dans la technologie,
+mais dans la cohérence fonctionnelle :
+	•	Ces classes sont-elles compréhensibles pour vous ?
+	•	Reflètent-elles vos besoins ?
+	•	Sont-elles adaptées à la manière dont vous travaillez ?
+	•	En manque-t-on une ? Une doit-elle être fusionnée ?
+	•	La progression en maturité est-elle claire ?
+	•	Ces classes donnent-elles envie de contribuer ?
+
+C’est un atelier d’écoute, de validation, de fédération.
+
+Il commence par une introduction narrative :
+
+“Pourquoi avons-nous structuré les agents de cette manière ?
+Quel est le fil directeur ?
+Quelle philosophie sous-tend cette classification ?”
+
+⸻
+
+15:55
+
+Move to plenary room
+
+⸻
+
+16:05 – 16:30
+
+Workshop Agentic – Classes – Restitution
+
+⸻
+
+16:30
+
+Pause
+
+⸻
+
+16:45
+
+Move to workshop
+
+⸻
+
+16:55 – 17:40
+
+Workshop 2 – Définir les agents
+Dans ce deuxième atelier, on ne parle plus de classes,
+mais de spécimens d’agents.
+
+On sélectionne les deux ou trois premières classes (les plus proches du réel, les plus mûres pour un démarrage) :
+	•	Agents d’Assistance & Connaissance
+	•	Agents Contextuels & Compréhension
+	•	Agents de Gestion Opérationnelle
+
+Et, dans ces classes, on identifie ensemble :
+	•	Quels agents concrets créer ?
+	•	À quoi servent-ils ?
+	•	Quels inputs ? Quels outputs ?
+	•	Quel périmètre ? Quelles règles ?
+	•	Quelle valeur pour l’exploitation ?
+	•	Priorité : immédiate, court terme, long terme ?
+
+On fournit un template de définition d’un agent pour guider le public :
+une structure simple, claire, intuitive.
+
+Le message du workshop reste :
+
+“Nous construisons ces agents avec vous,
+selon vos besoins,
+avec une vision commune.”
+
+⸻
+
+17:40
+
+Move to plenary room
+
+⸻
+
+17:50 – 18:15
+
+Workshop Agentic – Agents – Restitution
+
+⸻
+
+18:15 – 18:25
+
+Conclusion
