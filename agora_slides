@@ -1,0 +1,453 @@
+🟦 SLIDE 1 — Titre
+
+**AGORA TWIN
+
+Transformer la donnée en connaissance, et la connaissance en intelligence opérationnelle**
+
+Une journée pour comprendre pourquoi TWIN n’est pas un outil,
+mais un système au service du CTO Group.
+
+Technologies support : TigerGraph • GraphRAG • Airflow • GreenEdges / GraphFlow • LangChain / LangGraph
+
+⸻
+
+🟦 SLIDE 2 — Intention de la journée
+
+**TWIN n’est pas une solution isolée, ni un produit d’équipe.
+
+TWIN est un système conçu pour relier, structurer et valoriser l’ensemble de l’intelligence IT déjà existante.**
+
+Notre objectif aujourd’hui est de montrer comment l’IT peut passer :
+– de données fragmentées → à une connaissance exploitable,
+– de connaissances dispersées → à une intelligence collective,
+– d’un mode réactif → à un système capable de comprendre et d’anticiper.
+
+TWIN appartient au CTO Group. Il se construit avec vous.
+
+Technologies support : Data Lake • Elastic • Discovery • Confluence • JIRA • ServiceNow
+
+⸻
+
+🟦 SLIDE 3 — Pourquoi commencer par une démonstration ?
+
+**Nous démarrons par une démo simple, non pas parce que le sujet est simple,
+
+mais parce qu’elle incarne la philosophie fondamentale du Digital Twin.**
+
+À partir d’un fait isolé — une modification technique minime —
+TWIN reconstruit une vision globale, cohérente et explicable.
+La démo n’a pas pour objectif de montrer une fonctionnalité,
+mais de révéler un principe fondateur :
+
+**Dans un jumeau numérique, rien n’existe seul.
+
+Le sens apparaît lorsqu’un événement est replacé dans son contexte.**
+
+Technologies support : Event collectors • FIM / AuditD • Elastic Indexing
+
+⸻
+
+🟦 SLIDE 4 — La philosophie illustrée par la démonstration
+
+**Une donnée isolée ne raconte rien.
+
+Une donnée reliée à son historique, sa topologie et son environnement devient une connaissance exploitable.**
+
+Un événement devient une explication.
+Une explication devient une recommandation.
+C’est ce passage — data → compréhension → action —
+qui constitue le socle du Digital Twin.
+
+👉 “La donnée brute devient compréhensible une fois réinsérée dans le système qui l’a produite.”
+
+Technologies support : TigerGraph (KG Topology+Event) • ETL / Airflow • Log Normalization
+
+⸻
+
+🟦 SLIDE 5 — Pourquoi cette démo est clé pour la suite
+
+Cette démonstration pose la pierre angulaire de toute la journée.
+
+Elle montre que :
+– la donnée seule n’est pas exploitable,
+– le SI n’est pas une somme de composants mais un système vivant,
+– la valeur ne se trouve pas dans la captation, mais dans l’interprétation,
+– structurer topologie, événements et documentation est indispensable
+avant de parler d’automatisation ou d’agents.
+
+Tout ce que nous verrons ensuite est l’extension naturelle de ce principe.
+
+Technologies support : Graph Models • Metadata Layer • Event Ingestion Pipelines
+
+⸻
+
+🟦 SLIDE 6 — La démo comme miroir du futur
+
+Ce que vous voyez aujourd’hui est une miniature du TWIN que nous bâtissons :
+
+– chaque événement trouve automatiquement sa place dans le graphe,
+– chaque changement est contextualisé,
+– chaque impact potentiel devient visible,
+– la connaissance devient un actif collectif,
+– l’IT gagne en lisibilité, en cohérence, en capacité d’action.
+
+Cette démo montre non pas l’état actuel, mais la trajectoire à laquelle nous voulons aller ensemble.
+
+Technologies support : GraphFlow • Dependencies Modeling • Event Correlation Engine
+
+⸻
+
+🟦 SLIDE 7 — Message final avant la démonstration
+
+Nous commençons par une démonstration parce qu’elle condense :
+
+– ce qu’est un jumeau numérique,
+– comment l’IT devient compréhensible,
+– pourquoi la transformation data → connaissance est le fondement
+de toute intelligence agentique.
+
+Ce que vous allez voir est une philosophie incarnée.
+
+Technologies support : Observability Stack • Knowledge Graph Engine
+
+⸻
+
+⸻
+
+🟦 SLIDE 8 — De la Data à la Connaissance : philosophie du Digital Twin
+
+**Un Digital Twin n’est pas une copie de l’infrastructure.
+
+C’est un système qui transforme la data existante en une connaissance structurée et exploitable.**
+
+La matière première existe déjà :
+– la topologie : la carte vivante de nos environnements,
+– les événements : la respiration quotidienne du SI,
+– la documentation : la mémoire collective, les savoir-faire.
+
+Ces données existent… mais elles ne sont ni reliées, ni structurées.
+
+Notre travail n’est pas de collecter plus, mais de transformer mieux.
+
+Technologies support : Discovery • Elastic • Data Lake • Confluence / Doc Repository
+
+⸻
+
+🟦 SLIDE 9 — Deux types de connaissances indispensables
+
+1️⃣ La connaissance structurelle : le Knowledge Graph
+
+Il formalise ce qu’est l’infrastructure.
+Il relie les composants, expose les dépendances, contextualise les événements.
+Il transforme la topologie brute en une connaissance cohérente, navigable et exploitable.
+
+2️⃣ La connaissance experte : les Knowledge Bases documentaires
+
+Elles transforment les manuels Red Hat, Kubernetes, les procédures internes, les runbooks…
+en graphes de savoirs exploitables par des agents.
+
+Structure + expertise = la base de toute intelligence.
+
+Technologies support : TigerGraph (Knowledge Graph) • GraphRAG (Doc-to-Knowledge)
+
+⸻
+
+🟦 SLIDE 10 — Le Knowledge Graph : un système vivant
+
+**Le Knowledge Graph TWIN n’est ni un inventaire, ni un flux de logs.
+
+C’est une représentation unifiée, dynamique et intelligente de l’infrastructure.**
+
+Il permet de comprendre :
+– qui dépend de quoi,
+– ce qui est critique,
+– où se situent les fragilités,
+– comment un incident peut se propager,
+– pourquoi un événement survient.
+
+C’est la carte du système… et en même temps son langage.
+
+Technologies support : TigerGraph • GraphFlow • Airflow Pipelines
+
+⸻
+
+🟦 SLIDE 11 — Les Knowledge Bases : transformer les documents en savoir utilisable
+
+**Nous ne voulons pas stocker des documents.
+
+Nous voulons transformer les documents en connaissances actionnables.**
+
+Une Knowledge Base est un graphe de concepts, de règles, de procédures.
+Elle encapsule l’expertise de l’entreprise :
+« comment comprendre », « comment diagnostiquer », « comment configurer », « comment réparer ».
+
+Un document devient un volume de la bibliothèque technique du CTO Group — exploitable par les agents.
+
+Technologies support : GraphRAG • Embeddings • Doc-to-KG Pipelines
+
+⸻
+
+🟦 SLIDE 12 — Pourquoi cette transformation est essentielle
+
+**Un moteur de recherche répond.
+
+Un moteur de raisonnement explique, contextualise, diagnostique, recommande.**
+
+Le Digital Twin n’a pas besoin de “data”.
+Il a besoin de connaissance structurée.
+
+La donnée brute est passive.
+La connaissance est active :
+elle éclaire, guide, anticipe.
+
+C’est cette transformation qui donne naissance à TWIN.
+
+Technologies support : LLM + KG Hybrid Reasoning • Semantic Search • Knowledge Tracking
+
+⸻
+
+🟦 SLIDE 13 — Message de fin de matinée
+
+**L’innovation n’est pas dans la collecte.
+
+Elle est dans la transformation.**
+
+TWIN transforme :
+topologie + événements + documentation
+→ en une connaissance unifiée, dynamique et interconnectée,
+capable d’expliquer, diagnostiquer et recommander.
+
+Technologies support : Full Stack Graph – TigerGraph, GraphRAG, ETL Airflow, Observability Data
+
+⸻
+
+⸻
+
+🟦 SLIDE 14 — Introduction Agentique : donner vie à la connaissance
+
+Ce matin, nous avons construit la compréhension :
+– ce qu’est le système (Knowledge Graph),
+– ce qu’il faut savoir pour l’opérer (Knowledge Bases).
+
+Mais un Digital Twin ne doit pas seulement comprendre.
+Il doit raisonner, interpréter, simuler, répondre, et demain agir.
+
+**L’après-midi, nous entrons dans la seconde étape :
+
+transformer la connaissance en intelligence grâce aux agents.**
+
+Technologies support : LangChain • LangGraph • LangSmith • Agent Runtime
+
+⸻
+
+🟦 SLIDE 15 — Ce qu’est vraiment un agent
+
+**Un agent n’est pas un chatbot.
+
+Un agent est un expert numérique, doté d’un rôle, d’une intention, d’un périmètre, d’une expertise.**
+
+Il sait analyser, diagnostiquer, interpréter, appliquer des règles,
+détecter des anomalies, simuler des impacts,
+et proposer des options ou des procédures.
+
+Créer un agent = créer un expert de l’IT.
+
+Technologies support : LLM Orchestration • Retrieval • Knowledge Routing
+
+⸻
+
+🟦 SLIDE 16 — Le rôle du Knowledge Graph pour les agents
+
+Avant d’agir, un agent doit comprendre son contexte.
+
+Le Knowledge Graph lui donne :
+– la topologie exacte de la situation,
+– les dépendances,
+– les versions,
+– les événements récents,
+– les zones critiques.
+
+**Le KG est la carte mentale de l’agent.
+
+Sans contexte, pas d’intelligence.**
+
+Technologies support : KG Querying • Contextualization Layer
+
+⸻
+
+🟦 SLIDE 17 — Le rôle des Knowledge Bases
+
+Une fois le contexte compris, l’agent doit savoir quoi faire.
+
+Il invoque alors la bonne Knowledge Base :
+Red Hat 9, Kubernetes, ITSM Processus, sécurité, réseau…
+
+L’agent utilise la bonne documentation structurée,
+adaptée automatiquement au contexte réel.
+
+Contexte + expertise = intelligence effective.
+
+Technologies support : GraphRAG • Knowledge Base Selection • Dynamic Routing
+
+⸻
+
+🟦 SLIDE 18 — L’intelligence collective : l’orchestration
+
+**Un agent seul ne suffit pas.
+
+Comme en réalité, il faut une équipe d’experts.**
+
+Dans un incident :
+– un expert système,
+– un expert réseau,
+– un expert Kubernetes,
+– un expert sécurité,
+– un coordinateur…
+
+TWIN reproduit ce modèle :
+plusieurs agents coopèrent, se complètent, et produisent une réponse cohérente.
+
+**Nous ne construisons pas un super-agent.
+
+Nous construisons une équipe orchestrée.**
+
+Technologies support : LangGraph • Multi-agent Orchestration
+
+⸻
+
+🟦 SLIDE 19 — Maîtriser les agents en production
+
+Dès qu’un système gagne en autonomie, la maîtrise devient essentielle.
+
+Grâce à LangSmith et notre architecture de supervision, nous pouvons :
+– tracer chaque décision,
+– détecter les dérives,
+– mesurer les coûts,
+– simuler des comportements,
+– vérifier l’alignement sécurité / conformité,
+– contrôler les appels LLM.
+
+**La technologie sert la maîtrise.
+
+La maîtrise garantit la confiance.**
+
+Technologies support : LangSmith • Evaluation Online/Offline • Token Governance
+
+⸻
+
+🟦 SLIDE 20 — TWIN comme expérience utilisateur intelligente
+
+Une intelligence n’a de valeur que si elle est accessible.
+
+TWIN peut être utilisé via :
+– un portail web,
+– une interface analytique,
+– et surtout Teams, via un simple @TWIN.
+
+Ce qui rend TWIN unique :
+deux personnes peuvent poser la même question…
+et obtenir deux réponses différentes, car TWIN comprend :
+
+– qui pose la question,
+– son rôle,
+– son périmètre,
+– son historique et ses préférences.
+
+**TWIN ne répond pas seulement.
+
+TWIN contextualise l’utilisateur lui-même.**
+
+Technologies support : User Context Engine • Personalization Layer
+
+⸻
+
+🟦 SLIDE 21 — L’interface comme méta-agent
+
+L’interface TWIN est elle-même un agent orchestrateur.
+
+Elle interprète les intentions,
+invoque les bons agents spécialisés,
+agrège leurs réponses,
+et restitue une réponse adaptée à la personne, à son rôle, et à son contexte.
+
+**Humain → Interface intelligente → Agents → Connaissance.
+
+C’est la chaîne complète de TWIN.**
+
+Technologies support : Conversational Orchestrator • Routing Policies
+
+⸻
+
+🟦 SLIDE 22 — Logique des classes d’agents
+
+Nous avons organisé les agents non pas par technologie, mais par fonction opérationnelle.
+
+– Agents d’assistance & connaissance
+– Agents contextuels & compréhension
+– Agents de gestion opérationnelle
+– Agents d’analyse & diagnostic
+– Agents d’automatisation & exécution
+– Agents stratégiques & gouvernance
+
+Un parcours de maturité, du support → à l’action → à la stratégie.
+
+Technologies support : Class Templates • Agent Metadata
+
+⸻
+
+🟦 SLIDE 23 — Workshop 1 : Challenger les classes
+
+Objectif : valider la cohérence fonctionnelle de ces classes.
+
+– Sont-elles compréhensibles ?
+– Reflètent-elles vos besoins ?
+– Donnent-elles envie de contribuer ?
+– En manque-t-on ?
+– La progression est-elle claire ?
+
+C’est un atelier d’écoute, de fédération, d’alignement.
+
+Technologies support (en arrière-plan) : Agentic Framework
+
+⸻
+
+🟦 SLIDE 24 — Workshop 2 : Définir les agents
+
+On passe des familles aux spécimens d’agents.
+
+Pour les classes les plus mûres, on définit ensemble :
+– rôle, périmètre, valeur, règles, priorités,
+– inputs, outputs, scénarios d’usage.
+
+Un template simple guidera l’exercice.
+
+“Nous construisons ces agents avec vous, selon vos besoins.”
+
+Technologies support : Knowledge Routing • Agent Templates
+
+⸻
+
+🟦 SLIDE 25 — Conclusion
+
+**TWIN relie nos données.
+
+TWIN structure notre connaissance.
+TWIN transforme nos expertises en intelligence opérationnelle.**
+
+Ce n’est pas un outil d’équipe.
+C’est un système du CTO Group,
+un écosystème auquel chacun contribue :
+– les équipes Data & Discovery,
+– les équipes Logs,
+– les équipes Documentation,
+– les équipes ITSM,
+– les équipes Cloud & Infra,
+– les équipes Sécurité,
+– les CTO et leurs domaines techniques.
+
+**TWIN n’est pas “notre projet”.
+
+C’est votre système.
+Nous le construisons ensemble.**
+
+Technologies support : L’ensemble de la plateforme TWIN
