@@ -1,0 +1,174 @@
+ Classe 1 — Agents d’Assistance & Connaissance
+
+📌 Lien direct avec : Knowledge Bases (Doc → Knowledge)
+
+👉 Ce sont les agents qui exploitent directement les KB.
+👉 Ils transforment les encyclopédies documentaires en explications opérationnelles.
+
+Justification par rapport à l’Agora :
+Le matin, tu expliques que les documents techniques deviennent des Knowledge Bases.
+Ces agents sont la mise en action de cette transformation.
+
+Phrases pour le workshop :
+	•	“Ce sont les agents qui rendent les KB utiles.”
+	•	“Ils transforment la connaissance brute en compréhension immédiate.”
+	•	“Ils incarnent la première marche de l’intelligence TWIN.”
+
+🧩 Niveau de maturité technique : basique
+
+— utilise les KB, pas encore le KG
+— ne prend pas de décision
+— première exploitation de la connaissance structurée
+
+⸻
+
+🟠 Classe 2 — Agents Contextuels & Compréhension
+
+📌 Lien direct avec : Knowledge Graph (Topologie + Events)
+
+👉 Ils exploitent le KG pour comprendre le contexte réel :
+dépendances, composants, impacts, localisation.
+
+Justification Agora :
+Le matin, tu expliques que les événements prennent du sens recontextualisés dans la topologie.
+Ces agents sont la traduction opérationnelle de ce principe.
+
+Phrases clés :
+	•	“Ils utilisent le KG pour reconstruire la situation.”
+	•	“Ils donnent la vue d’ensemble nécessaire avant toute action.”
+
+🧩 Niveau de maturité technique : intermédiaire
+
+— requête avancée du KG
+— reconstruction de contexte
+— capacité de situer un incident ou une application
+
+⸻
+
+🟡 Classe 3 — Agents de Gestion Opérationnelle
+
+📌 Lien direct avec : ITSM / Processus / Coordination
+
+👉 Ils s’appuient sur la connaissance structurelle + les processus métiers (KB “processus”).
+Ils organisent incidents, changements, problèmes.
+
+Justification Agora :
+C’est ce que tu expliques en fin de matinée :
+
+“La connaissance doit soutenir la décision opérationnelle et la coordination.”
+
+Phrases clés :
+	•	“Ils orchestrent le quotidien opérationnel.”
+	•	“Ils mettent en cohérence KG + KB + ITSM.”
+
+🧩 Niveau de maturité technique : élevé mais contrôlé
+
+— utilise KG + KB
+— structuration de workflows
+— contextualisation + règles
+
+⸻
+
+🟣 Classe 4 — Agents d’Analyse & Diagnostic
+
+📌 Lien direct avec : KG (événements) + KB (expertise technique)
+
+👉 Ce sont les “cerveaux analytiques”.
+Ils combinent :
+	•	logique topologique,
+	•	historique des événements,
+	•	expertise technologique documentaire
+pour expliquer les causes, prioriser, corréler.
+
+Justification Agora :
+C’est exactement ce que tu dis dans le bloc KG :
+
+“Comprendre ce qu’il se passe, pourquoi cela se produit et quelles relations existent.”
+
+Phrases clés :
+	•	“Ils donnent du sens.”
+	•	“Ils relient cause, contexte, expertise.”
+
+🧩 Niveau de maturité technique : avancé
+
+— KG intensif
+— KB expertes
+— raisonnement multi-source
+
+⸻
+
+🟢 Classe 5 — Agents d’Automatisation & Exécution
+
+📌 Lien direct avec : la vision d’un TWIN maîtrisé et gouverné
+
+👉 Ils agissent, mais sur la base :
+	•	d’un diagnostic fiable,
+	•	d’une procédure KB,
+	•	d’un scénario validé.
+
+Justification Agora :
+Tu expliques que le Digital Twin n’agit que lorsque la connaissance est fiable.
+Cette classe est la conséquence logique de la maturité.
+
+Phrases clés :
+	•	“Ils appliquent, mais sous supervision.”
+	•	“Chaque action est contextuelle, traçable et gouvernée.”
+
+🧩 Niveau de maturité technique : très avancé
+
+— nécessite KG + KB + orchestration
+— simulation avant action
+— gouvernance stricte
+
+⸻
+
+🟤 Classe 6 — Agents Stratégiques & Gouvernance
+
+📌 Lien direct avec : la vision cible TWIN (écosystème du CTO Group)
+
+👉 Ils utilisent KG + KB + historique pour orienter :
+	•	risques structurels
+	•	dette technique
+	•	hypervision
+	•	roadmap d’évolution
+	•	arbitrages techniques
+
+Justification Agora :
+C’est la vision TWIN Target : un système qui ne fait plus seulement du run,
+mais qui aide les CTO à piloter l’avenir.
+
+Phrases clés :
+	•	“Ils transforment l’intelligence opérationnelle en intelligence stratégique.”
+	•	“Ce sont les conseillers du CTO Group.”
+
+🧩 Niveau de maturité technique : ultime
+
+— nécessite toutes les couches TWIN
+— capacités prédictives
+— scénarios d’anticipation
+
+⸻
+
+🟦 **SYNTHÈSE FINALE POUR LE WORKSHOP :
+
+Le fil rouge complet**
+
+🌱 1. La Data brute → (Topologie, Events, Docs)
+
+🌿 2. devient Connaissance (KG + KB)
+
+🌳 3. qui devient Intelligence (Agents)
+
+🌲 4. structurée en 6 classes (maturité croissante)
+
+Chaque classe existe pour exploiter un niveau précis de connaissance.
+
+⸻
+
+🔥 Phrase d’ouverture pour lancer le Workshop 1 :
+
+“Ce matin, nous avons vu comment TWIN transforme la donnée en connaissance.
+Cet après-midi, nous voyons comment cette connaissance devient une intelligence structurée.
+
+Les classes d’agents ne sont pas théoriques :
+elles correspondent exactement aux étapes que nous avons construites ensemble ce matin.”
