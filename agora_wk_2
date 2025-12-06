@@ -1,0 +1,316 @@
+Objectif : Construire les agents concrets dans les domaines prioritaires
+
+Étapes :
+	1.	Choisir 2 domaines prioritaires (souvent INFRA + SOLVIUM)
+	2.	Pour chaque domaine, définir des agents des classes :
+	•	Assistance (C1)
+	•	Contexte (C2)
+	•	Gestion Opérationnelle (C3)
+	3.	Pour chaque agent, remplir le canevas suivant :
+
+🟧 Template de définition d’agent
+	•	Nom de l’agent :
+	•	Classe :
+	•	Domaine :
+	•	Intention : (à quoi sert-il ?)
+	•	Inputs :
+	•	Carte du contexte dans le KG :
+	•	Knowledge Bases mobilisées :
+	•	Outputs :
+	•	Interactions avec d’autres agents :
+	•	Valeur métier :
+	•	Priorité : (immédiate, court terme, long terme)
+
+Livrables :
+	•	Liste d’agents concrets
+	•	Première version du catalogue d’agents TWIN
+	•	Inputs pour le backlog de développement
+
+
+WORKSHOP 2 — Narration détaillée et phrases importantes
+
+🎙️ Atelier : Construire les agents concrets par domaine
+
+⸻
+
+🎤 Introduction narrative (version longue et impactante)
+
+“Dans ce second atelier, nous changeons de niveau.
+Nous ne parlons plus de classes, mais d’agents concrets.
+Des agents opérationnels.
+Des agents qui, demain, pourront réellement fonctionner dans TWIN.”
+
+“Nous allons travailler domaine par domaine — Infrastructure, APS, Observabilité, Changium, Solvium, Sécurité — pour identifier les agents qui seront les premiers à exister dans le système.”
+
+“Un agent n’est pas une idée abstraite.
+C’est une compétence.
+Une expertise numérique.
+C’est l’équivalent d’un spécialiste que vous ajouteriez à votre équipe.”
+
+⸻
+
+🎤 Phrases clés impactantes pour l’ouverture
+	•	“Créer un agent, c’est créer un expert numérique dédié à votre domaine.”
+	•	“Chaque agent que nous définissons aujourd’hui deviendra une brique réelle du système TWIN.”
+	•	“Nous ne faisons pas un exercice théorique : nous définissons les premiers membres d’une équipe numérique qui travaillera avec vous.”
+
+⸻
+
+🟤 Narration sur la méthode
+
+“Nous allons commencer par les trois classes les plus accessibles : Assistance, Contexte, Opérationnel.
+C’est ici que se trouvent les agents qui apportent une valeur immédiate.”
+
+*“Pour chaque agent, nous allons clarifier cinq éléments :
+	1.	À quoi sert-il ?
+	2.	Sur quoi doit-il raisonner ?
+	3.	Quelle connaissance doit-il exploiter ?
+	4.	Quels signaux ou données lui sont nécessaires ?
+	5.	Quelle est la valeur opérationnelle attendue ?”*
+
+“Cette approche garantit que chaque agent répond à un besoin réel et qu’il est immédiatement intégrable dans un plan de construction.”
+
+⸻
+
+🎤 Phrases structurantes qui frappent l’auditoire
+	•	“Un bon agent est un agent dont l’intention est claire.”
+	•	“Un agent n’agit pas seul : il s’inscrit dans le système de connaissance de TWIN.”
+	•	“Un agent doit être ancré dans la réalité opérationnelle, pas dans la théorie.”
+	•	“Un agent utile n’est pas celui qui sait tout faire, mais celui qui fait très bien ce qu’on lui demande.”
+
+⸻
+
+🟤 Narration sur le rôle de la Production IT
+
+“Chaque domaine — que ce soit Infra, Sécurité, Changium, Solvium, APS ou Observabilité — possède déjà des expertises uniques.
+L’objectif de ce workshop est de les transformer en agents.”
+
+“TWIN n’impose pas une vision.
+TWIN formalise, amplifie et valorise les expertises existantes.”
+
+⸻
+
+🎤 Phrase de transition forte
+	•	“Aujourd’hui, nous ne décrivons pas TWIN : nous le construisons.”
+	•	“Les agents que vous allez définir dans cet atelier seront les premiers ambassadeurs numériques de vos domaines.”
+
+⸻
+
+🟤 Conclusion du Workshop 2
+
+“À la fin de ce workshop, nous aurons une première version du catalogue d’agents TWIN.
+C’est ce catalogue qui servira de base au backlog de construction, à la priorisation, et à la feuille de route.”
+
+“Nous bâtissons ensemble l’équipe numérique qui accompagnera la Production IT dans les prochaines années.”
+
+⸻
+
+🎤 Phrase finale, mémorable
+
+**“Chaque domaine apporte ses experts.
+
+TWIN leur donne une forme numérique.
+Aujourd’hui, nous créons ces experts ensemble.”**
+
+
+
+
+
+
+
+
+Matrice officielle Domains × Classes d’agents TWIN
+
+L’ossature du futur système d’intelligence opérationnelle du CTO Group
+
+Pourquoi ce découpage ?
+
+Nous avons structuré TWIN autour de deux axes :
+	1.	Les 6 classes d’agents
+→ Elles représentent la progression naturelle de l’intelligence, depuis l’assistance jusqu’à la gouvernance stratégique.
+	2.	Les domaines opérationnels du CTO Group
+→ Ils reflètent la manière réelle dont l’IT est organisée, les responsabilités, les expertises et les flux opérationnels.
+
+Ce modèle n’est pas théorique :
+il colle à la réalité du terrain, fédère les équipes, et permet à chaque domaine de comprendre quelle place il occupe dans TWIN, et comment il peut contribuer.
+
+⸻
+
+🟩 Justification du découpage par domaines
+
+Le CTO Group s’appuie sur des piliers opérationnels bien définis :
+	•	l’infrastructure,
+	•	les applications,
+	•	la sécurité,
+	•	les logs,
+	•	les incidents,
+	•	les changements,
+	•	la gouvernance.
+
+Ces piliers fonctionnent déjà comme des éco-systèmes d’expertise.
+Notre objectif n’est pas de les remplacer, mais de les augmenter — en leur donnant des agents capables d’exploiter les connaissances produites par TWIN.
+
+Ainsi, chaque domaine contribue à TWIN selon son expertise, tout en bénéficiant d’agents transverses, gouvernés, cohérents.
+
+⸻
+
+🟦 Matrice officielle Domaines × Classes d’agents
+
+🧱 LECTURE DE LA MATRICE
+	•	Verticalement (Classes) : la maturité de l’intelligence agentique
+	•	Horizontalement (Domaines) : les expertises opérationnelles
+
+⸻
+
+🌐 1. Domaine INFRASTRUCTURE (BP2I)
+
+(OS, réseau, stockage, middleware, bases, cloud interne…)
+→ Pourquoi ce domaine ?
+Parce qu’il est le socle technique du SI.
+Les agents y opèrent la stabilité, la cohérence et la sécurité de l’infrastructure.
+
+Classe
+Capacités
+1. Assistance
+KB OS / Réseau / DB / Middleware
+2. Contexte
+KG infra, dépendances, versions
+3. Opérationnelle
+Patching, conformité, cohérence
+4. Diagnostic
+RCA infra, propagation, performances
+5. Exécution
+Actions infra automatisées et contrôlées
+6. Stratégique
+Roadmap versions, dette technique
+
+
+2. Domaine SÉCURITÉ / PROTECTION
+
+→ Pourquoi ce domaine ?
+Parce que la sécurité est un flux transversal critique et qu’elle dépend d’une compréhension contextuelle du SI.
+
+Classe
+Capacités
+1. Assistance
+Vulgarisation règles SSI
+2. Contexte
+Contexte alerte dans KG
+3. Opérationnelle
+Security Run, qualification
+4. Diagnostic
+Analyse IOC, corrélations
+5. Exécution
+Remédiations contrôlées
+6. Stratégique
+Modèles de risques, posture SSI
+
+
+Domaine CHANGIUM (Changements / CAB)
+
+→ Pourquoi ce domaine ?
+Parce que les changements sont la première source de risques dans les grandes organisations IT.
+Les agents ici aident à préparer, sécuriser, gouverner.
+
+Classe
+Capacités
+1. Assistance
+KB change, explication procédures
+2. Contexte
+Analyse d’impact via KG
+3. Opérationnelle
+Coordination CAB
+4. Diagnostic
+Analyse des risques change
+5. Exécution
+Pre-check / Post-check automatisés
+6. Stratégique
+Gouvernance, qualité du change
+
+
+. Domaine LOGS & OBSERVABILITÉ
+
+→ Pourquoi ce domaine ?
+Parce que les logs et métriques sont la source principale de signaux permettant de détecter dysfonctionnements et anomalies.
+
+Classe
+Capacités
+1. Assistance
+KB logs, types d’indices
+2. Contexte
+Contexte des signaux dans KG
+3. Opérationnelle
+Orchestration alertes multi-sources
+4. Diagnostic
+Corrélation anomalies, patterns
+5. Exécution
+Actions auto → cleanup, resets, etc.
+6. Stratégique
+Indicateurs santé SI, prévisions
+
+
+Domaine APPLICATIF (APS)
+
+→ Pourquoi ce domaine ?
+Parce que les applications sont le point de contact métier, et toute intelligence doit comprendre leurs dépendances.
+
+Classe
+Capacités
+1. Assistance
+KB applicatives
+2. Contexte
+KG applicatif, mapping service ↔ infra
+3. Opérationnelle
+Support N2/N3 structuré
+4. Diagnostic
+Diagnostic applicatif
+5. Exécution
+Actions applicatives
+6. Stratégique
+Capacité, coûts, optimisation métier
+
+
+Domaine SOLVIUM (Incidents / MTTR)
+
+→ Pourquoi ce domaine ?
+Parce que la réduction du MTTR est un enjeu majeur pour la disponibilité des services.
+
+Classe
+Capacités
+1. Assistance
+KB incident
+2. Contexte
+Impact via KG, dépendances
+3. Opérationnelle
+Coordination incident
+4. Diagnostic
+RCA incident, scoring de causes
+5. Exécution
+Actions post-incident automatisées
+6. Stratégique
+Tendances, fragilités structurelles
+
+
+ Domaine CTO & ORGANISATION
+
+→ Pourquoi ce domaine ?
+Parce que TWIN n’est pas seulement un outil d’exploitation :
+c’est un système de pilotage, aligné avec les enjeux du CTO.
+
+Classe
+Capacités
+1. Assistance
+KB architecture, standards
+2. Contexte
+Contexte SI dans KG
+3. Opérationnelle
+Gouvernance opérationnelle
+4. Diagnostic
+Analyse écarts design ↔ réalité
+5. Exécution
+Audits automatisés
+6. Stratégique
+Vision SI, risk scoring global
+
+
+
