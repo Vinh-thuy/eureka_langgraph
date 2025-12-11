@@ -1,143 +1,140 @@
 AGENT 1 — Process Insight Agent
 
-(Classe : Assistance & Knowledge)
+(Classe : Assistance & Connaissance)
 
 Contexte
 
-Les processus IT (incident, request, audit, governance…) sont dispersés et difficiles à comprendre.
+Les processus IT (incident, demande, audit, gouvernance…) sont dispersés entre ServiceNow, Confluence, PDF, RefCard IT, et difficiles à comprendre.
 
-Use Cases
-	•	“Explain the Incident Management process.”
-	•	“What is the CAB responsible for ?”
-	•	“What does the IT RefCard require in this scenario ?”
+Cas d’usage
+	•	“Explique-moi le processus Incident Management.”
+	•	“Quel est le rôle du CAB dans un changement ?”
+	•	“Que dit la RefCard IT dans ce contexte ?”
 
-Objectives
-	•	Make IT processes clear and accessible
-	•	Reduce misinterpretation
-	•	Ensure consistent understanding across teams
-	•	Improve process adoption
+Objectifs
+	•	Rendre les processus IT compréhensibles
+	•	Réduire les mauvaises interprétations
+	•	Aligner la compréhension entre équipes
+	•	Améliorer la qualité d’exécution des workflows
 
 ⸻
 
 🟦 AGENT 2 — Governance & Roles Guide
 
-(Classe : Assistance & Knowledge)
+(Classe : Assistance & Connaissance)
 
 Contexte
 
-Les responsabilités, acteurs et interactions sont souvent floues dans une grande organisation IT.
+Dans une grande organisation, les responsabilités, rôles et interactions entre entités ne sont pas toujours clairs.
 
-Use Cases
-	•	“Who is accountable in this workflow ?”
-	•	“Which team handles this step ?”
-	•	“Which committee oversees this topic ?”
+Cas d’usage
+	•	“Qui est responsable de cette étape ?”
+	•	“Quelle équipe intervient dans ce processus ?”
+	•	“Quel comité pilote ce sujet ?”
 
-Objectives
-	•	Clarify ownership and boundaries
-	•	Help users navigate organizational complexity
-	•	Reduce friction and improve collaboration
+Objectifs
+	•	Clarifier les rôles et les responsabilités
+	•	Aider les équipes à trouver les bons interlocuteurs
+	•	Réduire les frictions organisationnelles
+	•	Améliorer la cohérence du fonctionnement IT
 
 ⸻
 
 🟥 AGENT 3 — Process Compliance Analyzer
 
-(Classe : Context & Understanding)
+(Classe : Contexte & Compréhension)
 
 Contexte
 
-Les écarts de processus créent incidents, retards, pertes de qualité.
+Une large partie des défaillances opérationnelles provient de processus mal appliqués ou incomplets.
 
-Use Cases
-	•	“Was this change executed according to the process ?”
-	•	“Why did this incident take longer than expected ?”
-	•	“Which step has been skipped or misapplied ?”
+Cas d’usage
+	•	Vérifier si un changement a suivi correctement le processus
+	•	Comprendre pourquoi un incident a duré trop longtemps
+	•	Identifier les étapes manquantes ou incorrectes
 
-Objectives
-	•	Detect deviations from procedures
-	•	Explain root causes of non-compliance
-	•	Strengthen operational discipline
-	•	Improve end-to-end process reliability
+Objectifs
+	•	Détecter automatiquement les écarts aux processus IT
+	•	Identifier les causes de non-conformité
+	•	Renforcer la discipline opérationnelle
+	•	Réduire les risques liés à une mauvaise exécution
 
 ⸻
 
 🟥 AGENT 4 — KPI Interpretation Agent
 
-(Classe : Context & Understanding)
+(Classe : Contexte & Compréhension)
 
 Contexte
 
-Les KPIs sont souvent observés sans interprétation ni contextualisation.
+Les KPIs opérationnels sont nombreux (SLA, backlog, disponibilité, MTTR) et doivent être interprétés avec contexte pour avoir du sens.
 
-Use Cases
-	•	“Why are SLA numbers decreasing ?”
-	•	“Which risks emerge from this trend ?”
-	•	“Are we facing operational overload ?”
+Cas d’usage
+	•	Comprendre la baisse des SLA
+	•	Identifier les tendances critiques ou signaux faibles
+	•	Expliquer l’évolution d’un backlog ou d’un temps de résolution
 
-Objectives
-	•	Give meaning to metrics
-	•	Highlight trends, anomalies and risks
-	•	Support decision-making for managers and CTO
-	•	Improve transparency and foresight
+Objectifs
+	•	Donner du sens aux chiffres
+	•	Mettre en évidence les dérives ou ruptures
+	•	Aider les managers à prioriser et anticiper
+	•	Renforcer la transparence du pilotage IT
 
 ⸻
 
 🟦 AGENT 5 — Process Coordination Agent
 
-(Classe : Operational Management)
+(Classe : Gestion Opérationnelle)
 
 Contexte
 
-Les processus traversent plusieurs équipes (APS, BP2I, Cloud, Sécurité).
-La coordination manuelle génère lenteurs et incohérences.
+Les processus IT impliquent souvent plusieurs équipes (APS, BP2I, Sécurité, Cloud), ce qui rend la coordination complexe et source de lenteurs.
 
-Use Cases
-	•	“Help coordinate this multi-team change.”
-	•	“Guide all required steps for this request.”
-	•	“Ensure each team executes its part correctly.”
+Cas d’usage
+	•	Coordonner un changement impliquant plusieurs équipes
+	•	Organiser une procédure interne complexe
+	•	Guider la réalisation pas à pas d’un workflow multi-acteurs
 
-Objectives
-	•	Harmonize execution across teams
-	•	Reduce friction and delays
-	•	Structure collaboration
-	•	Improve reliability of IT operations
+Objectifs
+	•	Réduire la friction inter-équipes
+	•	Harmoniser et fiabiliser l’exécution
+	•	Faciliter la coordination d’activités transverses
+	•	Accélérer le Run IT dans les situations critiques
 
 ⸻
 
 🟦 AGENT 6 — Run Reporting Assistant
 
-(Classe : Operational Management)
+(Classe : Gestion Opérationnelle)
 
 Contexte
 
-Les managers perdent du temps à produire reports, synthèses, KPI packs, steering material.
+Les managers dépensent beaucoup de temps à produire des rapports, synthèses, slides, comités et tableaux de pilotage.
 
-Use Cases
-	•	“Prepare the Run Committee summary.”
-	•	“Give me monthly SLA deviations.”
-	•	“Generate a CTO-level overview of operational risks.”
+Cas d’usage
+	•	Préparer automatiquement un comité Run
+	•	Résumer les écarts de SLA du mois
+	•	Générer une synthèse des risques opérationnels pour le CTO
 
-Objectives
-	•	Automate reporting and run governance
-	•	Provide consistent, structured insights
-	•	Improve management efficiency
-	•	Strengthen alignment with CTO expectations
+Objectifs
+	•	Automatiser la production de reporting
+	•	Fournir une vision claire et structurée
+	•	Faire gagner du temps aux équipes managériales
+	•	Améliorer la qualité du pilotage global
 
-Class
-Agent Name
-Scope
-Assistance & Knowledge
+
+Assistance & Connaissance
 Process Insight Agent
-Explains IT processes, rules, workflows
+Explique les processus IT, workflows, règles et responsabilités
 Governance & Roles Guide
-Clarifies roles, ownership, committees
-Context & Understanding
+Clarifie la gouvernance, les rôles, les interactions entre équipes
+Contexte & Compréhension
 Process Compliance Analyzer
-Detects deviations, understands context
+Vérifie le respect des processus et détecte les écarts
 KPI Interpretation Agent
-Interprets operational KPIs & trends
-Operational Management
+Interprète les KPIs opérationnels et leurs tendances
+Gestion Opérationnelle
 Process Coordination Agent
-Orchestrates multi-team workflows
+Coordonne les workflows multi-équipes et les processus complexes
 Run Reporting Assistant
-Automates reporting & governance material
-
+Automatise le reporting et la préparation des instances de pilotage
