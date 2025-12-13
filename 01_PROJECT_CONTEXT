@@ -1,0 +1,30 @@
+# CONTEXTE PROJET : DIGITAL TWIN IT (BNP PARIBAS)
+
+## 1. OBJECTIF STRATÉGIQUE
+Construire un Jumeau Numérique (Digital Twin) de l'infrastructure bancaire pour :
+- Réduire le MTTR (Mean Time To Repair).
+- Anticiper les incidents (Détection d'anomalies).
+- Analyser l'impact des changements.
+
+## 2. FLUX DE DONNÉES (INPUTS)
+L'IA doit savoir qu'elle consomme 3 flux distincts :
+1.  **IT Event Capture (Elastic)** :
+    - Contient : Événements Synthétisés (Health, Change, Anomaly, Error Pattern).
+    - **Règle d'Or** : JAMAIS de logs bruts (Raw Logs). Le Twin ne voit que des signaux structurés.
+2.  **IT Data Capture (TigerGraph)** :
+    - Contient : La topologie unifiée (Services, Hosts, Pods, Dépendances).
+    - Sources : ServiceNow, BMC Discovery, Dynatrace.
+3.  **IT Doc Capture** :
+    - Contient : Runbooks, REX et procédures vectorisées pour le RAG.
+
+## 3. ARCHITECTURE CIBLE (MULTI-AGENTS)
+Le système est un graphe d'agents orchestré par **LangGraph** :
+- **Supervisor Agent** : Route la demande vers l'expert (RCA, Impact, ou Forecast).
+- **RCA Agent** : Enquête sur les causes racines (Corrélation Health Events + Changes).
+- **Impact Agent** : Traverse le graphe (TigerGraph) pour identifier la propagation d'une panne.
+- **Change Agent** : Évalue les risques d'une RFC (Request For Change).
+
+## 4. CONTRAINTES TECHNIQUES (AIR GAP)
+- **Environnement** : Serveur sécurisé, coupé d'Internet.
+- **Installation** : Interdiction absolue de `pip install`. Utiliser uniquement les libs pré-installées.
+- **Sécurité** : Respect strict du RBAC et de la confidentialité des données (PII).
