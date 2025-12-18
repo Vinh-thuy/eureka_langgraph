@@ -1,0 +1,40 @@
+Voici une synthèse combinant description et mots-clés pour chacun des documents fournis :
+1. Le Livre Blanc de référence (Théorie & Architecture)
+• Document : IA_agentique_numerique.pdf
+    ◦ Description : Ce livre blanc de l'IMA théorise la transition de l'IA générative vers l'IA agentique. Il définit les concepts clés (spectre d'autonomie), détaille les patterns d'architecture (ReAct, Reflection, Planning), et insiste sur l'importance des protocoles standards (MCP, A2A, AG-UI) pour l'industrialisation. Il aborde également les enjeux critiques de gouvernance, de sécurité (propagation d'identité), de gestion de la mémoire (sémantique/épisodique) et les stratégies de mise en œuvre (FinOps, frameworks comme LangGraph ou CrewAI),,,.
+    ◦ Mots-clés : IA Agentique, Patterns (ReAct, Planning), Protocoles (MCP, A2A, AG-UI), Gouvernance & Sécurité, Mémoire, Frameworks (LangGraph, CrewAI).
+2. Retours d'expérience et Stratégies d'Entreprise
+• Document : 20251106 - ILLUIN x BYTEL - IMA.pdf
+    ◦ Description : Présentation du partenariat entre Bouygues Telecom et Illuin Technology pour l'industrialisation d'agents conversationnels. Le document détaille la gestion de volumes massifs (400M+ demandes/an) via des callbots et chatbots capables de gérer des tâches récurrentes (factures, codes PUK) en 24/7, avec une hybridation vers des conseillers humains si nécessaire,,.
+    ◦ Mots-clés : Bouygues Telecom, Relation Client, Callbots/Chatbots, Industrialisation, Illuin Technology, Hybridation Humain-IA.
+• Document : Agentic AI - l’automatisation intelligente chez Roche.pdf
+    ◦ Description : Retour d'expérience du groupe Roche qui fait évoluer son programme "Citizen Developer" vers l'IA agentique. L'entreprise équipe ses collaborateurs d'une "toolbox" sécurisée pour créer des agents autonomes capables de planifier des tâches complexes, comme la réservation de voyages professionnels, en passant du simple script à l'agent intelligent,,.
+    ◦ Mots-clés : Roche, Citizen Developer, Low Code / No Code, Automatisation Intelligente, Agent de Voyage, Toolbox Sécurisée.
+• Document : Egis_strategie_agentiqueVF.pdf
+    ◦ Description : Egis explique sa bascule stratégique d'une solution interne (IRIS) vers l'écosystème Microsoft Copilot Studio pour des raisons de maintenance et de scalabilité. Le document présente des cas d'usage comme une FAQ métier intégrée à Teams et un agent de détection de défauts d'infrastructure via l'analyse d'images,,.
+    ◦ Mots-clés : Egis, Microsoft Copilot Studio, Stratégie Make vs Buy, Détection de Défauts (Computer Vision), FAQ Métier.
+• Document : MAiA ppt.pdf (Groupe BPCE)
+    ◦ Description : Présentation de "MAiA", le hub d'IA générative du Groupe BPCE destiné à acculturer et équiper l'ensemble des collaborateurs. La plateforme propose des assistants sécurisés et évolue techniquement du simple prompt vers des systèmes de raisonnement et d'utilisation d'outils (Reasoning & Tools),,.
+    ◦ Mots-clés : Groupe BPCE, Hub IA, Acculturation, MAiA, Reasoning & Tools, IA pour tous.
+• Document : NOVA BPCE.pdf (Groupe BPCE)
+    ◦ Description : Focus sur "NOVA", l'orchestrateur No-Code de chatbots et callbots du Groupe BPCE. Cette plateforme industrielle permet de créer des agents virtuels multicanaux en s'abstraisant de la complexité technique, intégrant RAG et APIs métiers, et se prépare à l'intégration de l'agentique,,.
+    ◦ Mots-clés : Plateforme NOVA, Orchestration No-Code, Agents Virtuels, RAG, Omnicanal, Groupe BPCE.
+• Document : LOCAL - IA Gen at IMA MALT.pdf
+    ◦ Description : Récit de la transformation de l'IA chez Malt vers "Malty AI", un réseau de 7 assistants spécialisés (expert client, expert freelance, etc.). Le document met en avant l'importance de la communauté interne, de la formation "AI University" et de la boucle de feedback pour améliorer les agents,,.
+    ◦ Mots-clés : Malt, Malty AI, Assistants Spécialisés, Efficacité Interne, Communauté, Feedback Loop.
+• Document : YOUNICORNS x ID LOGISTIQUE - IMA.pdf
+    ◦ Description : Cas d'usage opérationnel chez ID Logistics utilisant un agent intelligent (Python/OpenAI) pour automatiser le suivi des chargements. L'agent analyse les emails entrants dans Outlook via API, classifie les incidents de transport et propose des actions de réponse adaptées,.
+    ◦ Mots-clés : ID Logistics, Supply Chain, Classification Email, Outlook Graph API, Suivi de Chargements, Younicorns.
+3. Focus Technique et Développement
+• Document : IMA_AI_Agents_in_Finance_Hanane_pour_diffusion (1).pdf
+    ◦ Description : Guide technique comparant les frameworks (OpenAI Agents SDK, LlamaIndex, CrewAI) appliqués à la finance. Il détaille l'implémentation de patterns comme le "Prompt Chaining" pour l'analyse de transcriptions financières ou le "LLM-as-a-Judge" pour valider la conformité des réponses,,,.
+    ◦ Mots-clés : Finance, Frameworks Python (OpenAI SDK, LlamaIndex, CrewAI), Prompt Chaining, LLM-as-a-Judge, Analyse Financière.
+• Document : Worksplatform_IMA-2025-06_AI-Agents-LCNC_V1.0.pdf
+    ◦ Description : Présentation de la plateforme "Works" qui associe Agents IA et No-Code pour la modernisation de systèmes legacy. Elle utilise des agents analystes capables d'ingérer massivement du code (1 million de lignes) pour générer des spécifications fonctionnelles et réduire la dette technique,,.
+    ◦ Mots-clés : Works Platform, Modernisation Legacy, Analyse de Code, Dette Technique, No-Code Builder, Refactoring.
+• Document : Yann Carbonne et Ludovic Gibert.pdf (Crédit Agricole CIB)
+    ◦ Description : Présentation distinguant les "Workflows Agentiques" (chemins prédéfinis) des "Agents Autonomes" (planification autonome). Elle explore les styles architecturaux de collaboration multi-agents (Leader-Follower, Peer-to-Peer) pour structurer des systèmes complexes,,.
+    ◦ Mots-clés : Crédit Agricole CIB, Workflows Agentiques, Agents Autonomes, Architecture Multi-Agents, Collaboration.
+• Document : c376b24a-3cd1-47d3-837a-349dfdb9568e.pdf (Artefact)
+    ◦ Description : Document axé sur le marketing montrant comment l'IA générative permet l'hyper-personnalisation ("Insight to activation"). Il évoque l'utilisation de la donnée pour amplifier le contenu et optimiser les conversions, avec des démos comme "Babylon",.
+    ◦ Mots-clés : Artefact, Marketing, Hyper-personnalisation, Insight to Activation, Amplification de Contenu.
