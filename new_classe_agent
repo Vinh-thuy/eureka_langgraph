@@ -1,0 +1,114 @@
+Voici la fiche détaillée des **6 Classes d'Agents du Digital Twin IT**.
+
+Ces fiches sont prêtes à être imprimées ou projetées lors de ton **CTO Day**. Elles permettent à chaque responsable (Infra, Secu, App) de choisir son "collaborateur numérique" idéal.
+
+---
+
+### 1. L'Agent CARTOGRAPHE (The Mapper)
+
+> **Devise :** *"Je ne crois que ce que je vois sur le réseau."*
+
+* **Sa Mission :** Il maintient la **vérité terrain** dans le Knowledge Graph (KG). Il ne se fie pas à la documentation (souvent périmée), mais scanne la réalité technique pour dessiner la topologie dynamique.
+* **Pour qui ?**
+* **Network & Telco :** Pour voir les flux réels vs théoriques.
+* **Architecture :** Pour valider l'urbanisation.
+* **CMDB Manager :** Pour réconcilier les assets (Shadow IT).
+
+
+* **Architecture Requise :** **KG Pur**. (Connecteurs vers vCenter, AWS, Switchs, Terraform).
+* **Exemple Concret :**
+* *"Scanne le VLAN 102 et cartographie toutes les connexions entrantes vers le serveur de Paiement. Mets à jour le Graphe."*
+
+
+
+---
+
+### 2. L'Agent BIBLIOTHÉCAIRE (The Librarian)
+
+> **Devise :** *"Je trouve l'aiguille dans la botte de documentation."*
+
+* **Sa Mission :** Il est le gardien du **Savoir Froid** (Knowledge Base). Il ingère, nettoie et indexe les documents non structurés pour répondre aux questions de procédure.
+* **Pour qui ?**
+* **Support N1 / Helpdesk :** Pour répondre vite aux utilisateurs.
+* **Onboarding :** Pour aider les nouveaux arrivants.
+* **Run :** Pour retrouver une procédure d'exploitation ancienne.
+
+
+* **Architecture Requise :** **KB Seule** (RAG standard). Le lien KG est optionnel.
+* **Exemple Concret :**
+* *"Comment on renouvelle le certificat SSL sur un Apache selon la procédure 2024 ? Résume-moi les étapes."*
+
+
+
+---
+
+### 3. L'Agent DIAGNOSTICIEN (The Investigator)
+
+> **Devise :** *"J'explique la panne, je ne la répare pas."*
+
+* **Sa Mission :** C'est le détective du **MTTR**. Il croise les logs (Symptômes), la Topologie (KG) et les Changements récents pour identifier la **Cause Racine** probable. Il mâche le travail d'analyse.
+* **Pour qui ?**
+* **APS (Application Support) :** Pour comprendre les bugs applicatifs.
+* **Incident Manager :** Pour la gestion de crise.
+* **SOC / ProdSec :** Pour qualifier une alerte de sécurité (Faux positif ?).
+
+
+* **Architecture Requise :** **KB + KG + Events**. (Il lui faut le contexte pour ne pas halluciner).
+* **Exemple Concret :**
+* *"L'appli Mobile est lente. Analyse les logs des 30 dernières minutes et dis-moi si c'est lié à la mise en prod de la base de données voisine."*
+
+
+
+---
+
+### 4. L'Agent GARDIEN (The Guardian)
+
+> **Devise :** *"Je vérifie les règles avant que ça casse."*
+
+* **Sa Mission :** Il assure la **Conformité** et la Sécurité. Il audite les configurations et les demandes de changement (RFC) par rapport aux standards de la Banque (Policy-as-Code).
+* **Pour qui ?**
+* **ProdSec (CISO) :** Pour la gestion des vulnérabilités (CVE).
+* **Change Management (CAB) :** Pour l'analyse de risque avant déploiement.
+* **FinOps :** Pour détecter le gaspillage de ressources.
+
+
+* **Architecture Requise :** **KB + KG**. (Il compare la Règle KB avec la Config Réelle KG).
+* **Exemple Concret :**
+* *"Vérifie si le serveur qui va être déployé respecte bien l'interdiction d'ouverture du port 22 vers Internet. Si non, bloque le ticket Jira."*
+
+
+
+---
+
+### 5. L'Agent PRÉPARATEUR (The Runner Assistant)
+
+> **Devise :** *"Je prépare le script, tu appuies sur le bouton."*
+
+* **Sa Mission :** Il est le bras droit des Ops pour l'**Action**. Il génère les scripts de remédiation ou d'installation, mais **attend toujours une validation humaine** (Human-in-the-loop) pour exécuter.
+* **Pour qui ?**
+* **SysAdmin / Ops :** Pour les tâches répétitives (purge logs, restart).
+* **Déploiement :** Pour préparer les playbooks Ansible.
+
+
+* **Architecture Requise :** **KB + KG** (Critique). Un script généré sans connaître la version exacte de l'OS (KG) peut casser la prod.
+* **Exemple Concret :**
+* *"Le disque est plein à 95%. J'ai préparé la commande pour supprimer les logs archivés de plus de 30 jours. Veux-tu que je l'exécute ? [OUI / NON]"*
+
+
+
+---
+
+### 6. L'Agent ORATEUR (The Reporter)
+
+> **Devise :** *"Je traduis la complexité technique en langage business."*
+
+* **Sa Mission :** Il synthétise l'information pour la **Communication**. Il transforme des métriques techniques arides en indicateurs de pilotage compréhensibles pour les décideurs.
+* **Pour qui ?**
+* **CTO Office :** Pour les comités de direction.
+* **Pilotage / Service Delivery :** Pour les rapports SLA.
+* **Communication de Crise :** Pour les flashs infos métier.
+
+
+* **Architecture Requise :** **KB + Data Aggregation**.
+* **Exemple Concret :**
+* *"Rédige un mail pour le Directeur de la Banque de Détail expliquant l'incident de ce matin sans utiliser de jargon technique, en insistant sur le fait que les données clients sont intègres."*
