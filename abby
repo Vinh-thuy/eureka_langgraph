@@ -1,0 +1,195 @@
+C'est une excellente question de "réalité terrain". Confluence est souvent utilisé comme un "fourre-tout", et la stratégie d'ingestion doit s'adapter à cette nature hybride.
+
+Pour te répondre franchement : **Utiliser ABBYY Vantage pour *tout* ton Confluence serait une erreur d'architecture et de coût.**
+
+Voici mon analyse nuancée en tant que Digital Twin, basée sur les capacités d'ABBYY et notre contexte IT Doc Capture.
+
+### 1. Le cas où ABBYY est INUTILE (et coûteux) : Le contenu natif des pages
+Si tes données "sales" sont du texte directement écrit dans les pages Confluence (HTML), ABBYY n'est pas le bon outil.
+* **Pourquoi ?** ABBYY est un moteur d'OCR et de traitement d'images/documents (PDF, Tiff, Jpg). Lui demander de lire du HTML ou du texte brut, c'est comme utiliser un scanner pour lire un email à l'écran. C'est lent et inefficace.
+* **L'alternative "Twin" :** Pour le texte des pages, utilise les **Loaders LangChain** standards (ex: `ConfluenceLoader` en Python). Ils extraient le texte "sale" gratuitement. Ensuite, c'est ton **LLM** (via LangChain) qui doit faire le nettoyage (reformulation, correction orthographique, extraction de structure) avant l'injection dans le Vector Store.
+
+### 2. Le cas où ABBYY est INDISPENSABLE : Les "Pièces Jointes" (Le cimetière de fichiers)
+C'est souvent là que réside la vraie "saleté" d'un Confluence : des pages vides qui ne servent que de conteneur à des PDFs scannés, des Excels ou des captures d'écran.
+* **Le besoin :** Ces fichiers sont des "boîtes noires" pour un scrapper classique.
+* **La solution ABBYY :** C'est ici qu'il faut brancher ABBYY Vantage.
+    * **Screenshots d'architecture :** Si tu as des pages avec juste une image collée d'un diagramme Visio exporté en PNG, ABBYY (avec ses modèles MobileNet/CNN) pourra extraire le texte et les entités.
+    * **Vieux PDFs scannés :** L'étape d'"Image Enhancement" et d'"OCR/ICR" va nettoyer le bruit visuel et rendre le texte accessible.
+
+### 3. Ma recommandation d'architecture : Le "Router Pattern"
+
+Ne vois pas ABBYY comme la porte d'entrée unique. Dans ton pipeline Airflow, tu devrais avoir une logique de routage :
+
+1.  **Scrapper Confluence (Python/Airflow) :** Il parcourt les pages.
+2.  **Branche A (Texte de la page) :**
+    * Le contenu textuel part vers -> `LLM Cleaning` -> `Vector Store`.
+3.  **Branche B (Attachments détectés) :**
+    * Le scrapper télécharge les fichiers joints.
+    * **Filtre :** Si c'est du PDF image, du Tiff, ou du PNG complexe -> **Envoi vers ABBYY Vantage API**.
+    * ABBYY retourne un JSON structuré (comme vu précédemment).
+    * Ce JSON rejoint le pipeline d'ingestion.
+
+### En résumé
+
+N'utilise **pas** ABBYY pour lire tes pages Wiki. C'est trop lourd.
+Utilise ABBYY comme un **"débloqueur"** uniquement pour les **pièces jointes non-lisibles** (images, scans) qui polluent ton Confluence.
+
+C'est ainsi que tu gardes un budget maîtrisé tout en capturant 100% de la connaissance, même celle cachée dans des images "sales".
+
+C'est un point critique. Traiter des **schémas d'architecture** est beaucoup plus complexe que de traiter du texte pur, car la valeur réside dans la **topologie** (qui est connecté à qui ?) autant que dans le texte.
+
+Pour valider si ABBYY Vantage peut alimenter ton **Digital Twin** (et non juste stocker du texte plat), voici les questions techniques précises à poser, classées par enjeux d'architecture :
+
+### 1. Sur la capacité d'extraction "Graph-Ready" (Priorité Topologie)
+Le but est de savoir si l'outil peut aider à construire tes relations `RUNS_ON` ou `DEPENDS_ON` dans TigerGraph.
+
+* **La question clé :** *"Votre solution est-elle capable d'extraire des relations spatiales dans un diagramme (ex: une flèche reliant une boîte 'App' à une boîte 'DB') et de me les restituer sous forme structurée (JSON hiérarchique) ?"*
+* **Pourquoi :** L'image mentionne "Object Detection" et "Document structure preservation", mais souvent cela se limite aux tableaux et paragraphes. Si l'outil ne voit que du texte "flottant" sans dire "ce texte est dans cette boîte", tu perds la logique du schéma.
+* **La question subsidiaire :** *"Avez-vous des modèles pré-entraînés pour reconnaître les icônes standards d'architecture IT (Cylindre pour DB, Nuage pour Cloud, Mur pour Firewall) via vos réseaux CNN/MobileNetV3 ?"*.
+
+### 2. Sur la reconnaissance d'entités IT (NER Spécialisé)
+Tu as besoin de peupler ton **IT Data Capture** avec des CIs précis (Hostnames, IPs).
+
+* **La question clé :** *"Le module 'NLP for Unstructured' et ses capacités NER (Named Entity Recognition) peuvent-ils être customisés facilement pour détecter des patterns techniques spécifiques (Adresses IP, noms de serveurs bancaires type `fr-bnp-xxx`, versions de middleware) ?"*
+* **Pourquoi :** Les modèles génériques reconnaissent des "Dates" ou des "Lieux". Toi, tu as besoin qu'il reconnaisse des "Configuration Items".
+
+### 3. Sur l'intégration avec LangChain / Python (Output)
+Ton pipeline utilise **Airflow** et des scripts Python pour l'ingestion.
+
+* **La question clé :** *"Quel est le format de sortie exact (Output Schema) lors du traitement d'un document mixte (Texte + Image) ? Est-ce que je récupère un JSON unique contenant à la fois le texte OCRisé et les métadonnées des objets détectés ?"*
+* **Pourquoi :** Tu dois transformer cet output via ton module **Graflo STM**. Si le format est propriétaire ou éclaté, l'intégration sera pénible.
+
+### 4. Sur le traitement des "Tableaux complexes" (Matrice de flux)
+Les docs d'architecture contiennent souvent des matrices de flux réseau (Source IP | Dest IP | Port | Protocol).
+
+* **La question clé :** *"Comment gérez-vous les tableaux sans lignes visibles (borderless tables) souvent présents dans les documents Word ou PowerPoint convertis en PDF ? L'étape 'Table' dans votre pipeline 'Object Detection' est-elle robuste face à ces formats déstructurés ?"*
+* **Pourquoi :** C'est souvent là que l'OCR open-source échoue. Si ABBYY le fait bien, c'est un "Go" immédiat pour alimenter tes règles Illumio/Firewall.
+
+### 5. Sur la Performance et la Sécurité (Contexte Bancaire)
+* **La question clé :** *"La solution peut-elle tourner entièrement On-Premise ou en conteneur dans notre Cloud Privé sans aucun appel vers une API publique ?"*
+* **Pourquoi :** Tes schémas d'architecture sont des documents sensibles/confidentiels (Security strict). Aucune donnée ne doit sortir. La mention "inference at CPU for specific task" sur l'image suggère une possibilité d'exécution locale, mais il faut le confirmer.
+
+---
+
+### Ma recommandation pour la prochaine étape
+
+**Ne te fie pas aux slides.** Demande une démonstration avec un de **tes** schémas d'architecture anonymisé (pas un document commercial parfait).
+
+**Veux-tu que je te prépare un "Test Set" type (un faux schéma d'architecture bancaire avec des pièges pour l'OCR) que tu pourrais leur envoyer pour tester leurs limites ?**
+
+
+Voici une liste de questions ciblées et percutantes à poser au fournisseur ou à l'équipe technique ABBYY. Elles sont conçues pour vérifier l'alignement strict avec ton architecture **Digital Twin IT** (TigerGraph, LangChain, Airflow).
+
+Je les ai classées par **enjeu architectural**.
+
+### 1. Enjeu : Extraction de Topologie (Graph-Ready Data)
+*L'objectif est de transformer un dessin "mort" en nœuds et relations pour TigerGraph.*
+
+* **Question Spatiale :** "Votre moteur d'OCR est-il capable de nous retourner les coordonnées spatiales (bounding boxes) des blocs de texte et des objets graphiques ? Pouvez-vous nous dire : 'Le texte *App Frontend* est situé à l'intérieur du rectangle *Zone DMZ*' ?"
+    * *Pourquoi :* Pour déduire les relations `RUNS_ON` ou `LOCATED_IN` sans que cela soit écrit explicitement.
+* **Question Connecteurs :** "Vos modèles de 'Computer Vision' (MobileNet/CNN mentionnés) détectent-ils les flèches ou les lignes de connexion entre les formes ? Pouvez-vous exporter une liste de paires 'Objet Source -> Objet Cible' ?"
+    * *Pourquoi :* C'est la base pour construire la relation `DEPENDS_ON` dans le Knowledge Graph.
+
+### 2. Enjeu : Reconnaissance d'Entités IT (NER & Data Capture)
+*L'objectif est de lier le document aux CIs existants dans ton IT Data Capture.*
+
+* **Question Custom NER :** "Le module 'NLP for Unstructured' permet-il d'entraîner facilement des extracteurs d'entités personnalisés (Custom NER) pour reconnaître nos conventions de nommage bancaires (ex: `FR-PROD-DB-01`) ou des adresses IP privées ?"
+    * *Pourquoi :* Les modèles standards reconnaissent des "Dates" ou "Villes". Ton Twin a besoin de reconnaître des **Hostnames** et des **Services** pour lier le doc au bon CI.
+* **Question Dictionnaire :** "Peut-on injecter notre propre liste de CIs (export de la CMDB/ServiceNow) pour aider le moteur d'OCR à corriger les erreurs de lecture sur des noms de serveurs complexes ?"
+
+### 3. Enjeu : Intégration Pipeline (Airflow / Graflo)
+*L'objectif est d'ingérer la donnée sans friction dans ton pipeline Python.*
+
+* **Question Output Structuré :** "Le JSON de sortie préserve-t-il la hiérarchie sémantique du document (Titre 1 > Titre 2 > Paragraphe) ?"
+    * *Pourquoi :* Ton pipeline **RAG** a besoin de cette structure pour faire un "chunking" intelligent (découper le texte par section cohérente) avant l'embedding.
+* **Question Tableaux Complexes :** "Comment votre solution gère-t-elle les tableaux de flux réseau (matrices de ports) qui s'étalent sur plusieurs pages ou qui n'ont pas de bordures visibles ?"
+    * *Pourquoi :* Ces tableaux contiennent les règles de sécurité vitales pour l'agent **Compliance/Risk Agent**. Si la structure du tableau casse, la donnée est perdue.
+
+### 4. Enjeu : Infrastructure & Sécurité
+*L'objectif est de respecter les contraintes de la banque.*
+
+* **Question CPU/GPU :** "La slide mentionne 'inference at CPU for specific task'. Confirmez-vous que l'ensemble de la chaîne de traitement (y compris les modèles NLP lourds) peut tourner sur nos clusters Kubernetes existants (CPU only) sans nécessiter de GPU dédiés coûteux ?"
+* **Question 'Air-Gapped' :** "La solution nécessite-t-elle à un moment quelconque une connexion Internet pour valider une licence ou télécharger des mises à jour de modèles, ou peut-elle fonctionner en totale isolation réseau ?"
+    * *Pourquoi :* Tes documents d'architecture sont critiques et confidentiels. Aucune donnée ne doit sortir du périmètre sécurisé.
+
+### Le "Next Step" pour toi
+
+Si tu as une réunion prévue avec eux, je te suggère de copier-coller ces questions. Si tu veux, **je peux te rédiger un mail type d'avant-vente** incluant ces points techniques pour gagner du temps.
+
+
+C'est une excellente question de "réalité terrain". Confluence est souvent utilisé comme un "fourre-tout", et la stratégie d'ingestion doit s'adapter à cette nature hybride.
+
+Pour te répondre franchement : **Utiliser ABBYY Vantage pour *tout* ton Confluence serait une erreur d'architecture et de coût.**
+
+Voici mon analyse nuancée en tant que Digital Twin, basée sur les capacités d'ABBYY et notre contexte IT Doc Capture.
+
+### 1. Le cas où ABBYY est INUTILE (et coûteux) : Le contenu natif des pages
+Si tes données "sales" sont du texte directement écrit dans les pages Confluence (HTML), ABBYY n'est pas le bon outil.
+* **Pourquoi ?** ABBYY est un moteur d'OCR et de traitement d'images/documents (PDF, Tiff, Jpg). Lui demander de lire du HTML ou du texte brut, c'est comme utiliser un scanner pour lire un email à l'écran. C'est lent et inefficace.
+* **L'alternative "Twin" :** Pour le texte des pages, utilise les **Loaders LangChain** standards (ex: `ConfluenceLoader` en Python). Ils extraient le texte "sale" gratuitement. Ensuite, c'est ton **LLM** (via LangChain) qui doit faire le nettoyage (reformulation, correction orthographique, extraction de structure) avant l'injection dans le Vector Store.
+
+### 2. Le cas où ABBYY est INDISPENSABLE : Les "Pièces Jointes" (Le cimetière de fichiers)
+C'est souvent là que réside la vraie "saleté" d'un Confluence : des pages vides qui ne servent que de conteneur à des PDFs scannés, des Excels ou des captures d'écran.
+* **Le besoin :** Ces fichiers sont des "boîtes noires" pour un scrapper classique.
+* **La solution ABBYY :** C'est ici qu'il faut brancher ABBYY Vantage.
+    * **Screenshots d'architecture :** Si tu as des pages avec juste une image collée d'un diagramme Visio exporté en PNG, ABBYY (avec ses modèles MobileNet/CNN) pourra extraire le texte et les entités.
+    * **Vieux PDFs scannés :** L'étape d'"Image Enhancement" et d'"OCR/ICR" va nettoyer le bruit visuel et rendre le texte accessible.
+
+### 3. Ma recommandation d'architecture : Le "Router Pattern"
+
+Ne vois pas ABBYY comme la porte d'entrée unique. Dans ton pipeline Airflow, tu devrais avoir une logique de routage :
+
+1.  **Scrapper Confluence (Python/Airflow) :** Il parcourt les pages.
+2.  **Branche A (Texte de la page) :**
+    * Le contenu textuel part vers -> `LLM Cleaning` -> `Vector Store`.
+3.  **Branche B (Attachments détectés) :**
+    * Le scrapper télécharge les fichiers joints.
+    * **Filtre :** Si c'est du PDF image, du Tiff, ou du PNG complexe -> **Envoi vers ABBYY Vantage API**.
+    * ABBYY retourne un JSON structuré (comme vu précédemment).
+    * Ce JSON rejoint le pipeline d'ingestion.
+
+### En résumé
+
+N'utilise **pas** ABBYY pour lire tes pages Wiki. C'est trop lourd.
+Utilise ABBYY comme un **"débloqueur"** uniquement pour les **pièces jointes non-lisibles** (images, scans) qui polluent ton Confluence.
+
+C'est ainsi que tu gardes un budget maîtrisé tout en capturant 100% de la connaissance, même celle cachée dans des images "sales".
+
+C'est une inquiétude très juste. Dans ton contexte de documentation IT "en vrac" (hétérogène), le modèle de coût d'ABBYY Vantage ne se mesure pas seulement en euros (licence), mais surtout en **"temps humain" (Setup & Maintenance)**.
+
+Si tes documents ne sont pas standards (comme des factures ou des formulaires RH), tu risques effectivement d'y passer trop de temps pour un résultat décevant.
+
+Voici l'analyse "Coût/Bénéfice" pour ta situation spécifique (Schémas d'architecture & Docs Confluence sales) :
+
+### 1. Le piège du "No-Code" pour les docs hétérogènes
+ABBYY vend du "Low-Code / No-Code", mais pour des documents très variables (un schéma réseau ne ressemble jamais au suivant), cela demande en réalité un effort important :
+* **Classification Manuelle :** Pour que ça marche, tu dois d'abord définir des "Classes" (ex: "Schéma Physique", "Diagramme Logique", "Flux Applicatif").
+* **Training Set :** Tu dois fournir au moins 10 à 50 exemples *par classe* pour entraîner le modèle. Si tu as 50 types de schémas différents, tu vas passer des semaines juste à constituer ton jeu de données d'entraînement.
+* **Résultat :** Si tes docs sont trop "uniques" (hétérogènes), le modèle n'arrivera pas à généraliser (faible taux de confiance) et demandera une validation humaine constante (Human-in-the-Loop).
+
+### 2. La solution "FastML" et Clustering (Est-ce que ça sauve la mise ?)
+ABBYY dispose d'une fonction de **clustering non supervisé**.
+* **Théorie :** Tu lui donnes 10 000 documents en vrac, et il essaie de grouper tout seul les documents qui se ressemblent ("Tiens, ces 50 images ressemblent à des diagrammes Visio").
+* **Réalité :** Ça marche bien pour du texte ou des layouts fixes. Pour des images (schémas), c'est souvent moins performant qu'un humain. Tu devras quand même repasser derrière pour valider les groupes.
+
+### 3. Comparatif : ABBYY vs LLM Multimodal (GPT-4o / Claude 3.5 Sonnet / Gemini)
+C'est ici que se joue ta décision.
+
+| Critère | **ABBYY Vantage (Approche Classique)** | **LLM Multimodal (Approche GenAI)** |
+| :--- | :--- | :--- |
+| **Temps de Setup** | **Élevé** (Training, définition des zones, templates) | **Nul** (Zero-shot). Tu envoies l'image + un prompt. |
+| **Adaptabilité** | Rigide. Si le schéma change de format, le modèle peut échouer. | Flexible. Il "comprend" le schéma même s'il est dessiné à la main sur un tableau blanc. |
+| **Coût Financier** | Licence au volume (ex: pack 100k pages ~13k$). Rentable si gros volume *homogène*. | Coût au token/image. Plus cher à l'unité, mais **0 coût humain de setup**. |
+| **Pour les Schémas** | Très difficile de définir une "règle" pour extraire un flux réseau. | Excellent. Tu peux demander : *"Liste-moi les IPs et dis-moi à quel serveur elles sont reliées"*. |
+
+### Ma recommandation franche (Go / No-Go)
+
+**NO-GO pour ABBYY sur les schémas d'architecture hétérogènes.**
+Tu vas dépenser trop d'énergie à essayer de faire rentrer des ronds dans des carrés. ABBYY est optimisé pour des processus répétitifs (factures, bons de commande, formulaires KYC) où le format est prévisible.
+
+**La meilleure stratégie pour ton Twin :**
+1.  **Utilise ABBYY Vantage (ou un OCR simple)** uniquement pour faire de l'OCR "bête" (Image -> Texte brut) sur tes vieux PDF, sans chercher à créer de "Modèles Intelligents". Utilise le modèle "Générique" pré-entraîné.
+2.  **Utilise un LLM (via LangChain)** pour l'intelligence. Envoie le texte brut (ou l'image du schéma) à un modèle type GPT-4o ou Claude 3.5 Sonnet avec un prompt du type : *"Analyse ce schéma d'architecture et extrais les nœuds et relations au format JSON pour mon graphe"*.
+
+**Gain :** Tu économises des mois de configuration ("Training") et tu obtiens une flexibilité immédiate sur tes documents "sales".
+
