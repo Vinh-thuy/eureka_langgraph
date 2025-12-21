@@ -1,13 +1,9 @@
 search SoftwareInstance
-WHERE type IN ['Apache Web Server', 'Tomcat', 'PostgreSQL Database Server', 'MySQL Community Server', 'Oracle Database Server', 'Java Web Server']
 SHOW 
   type, 
   name, 
   product_version,
-  /* Cas 1 : Linux/Unix - Le Processus standard */
-  #InferredElement:Inference:Primary:DiscoveredProcess.cmd_line as 'Linux_Cmd',
-  /* Cas 2 : Windows - Le Service Windows (Souvent le Pathname contient la commande) */
-  #InferredElement:Inference:Primary:DiscoveredService.pathname as 'Win_Service_Path',
-  #InferredElement:Inference:Primary:DiscoveredService.cmd_line as 'Win_Service_Cmd',
-  /* Cas 3 : L'Argument Java complet (souvent stocké à part pour les applis Java) */
-  #InferredElement:Inference:Primary:DiscoveredProcess.args as 'Process_Args'
+  /* Pour PostgreSQL / Java : On garde les Args */
+  #InferredElement:Inference:Primary:DiscoveredProcess.args as 'Process_Args',
+  /* Pour Oracle : On ajoute le chemin d'installation explicite */
+  install_root as 'Oracle_Home'
