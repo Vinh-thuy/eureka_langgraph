@@ -1,0 +1,6 @@
+search SoftwareInstance
+WHERE type IN ['Apache Web Server', 'Tomcat', 'PostgreSQL Database Server', 'MySQL Community Server', 'Oracle Database Server']
+SHOW 
+  type, 
+  name, 
+  #InferredElement:Inference:Primary:DiscoveredProcess.cmd_line as 'Command_Line'
