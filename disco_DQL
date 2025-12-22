@@ -71,9 +71,21 @@ Ici, on cible le nœud `Cluster`. Attention, Discovery peut découvrir des clust
 
 ```sql
 SEARCH Cluster
-WHERE cluster_type HAS 'Kubernetes' OR cluster_type HAS 'OpenShift'
-SHOW
-  cluster_type,
+WHERE cluster_type MATCHES '(?i)Kubernetes|OpenShift'
+SHOW 
+  cluster_type, 
+  version
+PROCESS WITH unique(0)
+
+
+SEARCH Cluster
+WHERE cluster_type MATCHES '(?i)Kubernetes|OpenShift'
+TRAVERSE Cluster:
+Dataset:
+SoftwareCollection:
+SoftwareInstance
+SHOW 
+  type, 
   version
 PROCESS WITH unique(0)
 
