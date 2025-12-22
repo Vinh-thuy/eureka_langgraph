@@ -1,0 +1,100 @@
+C'est une excellente initiative. Pour alimenter tes **Knowledge Bases (KB)** et tes agents RAG, tu ne peux pas "scraper tout Internet". Tu dois cibler chirurgicalement la documentation des technologies *réellement* présentes dans ton parc.
+
+La clé en DQL (Discovery Query Language) pour obtenir une liste dédoublonnée (pour éviter de télécharger 500 fois le manuel de Windows 2019), c'est l'opérateur `processWith unique(0)`. C'est l'équivalent du `DISTINCT` en SQL.
+
+Voici les requêtes DQL prêtes à l'emploi pour tes 4 blocs manquants, basées sur le modèle de données BMC.
+
+### 1. Bloc HOST (Pour les KB "Système d'Exploitation")
+
+Tu cherches à lister les OS uniques (Vendor + Nom + Version).
+*Note : Je demande `os_class` pour que tu puisses séparer tes KB Linux et Windows.*
+
+```sql
+SEARCH Host
+SHOW
+  os_class,
+  os_vendor,
+  os_type,
+  os_version
+PROCESS WITH unique(0)
+
+```
+
+* **Exemple de résultat :** `Linux`, `Red Hat`, `Red Hat Enterprise Linux`, `8.4`.
+* **Action KB :** Télécharger le "RHEL 8 Administration Guide".
+
+---
+
+### 2. Bloc NETWORK (Pour les KB "Réseau")
+
+Les équipements réseaux (Switchs, Load Balancers, Firewalls) sont identifiés par le Constructeur, le Modèle et la version du Firmware.
+
+```sql
+SEARCH NetworkDevice
+SHOW
+  vendor,
+  model,
+  os_version,
+  sysObjectId
+PROCESS WITH unique(0)
+
+```
+
+* **Exemple de résultat :** `Cisco Systems`, `Catalyst 9300`, `17.06.03`, `1.3.6.1.4.1.9...`
+* **Action KB :** Télécharger le "Cisco IOS-XE 17.6 Configuration Guide".
+* *Astuce :* J'ai ajouté `sysObjectId` car c'est souvent la clé la plus précise pour trouver la doc technique exacte chez Cisco ou F5.
+
+---
+
+### 3. Bloc STORAGE (Pour les KB "Stockage")
+
+Comme confirmé précédemment, le stockage est souvent une "boîte noire" vue de l'extérieur, mais Discovery remonte le modèle de la baie via le nœud `StorageSystem` (visible en bas à gauche du schéma).
+
+```sql
+SEARCH StorageSystem
+SHOW
+  vendor,
+  model,
+  os_version
+PROCESS WITH unique(0)
+
+```
+
+* **Exemple de résultat :** `NetApp`, `FAS8000`, `9.7P1`.
+* **Action KB :** Télécharger la documentation "ONTAP 9.7".
+
+---
+
+### 4. Bloc CLOUD & ORCHESTRATION (Pour les KB "Kubernetes")
+
+Ici, on cible le nœud `Cluster`. Attention, Discovery peut découvrir des clusters VMware ou Hadoop. Il faut filtrer pour ne garder que l'orchestration de conteneurs (K8s, OpenShift).
+
+```sql
+SEARCH Cluster
+WHERE cluster_type HAS 'Kubernetes' OR cluster_type HAS 'OpenShift'
+SHOW
+  cluster_type,
+  version
+PROCESS WITH unique(0)
+
+```
+
+* **Exemple de résultat :** `Kubernetes`, `1.24.0`.
+* **Action KB :** Ingérer la doc officielle Kubernetes 1.24 (attention, les APIs changent vite, la version est critique ici).
+
+---
+
+### Synthèse pour ton "Robot Documentaire"
+
+Vinh, tu as maintenant 5 flux d'entrée pour ton pipeline d'ingestion documentaire (Doc Capture) :
+
+| Bloc | Requête DQL (Input) | Clé de Recherche Doc (Output) | Granularité KB suggérée |
+| --- | --- | --- | --- |
+| **Software** | (Ta requête existante) | `Type` + `Version` | Par Major Version (ex: Oracle 19c) |
+| **Host** | `SEARCH Host...` | `os_type` + `os_version` | Par Major Version (ex: RHEL 8, Win 2019) |
+| **Network** | `SEARCH NetworkDevice...` | `Model` + `os_version` | Par Famille (ex: Cisco Catalyst 9000) |
+| **Storage** | `SEARCH StorageSystem...` | `Model` + `os_version` | Par OS Stockage (ex: ONTAP 9) |
+| **Cloud** | `SEARCH Cluster...` | `cluster_type` + `version` | Par Minor Version (ex: K8s 1.24 vs 1.25) |
+
+**Prochaine étape pour toi :**
+Exécute ces 4 requêtes dans l'onglet "Query" de ta console Discovery, exporte en CSV, et donne ce fichier à ton équipe en charge du **Doc Capture** (ceux qui gèrent l'ingestion PDF/Confluence). C'est la liste exacte des "Manuels" qu'ils doivent trouver.
