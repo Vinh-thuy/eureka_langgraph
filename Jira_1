@@ -1,77 +1,76 @@
-C'est noté Vinh. On oublie le "Nettoyeur" pour cette fois (c'est peut-être trop "police" pour une démo inspirante).
+C'est bien noté Vinh. On s'adapte à la contrainte : **Monoprojet JIRA, équipe réduite, architecture 3-tiers (Front/Back/Postgre).**
 
-On se concentre donc sur le binôme **Reporter** (Vision Management) et **Investigator** (Vision Tech/Réalité). Voici une liste de *Use Cases* concrets, prêts à coder, pour enrichir ton medley.
+C'est une excellente contrainte car elle force à montrer l'intelligence "profonde" (comprendre le contenu) plutôt que l'intelligence "large" (croiser des équipes).
 
-Tu peux transmettre ça directement à ta team.
+Voici les Use Cases ajustés, faisables avec ton périmètre actuel, à transmettre à ton équipe.
 
 ---
 
-**Objet : Scénarios additionnels Démo CTO – Focus Reporter & Investigator**
+**Objet : Ajustement Scénarios Démo – Focus "Single Project"**
 
 Salut la team,
 
-Pour la démo, on doit densifier les capacités de nos deux stars : l'Agent **Reporter** (qui parle aux humains) et l'Agent **Investigator** (qui vérifie la tech).
+On affine le tir pour la démo. L'environnement JIRA de pré-prod est un projet unique (Front + Back + DB Postgre). Pas de dépendances inter-équipes complexes.
+On va donc miser sur la **qualité de l'analyse locale**.
 
-Voici des cas d'usage précis à implémenter pour montrer qu'on couvre tout le spectre. Choisissez-en un ou deux percutants en plus des scénarios de base.
+Voici les scénarios validés à implémenter :
 
-### 1. AGENT REPORTER (Classe 6 - Le Facilitateur)
+### 1. AGENT REPORTER (Classe 6)
 
-*Mission : Transformer la donnée Jira en aide à la décision. Il ne vérifie pas la technique, il analyse la gestion de projet.*
+*Mission : Aider le Product Owner à y voir clair dans SON sprint, sans jargon.*
 
-* **Use Case A : Le "Dependency Tracker" (Vision Transverse)**
-* **Le problème :** Un projet est en retard, mais le PM ne sait pas que c'est à cause d'une dépendance externe (une autre équipe).
-* **Prompt :** *"Pourquoi la Story 'Paiement API' est-elle bloquée depuis 5 jours ?"*
-* **L'Intelligence Agentique :** L'agent analyse les liens Jira (`blocks`, `is blocked by`). Il remonte la chaîne et détecte que le ticket bloquant appartient au projet d'une *autre* équipe (ex: Team Sécurité).
-* **Réponse Twin :** *"La Story est bloquée par le ticket SEC-404 (Validation Firewall) géré par l'équipe Sécurité. Ce ticket n'a pas bougé depuis une semaine. Veux-tu que je draft un mail de relance ?"*
-* **Valeur Démo :** Montre que Twin voit au-delà des silos d'équipe.
-
-
-* **Use Case B : Le "Release Note Generator" (Gain de temps)**
-* **Le problème :** Personne ne lit les tickets techniques. Le management veut savoir "Quoi de neuf pour le client ?".
-* **Prompt :** *"Prépare-moi la Release Note fonctionnelle pour la MEP de ce soir."*
-* **L'Intelligence Agentique :** L'agent filtre les tickets "Done" du Sprint, ignore les tickets "Tech/Refactoring", résume les "User Stories" en langage clair et groupe par thèmes.
-* **Réponse Twin :** *"Voici les 3 nouveautés activées ce soir : 1. Ajout d'Apple Pay. 2. Correction du bug d'affichage sur iOS. 3. Optimisation du login."*
-* 
-**Valeur Démo :** Montre la capacité de **Synthèse**  intelligente (Business vs Tech).
+* **Use Case A : Le "Sprint Blocker interne" (Analyse de Goulot)**
+* **Le contexte :** Dans un petit projet, une User Story est souvent bloquée par une tâche technique (ex: "Dev API" bloque "Intégration Front").
+* **La data :** Créez 2 tickets dans le même projet.
+* Ticket A (Story) : "Écran Login" (Statut: To Do).
+* Ticket B (Task) : "Update Schéma DB" (Statut: In Progress, Priorité: High).
+* Liez-les dans Jira (A `is blocked by` B).
 
 
+* **Prompt :** *"Pourquoi la story 'Écran Login' n'avance pas ?"*
+* **Réponse Twin :** *"La story est techniquement bloquée par la tâche de base de données 'Update Schéma DB' qui est toujours en cours. Tant que la DB n'est pas à jour, le Front ne peut pas avancer."*
+* **Valeur :** Montre que Twin comprend la logique de dépendance technique au sein d'un même projet.
 
 
-
----
-
-### 2. AGENT INVESTIGATEUR (Classe 3 - Le Vérificateur)
-
-*Mission : Faire le lien dur entre le Ticket (Jira) et le Composant (Graph/Infra). Il traque la vérité.*
-
-* **Use Case C : Le "Ghost Change Detector" (L'Inverse du déploiement)**
-* **Le contexte :** Twin a détecté une modification de config sur un serveur (Event Mutation), mais aucun ticket Jira ne correspond. C'est du "Shadow IT".
-* **Prompt (ou Push proactif) :** *"J'ai détecté un changement de configuration sur le Cluster Payment à 14h00. Y a-t-il un ticket Jira associé ?"*
-* **L'Intelligence Agentique :** L'agent cherche dans Jira les tickets en cours sur ce composant précis pour cette plage horaire.
-* **Réponse Twin :** *"Alerte : Le fichier de config a été modifié (Event FIM), mais aucun ticket Jira n'est ouvert sur ce service aujourd'hui. C'est un changement non tracé. Investigation requise."*
-* 
-**Valeur Démo :** C'est le cas d'usage de **Détection de Drift**. Très puissant pour la sécu/compliance.
-
-
-
-
-* **Use Case D : Le "RCA Assistant" (Build -> Run)**
-* **Le contexte :** Une alerte de performance tombe en Prod. On cherche le coupable.
-* **Prompt :** *"Le CPU du service 'Client-DB' sature depuis 10h. Quels sont les derniers tickets déployés qui pourraient expliquer ça ?"*
-* **L'Intelligence Agentique :** L'agent utilise le **Knowledge Graph** pour voir les dépendances, remonte aux `SoftwareInstances`, trouve les versions récentes, et va chercher dans Jira les tickets liés à ces versions.
-* **Réponse Twin :** *"Suspicion : La Story JIRA-88 'Optimisation Index SQL' a été déployée à 09h55. La saturation a commencé à 10h00. Forte probabilité de corrélation."*
-* 
-**Valeur Démo :** Montre l'analyse de **Root Cause**  en liant le code (Jira) à l'incident (Infra).
-
-
+* **Use Case B : Le "Translator" (Tech vers Métier)**
+* **Le contexte :** Les devs ont loggé des tâches techniques incompréhensibles ("Fix CORS header", "Bump pgsql driver", "Refactor Auth controller").
+* **Prompt :** *"Fais-moi un résumé du travail accompli cette semaine pour le métier."*
+* **Intelligence :** L'agent lit les titres techniques et les reformule/catégorise.
+* **Réponse Twin :** *"L'équipe a travaillé sur 3 axes : 1. Sécurisation des accès (Auth & CORS). 2. Maintenance de la base de données. 3. Préparation du module d'authentification."*
+* **Valeur :** Montre la capacité de **Reformulation** (LLM) pour le management.
 
 
 
 ---
 
-**Résumé pour la construction :**
+### 2. AGENT INVESTIGATOR (Classe 3)
 
-* **Reporter** = Analytique Projet, Synthèse, Dépendances humaines.
-* **Investigator** = Corrélation Temps/Objet, Preuve par l'Infra, Chasse aux incohérences.
+*Mission : Vérifier que le ticket Jira dit la vérité sur l'infra (Front/Back/DB).*
 
-Foncez là-dessus, ce sont des cas qui parlent immédiatement au management (Reporter) comme aux ops (Investigator).
+* **Use Case C : Le "Full Stack Verification" (La preuve par 3)**
+* **Le contexte :** Le ticket Jira "Livraison v1.2" est passé à "Done". Cela implique que le Front ET le Back doivent être à jour.
+* **L'infra (Graph) :**
+* Container Front : tag `v1.2` (OK).
+* Container Back : tag `v1.1` (KO, oubli de déploiement).
+
+
+* **Prompt :** *"Le ticket de livraison v1.2 est fermé. Confirme-moi que tout l'environnement est aligné."*
+* **Action Agent :** Il vérifie les versions sur les `SoftwareInstances` du Front et du Back dans le Graph.
+* **Réponse Twin :** *"Attention, incohérence partielle. Le Front est bien en v1.2, mais le Back-end tourne toujours en v1.1. La livraison est incomplète, risque de bug API."*
+* **Valeur :** Idéal pour ton architecture 3-tiers. On montre qu'on vérifie la cohérence globale.
+
+
+* **Use Case D : Le "Database Check" (Spécifique Postgre)**
+* **Le contexte :** Un ticket Jira demande un changement de config DB (ex: "Augmenter max_connections" ou "Update version").
+* **L'infra (Graph) :** Le nœud `SoftwareInstance` (Postgre) a des propriétés collectées (version ou conf).
+* **Prompt :** *"Le ticket DBA-12 dit que la base a été patchée. Est-ce le cas ?"*
+* **Action Agent :** Il compare la date de dernier redémarrage ou la version remontée par Discovery/Elastic sur le nœud Postgre.
+* **Réponse Twin :** *"Négatif. Le ticket est résolu, mais le processus PostgreSQL n'a pas redémarré depuis 30 jours. Le patch n'est pas appliqué."*
+* **Valeur :** Preuve de contrôle sur la couche Data critique.
+
+
+
+**En résumé :**
+On reste sur votre petit périmètre, mais on creuse la **profondeur** de l'analyse (Liens bloquants internes, Cohérence Front/Back, Réalité DB). C'est tout aussi impressionnant.
+
+Bonne prépa !
