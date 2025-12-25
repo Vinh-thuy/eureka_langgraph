@@ -1,0 +1,77 @@
+C'est noté Vinh. On oublie le "Nettoyeur" pour cette fois (c'est peut-être trop "police" pour une démo inspirante).
+
+On se concentre donc sur le binôme **Reporter** (Vision Management) et **Investigator** (Vision Tech/Réalité). Voici une liste de *Use Cases* concrets, prêts à coder, pour enrichir ton medley.
+
+Tu peux transmettre ça directement à ta team.
+
+---
+
+**Objet : Scénarios additionnels Démo CTO – Focus Reporter & Investigator**
+
+Salut la team,
+
+Pour la démo, on doit densifier les capacités de nos deux stars : l'Agent **Reporter** (qui parle aux humains) et l'Agent **Investigator** (qui vérifie la tech).
+
+Voici des cas d'usage précis à implémenter pour montrer qu'on couvre tout le spectre. Choisissez-en un ou deux percutants en plus des scénarios de base.
+
+### 1. AGENT REPORTER (Classe 6 - Le Facilitateur)
+
+*Mission : Transformer la donnée Jira en aide à la décision. Il ne vérifie pas la technique, il analyse la gestion de projet.*
+
+* **Use Case A : Le "Dependency Tracker" (Vision Transverse)**
+* **Le problème :** Un projet est en retard, mais le PM ne sait pas que c'est à cause d'une dépendance externe (une autre équipe).
+* **Prompt :** *"Pourquoi la Story 'Paiement API' est-elle bloquée depuis 5 jours ?"*
+* **L'Intelligence Agentique :** L'agent analyse les liens Jira (`blocks`, `is blocked by`). Il remonte la chaîne et détecte que le ticket bloquant appartient au projet d'une *autre* équipe (ex: Team Sécurité).
+* **Réponse Twin :** *"La Story est bloquée par le ticket SEC-404 (Validation Firewall) géré par l'équipe Sécurité. Ce ticket n'a pas bougé depuis une semaine. Veux-tu que je draft un mail de relance ?"*
+* **Valeur Démo :** Montre que Twin voit au-delà des silos d'équipe.
+
+
+* **Use Case B : Le "Release Note Generator" (Gain de temps)**
+* **Le problème :** Personne ne lit les tickets techniques. Le management veut savoir "Quoi de neuf pour le client ?".
+* **Prompt :** *"Prépare-moi la Release Note fonctionnelle pour la MEP de ce soir."*
+* **L'Intelligence Agentique :** L'agent filtre les tickets "Done" du Sprint, ignore les tickets "Tech/Refactoring", résume les "User Stories" en langage clair et groupe par thèmes.
+* **Réponse Twin :** *"Voici les 3 nouveautés activées ce soir : 1. Ajout d'Apple Pay. 2. Correction du bug d'affichage sur iOS. 3. Optimisation du login."*
+* 
+**Valeur Démo :** Montre la capacité de **Synthèse**  intelligente (Business vs Tech).
+
+
+
+
+
+---
+
+### 2. AGENT INVESTIGATEUR (Classe 3 - Le Vérificateur)
+
+*Mission : Faire le lien dur entre le Ticket (Jira) et le Composant (Graph/Infra). Il traque la vérité.*
+
+* **Use Case C : Le "Ghost Change Detector" (L'Inverse du déploiement)**
+* **Le contexte :** Twin a détecté une modification de config sur un serveur (Event Mutation), mais aucun ticket Jira ne correspond. C'est du "Shadow IT".
+* **Prompt (ou Push proactif) :** *"J'ai détecté un changement de configuration sur le Cluster Payment à 14h00. Y a-t-il un ticket Jira associé ?"*
+* **L'Intelligence Agentique :** L'agent cherche dans Jira les tickets en cours sur ce composant précis pour cette plage horaire.
+* **Réponse Twin :** *"Alerte : Le fichier de config a été modifié (Event FIM), mais aucun ticket Jira n'est ouvert sur ce service aujourd'hui. C'est un changement non tracé. Investigation requise."*
+* 
+**Valeur Démo :** C'est le cas d'usage de **Détection de Drift**. Très puissant pour la sécu/compliance.
+
+
+
+
+* **Use Case D : Le "RCA Assistant" (Build -> Run)**
+* **Le contexte :** Une alerte de performance tombe en Prod. On cherche le coupable.
+* **Prompt :** *"Le CPU du service 'Client-DB' sature depuis 10h. Quels sont les derniers tickets déployés qui pourraient expliquer ça ?"*
+* **L'Intelligence Agentique :** L'agent utilise le **Knowledge Graph** pour voir les dépendances, remonte aux `SoftwareInstances`, trouve les versions récentes, et va chercher dans Jira les tickets liés à ces versions.
+* **Réponse Twin :** *"Suspicion : La Story JIRA-88 'Optimisation Index SQL' a été déployée à 09h55. La saturation a commencé à 10h00. Forte probabilité de corrélation."*
+* 
+**Valeur Démo :** Montre l'analyse de **Root Cause**  en liant le code (Jira) à l'incident (Infra).
+
+
+
+
+
+---
+
+**Résumé pour la construction :**
+
+* **Reporter** = Analytique Projet, Synthèse, Dépendances humaines.
+* **Investigator** = Corrélation Temps/Objet, Preuve par l'Infra, Chasse aux incohérences.
+
+Foncez là-dessus, ce sont des cas qui parlent immédiatement au management (Reporter) comme aux ops (Investigator).
