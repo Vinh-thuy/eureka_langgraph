@@ -1,0 +1,211 @@
+En tant qu'IA textuelle, je ne peux pas créer un fichier `.docx` binaire que tu peux cliquer et télécharger directement (c'est une limitation de l'interface).
+
+Cependant, j'ai préparé ci-dessous une **"Fiche de Saisie JIRA"** complète et formatée.
+
+👉 **Mon conseil :** Copie-colle simplement tout le contenu ci-dessous dans un document Word (ou un Notepad). C'est formaté spécifiquement pour te faciliter la tâche lors de la saisie manuelle (copier le titre, copier la description).
+
+---
+
+# 📄 FICHE DE SAISIE JIRA - DÉMO DIGITAL TWIN
+
+**Date de la démo :** [Date du jour]
+**Objectif :** Alimenter le projet pour les Agents Reporter et Investigator.
+
+## 👥 LE CASTING (Rappel pour assignation)
+
+* **Personne A (Toi / PO) :** User Stories, Releases.
+* **Personne B (Back / Tech Lead) :** Tâches API, DB, Bugs complexes.
+* **Personne C (Front / UX) :** Bugs visuels, Design.
+* **Personne D (Ops / DBA) :** Certificats, Patchs, Backups.
+
+---
+
+## 🟢 SCÉNARIO 1 : AGENT REPORTER (Blocages & Résumé)
+
+*Objectif : Créer une chaîne de dépendance et du "bruit" technique à résumer.*
+
+### 🎫 JIRA-101 (User Story)
+
+* **Titre :** Implémentation Login SSO
+* **Assigné à :** Personne A
+* **Statut :** To Do
+* **Liens :** `is blocked by` **JIRA-102**
+* **Description :**
+
+```text
+En tant qu'utilisateur interne,
+Je veux me connecter via le SSO Corporate (OAuth2)
+Afin d'éviter d'avoir un mot de passe spécifique à l'application.
+
+Note : Dépend de la mise à jour du modèle de données (ticket lié JIRA-102).
+
+```
+
+### 🎫 JIRA-102 (Task)
+
+* **Titre :** Update Schema DB (Table Users)
+* **Assigné à :** Personne B
+* **Statut :** In Progress
+* **Liens :** `blocks` **JIRA-101**
+* **Description :**
+
+```sql
+ALTER TABLE users ADD COLUMN oauth_token VARCHAR(255);
+ALTER TABLE users ADD COLUMN sso_provider_id INT;
+
+Mise à jour nécessaire des entités Hibernate pour supporter le nouveau flux d'authentification SSO.
+
+```
+
+### 🎫 JIRA-103 (User Story)
+
+* **Titre :** Page Profil Utilisateur
+* **Assigné à :** Personne A
+* **Statut :** To Do
+* **Liens :** `is blocked by` **JIRA-101**
+* **Description :**
+
+```text
+En tant qu'utilisateur connecté,
+Je veux visualiser mes informations personnelles (Nom, Matricule, Rôle).
+
+Dépendance : Cette page ne peut pas être testée tant que le token d'authentification (JIRA-101) n'est pas disponible.
+
+```
+
+### 🎫 JIRA-104 (Bug)
+
+* **Titre :** Bouton Login décalé sur mobile
+* **Assigné à :** Personne C
+* **Statut :** To Do
+* **Description :**
+
+```text
+Sur iPhone (Safari), le bouton "Se connecter" chevauche le footer.
+Problème CSS probable dans le flex-container du composant LoginView.js.
+Repro : Mode responsive < 375px.
+
+```
+
+### 🎫 JIRA-105 (Task)
+
+* **Titre :** Fix CORS headers on API Gateway
+* **Assigné à :** Personne B
+* **Statut :** In Progress
+* **Description :**
+
+```text
+L'appel API depuis localhost:3000 est bloqué par le navigateur.
+Erreur : Access to XMLHttpRequest blocked by CORS policy.
+
+Action : Ajouter Access-Control-Allow-Origin: * sur l'API Gateway pour l'environnement DEV uniquement.
+
+```
+
+### 🎫 JIRA-106 (Task)
+
+* **Titre :** Renewal certificat SSL Wildcard
+* **Assigné à :** Personne D
+* **Statut :** In Progress
+* **Description :**
+
+```text
+Le certificat *.mybank.intra expire dans 10 jours.
+1. Générer le nouveau CSR.
+2. Signature via Sectigo.
+3. Déploiement du .pem sur le Load Balancer Nginx et redémarrage du service httpd.
+
+```
+
+---
+
+## 🟠 SCÉNARIO 2 : AGENT INVESTIGATOR (Release Verification)
+
+*Objectif : Une Release "Done" administrativement, mais incomplète techniquement (Backend v1.1 vs v1.2).*
+
+### 🎫 JIRA-107 (Release)
+
+* **Titre :** Livraison Production v1.2
+* **Assigné à :** Personne A
+* **Statut :** Done
+* **Description :**
+
+```text
+Scope de la Release :
+- Déploiement des artefacts taggés v1.2.0 sur le Front-end (Container Web).
+- Déploiement des artefacts taggés v1.2.0 sur le Back-end (Container API).
+
+Checklist :
+- Smoke test OK.
+- Version validée en UAT.
+
+```
+
+### 🎫 JIRA-108 (Defect)
+
+* **Titre :** Fix Memory Leak Panier
+* **Assigné à :** Personne B
+* **Statut :** Done
+* **Fix Version :** v1.2
+* **Description :**
+
+```text
+Analyse Heap Dump : Les objets CartSession ne sont pas nettoyés par le Garbage Collector après timeout.
+
+Fix : Correction appliquée dans ShoppingCartService.java.
+Inclus dans la Release v1.2.
+
+```
+
+### 🎫 JIRA-109 (Task)
+
+* **Titre :** Update Swagger Docs
+* **Assigné à :** Personne B
+* **Statut :** Done
+* **Fix Version :** v1.2
+* **Description :**
+
+```text
+Régénération de la spécification OpenAPI v3 suite aux changements de contrôleurs.
+Le endpoint /api/v1/cart/validate est maintenant documenté.
+Inclus dans la Release v1.2.
+
+```
+
+---
+
+## 🔴 SCÉNARIO 3 : AGENT INVESTIGATOR (Database Check)
+
+*Objectif : Piéger l'équipe sur un oubli de procédure (Restart manquant).*
+
+### 🎫 JIRA-110 (Change)
+
+* **Titre :** Patch Sécurité PostgreSQL (Critical)
+* **Assigné à :** Personne D
+* **Statut :** Done (⚠️ **À passer à Done AUJOURD'HUI**)
+* **Description :**
+
+```text
+Objet : Application du patch de sécurité CVE-2024-5678.
+Cible : Cluster PostgreSQL Production.
+
+Procédure :
+1. Update des binaires via yum update postgresql-server.
+2. ACTION REQUISE : Redémarrage complet du service (systemctl restart postgresql) pour recharger les librairies.
+3. Vérification des logs.
+
+```
+
+### 🎫 JIRA-111 (Task)
+
+* **Titre :** Backup Pré-Patch Prod
+* **Assigné à :** Personne D
+* **Statut :** Done
+* **Liens :** `relates to` **JIRA-110**
+* **Description :**
+
+```text
+Exécution d'un pg_dump complet de la base avant application du patch JIRA-110.
+Dump stocké sur le montage NFS /mnt/backup/pre-patch.
+
+```
