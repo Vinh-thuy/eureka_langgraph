@@ -1,258 +1,137 @@
-C'est bien noté Vinh. On s'adapte à ton schéma JIRA spécifique (SAFe / Agile à l'échelle).
+C'est parti Vinh. Voici la **Synthèse Complète et Exportable** de ta démo.
 
-Voici la **Version Finale et Exhaustive** du Runbook.
-J'ai converti tous les types de tickets pour coller strictement à ta liste : `Technical Story`, `Task`, `Enabler`, `Amélioration`.
+C'est ton document maître. Il regroupe tout : la logique des Agents, les scripts de conversation, et la configuration JIRA associée avec les vrais numéros de tickets.
 
 ---
 
-# 📘 RUNBOOK DÉMO DIGITAL TWIN (Version SAFe JIRA)
+# 📘 RUNBOOK DÉMO DIGITAL TWIN
 
-**Concept :** Le Digital Twin ne se contente pas des champs JIRA. Il lit les **Descriptions** (le plan) et les **Commentaires** (la réalité) pour détecter les blocages et les incohérences.
+**Sprint Cible :** "Sprint 25-01 : Hardening & Release 1.2"
 
-## 🎭 LE CASTING
+## 1. LE CASTING DES AGENTS
 
-| Rôle | Acteur JIRA | Type de tickets gérés |
+| AGENT | RÔLE & PÉRIMÈTRE | INTELLIGENCE DÉMONTRÉE |
 | --- | --- | --- |
-| **PO / Lead** | **Vinh-thuy TRAN** | Technical Story, Enabler (Releases) |
-| **Tech Lead** | **Romain** | Task (Back/DB), Technical Story |
-| **Front / UX** | **Fahem** | Amélioration (UI), Task (Fix) |
-| **Ops / DBA** | **Amani** | Enabler (Infra), Task (Maintenance) |
+| **🕵️‍♂️ AGENT REPORTER** | **Analyste Projet (JIRA)**<br>
+
+<br>Il traduit le technique en métier et analyse le planning. | **Intelligence Sémantique** : Capable de lire les descriptions, les commentaires et de trier par Priorité pour ne pas noyer le décideur. |
+| **🔎 AGENT INVESTIGATOR** | **Contrôleur de Vérité (INFRA)**<br>
+
+<br>Il croise JIRA avec le Graphe (État Réel). | **Intelligence Contextuelle** : Capable de détecter qu'un ticket est "Done" administrativement mais "KO" techniquement (Version, Uptime). |
 
 ---
 
-## 🟢 SCÉNARIO 1 : AGENT REPORTER (Vision Projet)
+## 2. SCÉNARIOS & SCRIPTS DE DÉMO
 
-### 🎯 Use Case A : "Le Blocker Dynamique"
+### 🟢 PARTIE A : AGENT REPORTER (Vision Métier)
 
-**L'histoire :** Une Story dépend d'une tâche technique. Cette tâche technique rencontre un imprévu (signalé en commentaire). L'Agent doit remonter la chaîne.
+#### 📌 USE CASE A : Le "Blocker" Dynamique
 
-#### 🗣️ La Question (Prompt)
+* **L'histoire :** Une Story prioritaire est bloquée. L'Agent remonte la chaîne de dépendance et trouve la cause racine dans un commentaire technique d'un autre ticket.
+* **🗣️ TA QUESTION (Prompt) :**
+> *"Pourquoi ma Story 'Implémentation Login SSO' n'avance pas ?"*
 
-> *"Pourquoi ma Story 'Login SSO' n'avance pas ?"*
 
-#### 🎫 Les Tickets à créer (Exhaustif)
-
-**1. Ticket : TCAAS3883-495**
-
-* **Type :** `Technical Story`
-* **Titre :** Implémentation Login SSO
-* **Assigné à :** Vinh-thuy TRAN
-* **Statut :** A Traiter (To Do)
-* **📝 Description Complète :**
-```text
-En tant qu'utilisateur interne, je veux me connecter via le SSO Corporate (OAuth2).
-
-OBJECTIFS :
-- Intégration du provider d'identité.
-- Gestion du retour de token JWT.
-
-⚠️ PRÉ-REQUIS TECHNIQUE :
-Ce ticket nécessite que le modèle de données soit à jour pour stocker le token.
-
-[DÉPEND DE : TCAAS3883-496]
-
-```
+* **💡 RÉPONSE ATTENDUE :**
+> "Ta Story **(495)** est bloquée par la tâche de base de données **(496)**.
+> Attention : Romain a signalé en commentaire un **conflit critique sur le driver JDBC**. Tant que ce point technique n'est pas réglé, le SSO ne peut pas démarrer."
 
 
 
-**2. Ticket : TCAAS3883-496**
+#### 📌 USE CASE B : Le Résumé "Smart" (Priorité)
 
-* **Type :** `Task`
-* **Titre :** Update Schema DB (Table Users)
-* **Assigné à :** Romain
-* **Statut :** En cours (In Progress)
-* **📝 Description Complète :**
-```text
-Tâche technique pour supporter le SSO.
-Script SQL à passer :
-ALTER TABLE users ADD COLUMN oauth_token VARCHAR(255);
-Mise à jour des entités Hibernate nécessaire.
-
-[IMPACTE : TCAAS3883-495]
-
-```
+* **L'histoire :** Le sprint contient 15 tickets. Le métier ne veut voir que l'essentiel. L'Agent utilise la **Priorité (High)** pour détailler le critique et synthétise le reste (Medium) en une phrase.
+* **🗣️ TA QUESTION (Prompt) :**
+> *"Fais-moi un résumé du sprint pour le métier en te basant sur les priorités."*
 
 
-* **💬 Commentaire à poster (Romain) :**
-> "⚠️ **ALERTE :** Je rencontre un conflit de version majeur sur le driver JDBC lors des tests de migration. Impossible de commiter le schéma tant que ce n'est pas résolu. Ça bloque tout le sujet SSO pour aujourd'hui."
+* **💡 RÉPONSE ATTENDUE :**
+> "Voici les 3 sujets majeurs du Sprint :
 
 
+> 1. **Release (503)** : La v1.2 est livrée.
+> 2. **Sécurité (506)** : Le Patch Critique PostgreSQL est passé.
+> 3. **Alerte (495)** : Le Login SSO est bloqué.
+> 
+> 
 
-**3. Ticket : TCAAS3883-497**
 
-* **Type :** `Technical Story`
-* **Titre :** Page Profil Utilisateur
-* **Assigné à :** Vinh-thuy TRAN
-* **Statut :** A Traiter (To Do)
-* **📝 Description Complète :**
-```text
-Visualisation des informations personnelles (Nom, Matricule, Rôle).
-Affichage des droits d'accès.
-
-⚠️ PRÉ-REQUIS FONCTIONNEL :
-Le profil ne peut pas être affiché tant que l'utilisateur n'est pas authentifié.
-
-[DÉPEND DE : TCAAS3883-495]
-
-```
+> *Activité de fond : L'équipe a traité 12 autres tickets de maintenance (Logs, Nettoyage) et d'ajustements mineurs.*"
 
 
 
 ---
 
-### 🎯 Use Case B : "Le Résumé Intelligent"
+### 🟠 PARTIE B : AGENT INVESTIGATOR (Vision Réalité)
 
-**L'histoire :** Filtrer le bruit pour donner une vision claire au management.
+#### 📌 USE CASE C : La Release Incomplète
 
-#### 🗣️ La Question (Prompt)
-
-> *"Fais-moi un résumé du sprint pour le métier."*
-
-#### 🎫 Les Tickets de "Bruit" (À créer pour le volume)
-
-*Pas besoin de descriptions complexes ici, le titre suffit.*
-
-| ID (Est.) | Type | Titre | Assigné | Statut |
-| --- | --- | --- | --- | --- |
-| **510** | `Task` | Rotation des logs Apache (Archivage) | Amani | Done |
-| **511** | `Amélioration` | Correction typo footer "Mentions Legales" | Fahem | To Do |
-| **512** | `Amélioration` | Mise à jour charte graphique (H1 Blue) | Fahem | In Progress |
-| **513** | `Task` | Rédaction CR réunion Architecture | Vinh | Done |
-| **514** | `Task` | Fix erreur 404 image signature mail | Fahem | To Do |
-| **515** | `Task` | Nettoyage espace disque /tmp SRV-DEV | Amani | Done |
-| **516** | `Task` | Refactoring classe DateUtils (Dette Tech) | Romain | To Do |
-| **517** | `Task` | Renouvellement licence IntelliJ Équipe | Vinh | In Progress |
-
----
-
-## 🟠 SCÉNARIO 2 : AGENT INVESTIGATOR (Vision Infra)
-
-### 🎯 Use Case C : "La Release Incomplète"
-
-**L'histoire :** On déclare la v1.2 livrée, mais le graphe montre que le Backend est resté en v1.1.
-
-#### 🗣️ La Question (Prompt)
-
-> *"Confirme-moi que la Production est bien alignée avec la Release v1.2."*
-
-#### 🎫 Les Tickets à créer
-
-**4. Ticket : [ID_RELEASE] (ex: 520)**
-
-* **Type :** `Enabler` *(On utilise Enabler pour une Release)*
-* **Titre :** Livraison Production v1.2
-* **Assigné à :** Vinh-thuy TRAN
-* **Statut :** **Terminé (Done)**
-* **📝 Description Complète :**
-```text
-Ticket de suivi de la mise en production v1.2.
-
-SCOPE DE LA RELEASE :
-- Composant Back-end (API) : Version v1.2.0
-- Composant Front-end (Web) : Version v1.2.0
-
-Checklist :
-- Smoke test OK.
-- Validé en UAT.
-
-```
+* **L'histoire :** JIRA dit "Tout est livré en v1.2". Le Graphe voit que le Backend est resté en v1.1.
+* **🗣️ TA QUESTION (Prompt) :**
+> *"Vérifie la cohérence de la Livraison Production v1.2."*
 
 
-* **💬 Commentaire à poster (Vinh) :**
-> "Déploiement terminé. Tous les voyants sont au vert sur le dashboard."
+* **💡 RÉPONSE ATTENDUE :**
+> "❌ **Incohérence Détectée.**
+> Le ticket JIRA **(503)** annonce un déploiement complet en **v1.2**.
+> Cependant, le Digital Twin détecte que le conteneur Backend tourne toujours avec l'image **v1.1**. La livraison n'est pas effective partout."
 
 
 
-**5. Ticket : TCAAS3883-504**
+#### 📌 USE CASE D : Le Mensonge par Omission (Compliance)
 
-* **Type :** `Task`
-* **Titre :** Fix Memory Leak Panier
-* **Assigné à :** Romain
-* **Statut :** **Terminé (Done)**
-* **📝 Description Complète :**
-```text
-Correction de la fuite mémoire sur les objets CartSession.
-Fix validé en pré-prod.
-
-[INCLUS DANS VERSION : v1.2]
-
-```
+* **L'histoire :** Le patch DB est marqué "Fait". La procédure exige un restart. L'humain a oublié le restart. L'uptime serveur (30 jours) trahit l'humain.
+* **🗣️ TA QUESTION (Prompt) :**
+> *"Est-ce que le patch de sécurité PostgreSQL est bien actif ?"*
 
 
-
-**6. Ticket : TCAAS3883-505**
-
-* **Type :** `Task`
-* **Titre :** Update Swagger Docs
-* **Assigné à :** Romain
-* **Statut :** **Terminé (Done)**
-* **📝 Description Complète :**
-```text
-Mise à jour de la documentation API.
-Endpoint /cart/validate ajouté.
-
-[INCLUS DANS VERSION : v1.2]
-
-```
+* **💡 RÉPONSE ATTENDUE :**
+> "⚠️ **Risque de Sécurité.**
+> Le ticket **(506)** est fermé, mais le patch est inactif.
+> La procédure impose un **redémarrage**, or l'uptime du serveur est de **30 jours**. Le nouveau binaire n'a pas été chargé en mémoire."
 
 
 
 ---
 
-### 🎯 Use Case D : "Le Mensonge par Omission" (Compliance)
+## 3. LISTE DES TICKETS ASSOCIÉS (Configuration JIRA)
 
-**L'histoire :** Le patch DB nécessite un redémarrage. Le ticket est fermé, le commentaire dit "OK", mais l'uptime serveur prouve le contraire.
+Voici la configuration exacte pour que les scénarios fonctionnent.
 
-#### 🗣️ La Question (Prompt)
+### 🟥 LES VIP (Priorité HIGH) - Pour le Scénario B
 
-> *"Le patch de sécurité PostgreSQL est-il actif ?"*
+| ID | Titre | Config Spéciale (Description/Commentaire) |
+| --- | --- | --- |
+| **503** | **Livraison Production v1.2** | **Desc:** Scope Backend v1.2 + Frontend v1.2.<br>
 
-#### 🎫 Les Tickets à créer
+<br>**Com:** "Tout est déployé." |
+| **506** | **Patch Sécurité PostgreSQL** | **Desc:** ACTION REQUISE : Redémarrage (restart) obligatoire.<br>
 
-**7. Ticket : TCAAS3883-506**
+<br>**Com:** "Binaires installés. Je ferme." *(Piège: pas de restart)* |
+| **495** | **Implémentation Login SSO** | **Desc:** [DÉPEND DE : TCAAS3883-496] |
 
-* **Type :** `Enabler` *(Pour un changement d'infra critique)*
-* **Titre :** Patch Sécurité PostgreSQL (Critical)
-* **Assigné à :** Amani
-* **Statut :** **Terminé (Done)** *(⚠️ DOIT ÊTRE PASSÉ À DONE AUJOURD'HUI)*
-* **📝 Description Complète :**
-```text
-Objet : Application du patch de sécurité CVE-2024-5678.
-Cible : Cluster PostgreSQL Production.
+### 🟦 LE CONTEXTE (Priorité MEDIUM) - Pour les liens
 
-PROCÉDURE OPÉRATOIRE :
-1. Mise à jour des binaires via `yum update postgresql-server`.
-2. 🛑 ACTION REQUISE IMPÉRATIVE : Un Redémarrage complet du service (`systemctl restart postgresql`) est obligatoire pour que le patch soit effectif en mémoire.
+| ID | Titre | Config Spéciale |
+| --- | --- | --- |
+| **496** | **Update Schema DB** | **Com:** "⚠️ ALERTE : Conflit Driver JDBC bloquant." *(Sert au Scénario A)* |
+| **497** | Page Profil Utilisateur | **Desc:** [DÉPEND DE : TCAAS3883-495] |
+| **507** | Backup Pré-Patch Prod | **Desc:** [LIÉ À : TCAAS3883-506] |
+| **504** | Fix Memory Leak Panier | *(Preuve de travail Release)* |
+| **505** | Update Swagger Docs | *(Preuve de travail Release)* |
 
-```
+### ⬜ LE BRUIT (Priorité MEDIUM) - Pour le volume
 
+*Tickets "transparents" pour montrer que l'Agent sait trier.*
 
-* **💬 Commentaire à poster (Amani) :**
-> "Mise à jour des paquets RPM effectuée avec succès. Aucune erreur dans les logs d'installation. Je clos le ticket."
-> *(Note : Elle ne mentionne pas le restart, c'est le piège).*
-
-
-
-**8. Ticket : TCAAS3883-507**
-
-* **Type :** `Task`
-* **Titre :** Backup Pré-Patch Prod
-* **Assigné à :** Amani
-* **Statut :** **Terminé (Done)**
-* **📝 Description Complète :**
-```text
-Exécution d'un pg_dump complet de la base avant application du patch critique.
-Dump stocké sur le montage NFS /mnt/backup/pre-patch.
-
-[LIÉ À : TCAAS3883-506]
-
-```
-
-
-
----
-
-### ✅ Récapitulatif pour la Saisie
-
-Tu as **8 tickets principaux** à soigner (Descriptions + Commentaires) et **8 tickets de bruit** (juste le titre).
-Avec ce fichier, tu couvres tous tes besoins pour la démo.
+* **498** (Bug Mobile)
+* **499** (CORS Headers)
+* **500** (Certificat SSL)
+* **508** (Logs Apache)
+* **509** (Typo Footer)
+* **510** (Charte Graphique)
+* **511** (CR Réunion)
+* **512** (Erreur 404)
+* **513** (Nettoyage Disque)
+* **514** (Refactoring)
+* **515** (Licence IntelliJ)
