@@ -1,0 +1,168 @@
+ C'est parfait Vinh. Avec ces captures, j'ai tout ce qu'il faut pour faire le mapping exact.
+
+C'est une excellente nouvelle que tu n'aies pas la main sur les attributs : cela valide à 100% l'approche **"Intelligence Textuelle"**. Ton Twin va prouver qu'il sait lire et comprendre le contexte, là où un outil classique échouerait.
+
+Voici ton **Script de Mise à Jour Final**. Tu as juste à ouvrir chaque ticket listé ci-dessous et à **remplacer la Description** par le texte fourni.
+
+---
+
+### 🟢 SCÉNARIO 1 : AGENT REPORTER (La Chaîne de Blocage)
+
+*L'Agent va lire le texte pour comprendre que **496 bloque 495** qui **bloque 497**.*
+
+#### 🎫 Ticket : TCAAS3883-495 (Implémentation Login SSO)
+
+* **Assigné à :** Vinh-thuy TRAN
+* **Statut :** A Traiter (To Do)
+* **📝 Nouvelle Description (Copier-Coller) :**
+
+```text
+En tant qu'utilisateur interne, je veux me connecter via le SSO Corporate (OAuth2).
+
+⚠️ DÉPENDANCE TECHNIQUE :
+Ce ticket ne peut pas démarrer tant que la base de données n'est pas prête (mise à jour du schéma Users).
+
+[BLOQUÉ PAR : TCAAS3883-496]
+
+```
+
+#### 🎫 Ticket : TCAAS3883-496 (Update Schema DB)
+
+* **Assigné à :** Romain
+* **Statut :** En cours (In Progress)
+* **📝 Nouvelle Description (Copier-Coller) :**
+
+```sql
+ALTER TABLE users ADD COLUMN oauth_token VARCHAR(255);
+Mise à jour des entités Hibernate nécessaire.
+
+[BLOQUE : TCAAS3883-495]
+
+```
+
+#### 🎫 Ticket : TCAAS3883-497 (Page Profil Utilisateur)
+
+* **Assigné à :** Vinh-thuy TRAN
+* **Statut :** A Traiter (To Do)
+* **📝 Nouvelle Description (Copier-Coller) :**
+
+```text
+Visualisation des informations personnelles (Nom, Matricule, Rôle).
+
+⚠️ DÉPENDANCE :
+Impossible à tester tant que le Login n'est pas fonctionnel.
+
+[BLOQUÉ PAR : TCAAS3883-495]
+
+```
+
+#### 🎫 Ticket : TCAAS3883-498 (Bouton Login décalé...)
+
+* **Assigné à :** Fahem
+* **Statut :** A Traiter
+* **📝 Nouvelle Description :** (Pas de changement majeur nécessaire, juste du contexte)
+
+```text
+Sur iPhone (Safari), le bouton "Se connecter" chevauche le footer.
+Problème CSS probable dans le flex-container.
+
+```
+
+---
+
+### 🟠 SCÉNARIO 2 : AGENT INVESTIGATOR (Release Verification)
+
+*⚠️ Note importante : Je ne vois pas le ticket "Livraison Production v1.2" dans ta liste (IMG_0334). Si tu ne l'as pas créé, crée-le maintenant. J'utiliserai **[ID_RELEASE]** ci-dessous, remplace-le par le vrai numéro quand tu l'auras.*
+
+#### 🎫 Ticket : [ID_RELEASE] (Livraison Production v1.2)
+
+* **Titre à créer :** Livraison Production v1.2
+* **Assigné à :** Vinh-thuy TRAN
+* **Statut :** **Terminé (Done)**
+* **📝 Nouvelle Description (Copier-Coller) :**
+
+```text
+SCOPE DE LA RELEASE :
+- Composant Back-end (API) : Version v1.2.0
+- Composant Front-end (Web) : Version v1.2.0
+
+Checklist :
+- Smoke test OK.
+- Validé en UAT.
+
+```
+
+#### 🎫 Ticket : TCAAS3883-504 (Fix Memory Leak Panier)
+
+* **Assigné à :** Romain
+* **Statut :** **Terminé (Done)**
+* **📝 Nouvelle Description (Copier-Coller) :**
+
+```text
+Analyse Heap Dump : Les objets CartSession ne sont pas nettoyés.
+Fix appliqué dans ShoppingCartService.java.
+
+[INCLUS DANS VERSION : v1.2]
+
+```
+
+#### 🎫 Ticket : TCAAS3883-505 (Update Swagger Docs)
+
+* **Assigné à :** Romain
+* **Statut :** **Terminé (Done)**
+* **📝 Nouvelle Description (Copier-Coller) :**
+
+```text
+Régénération de la spécification OpenAPI v3.
+Le endpoint /api/v1/cart/validate est maintenant documenté.
+
+[INCLUS DANS VERSION : v1.2]
+
+```
+
+---
+
+### 🔴 SCÉNARIO 3 : AGENT INVESTIGATOR (Database Check)
+
+*Le piège du redémarrage oublié.*
+
+#### 🎫 Ticket : TCAAS3883-506 (Patch Sécurité PostgreSQL)
+
+* **Assigné à :** Amani
+* **Statut :** **Terminé (Done)** (⚠️ Vérifie qu'il est bien passé à Done aujourd'hui)
+* **📝 Nouvelle Description (Copier-Coller) :**
+
+```text
+Objet : Application du patch de sécurité CVE-2024-5678.
+Cible : Cluster PostgreSQL Production.
+
+Procédure :
+1. Update des binaires via yum update.
+2. 🛑 ACTION REQUISE IMPÉRATIVE : Un Redémarrage complet du service (systemctl restart postgresql) est obligatoire pour que le patch soit effectif.
+
+```
+
+#### 🎫 Ticket : TCAAS3883-507 (Backup Pré-Patch Prod)
+
+* **Assigné à :** Amani
+* **Statut :** **Terminé (Done)**
+* **📝 Nouvelle Description (Copier-Coller) :**
+
+```text
+Exécution d'un pg_dump complet de la base avant application du patch critique.
+Dump stocké sur le montage NFS /mnt/backup/pre-patch.
+
+[LIÉ À : TCAAS3883-506]
+
+```
+
+---
+
+### ✅ Checklist Finale pour toi Vinh :
+
+1. Mets à jour les descriptions des tickets **495, 496, 497** (C'est le cœur de la démo "Reporter").
+2. Mets à jour **506 et 507** (C'est le cœur de la démo "Investigator DB").
+3. **Crée le ticket Release** (si ce n'est pas fait) et mets-le en "Terminé".
+4. C'est prêt !
+
+Ton JIRA est maintenant "Agent-Ready" sans avoir touché une seule ligne de configuration d'attributs.
