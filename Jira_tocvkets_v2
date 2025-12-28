@@ -1,168 +1,152 @@
- C'est parfait Vinh. Avec ces captures, j'ai tout ce qu'il faut pour faire le mapping exact.
+C'est parti Vinh. Voici ton **Runbook de Démo Digital Twin**.
 
-C'est une excellente nouvelle que tu n'aies pas la main sur les attributs : cela valide à 100% l'approche **"Intelligence Textuelle"**. Ton Twin va prouver qu'il sait lire et comprendre le contexte, là où un outil classique échouerait.
-
-Voici ton **Script de Mise à Jour Final**. Tu as juste à ouvrir chaque ticket listé ci-dessous et à **remplacer la Description** par le texte fourni.
+C'est le document de référence unique. Il contient tout : la logique, le casting, les tickets à saisir, et les questions à poser le jour J.
 
 ---
 
-### 🟢 SCÉNARIO 1 : AGENT REPORTER (La Chaîne de Blocage)
+# 📘 DIGITAL TWIN DEMO RUNBOOK
 
-*L'Agent va lire le texte pour comprendre que **496 bloque 495** qui **bloque 497**.*
-
-#### 🎫 Ticket : TCAAS3883-495 (Implémentation Login SSO)
-
-* **Assigné à :** Vinh-thuy TRAN
-* **Statut :** A Traiter (To Do)
-* **📝 Nouvelle Description (Copier-Coller) :**
-
-```text
-En tant qu'utilisateur interne, je veux me connecter via le SSO Corporate (OAuth2).
-
-⚠️ DÉPENDANCE TECHNIQUE :
-Ce ticket ne peut pas démarrer tant que la base de données n'est pas prête (mise à jour du schéma Users).
-
-[BLOQUÉ PAR : TCAAS3883-496]
-
-```
-
-#### 🎫 Ticket : TCAAS3883-496 (Update Schema DB)
-
-* **Assigné à :** Romain
-* **Statut :** En cours (In Progress)
-* **📝 Nouvelle Description (Copier-Coller) :**
-
-```sql
-ALTER TABLE users ADD COLUMN oauth_token VARCHAR(255);
-Mise à jour des entités Hibernate nécessaire.
-
-[BLOQUE : TCAAS3883-495]
-
-```
-
-#### 🎫 Ticket : TCAAS3883-497 (Page Profil Utilisateur)
-
-* **Assigné à :** Vinh-thuy TRAN
-* **Statut :** A Traiter (To Do)
-* **📝 Nouvelle Description (Copier-Coller) :**
-
-```text
-Visualisation des informations personnelles (Nom, Matricule, Rôle).
-
-⚠️ DÉPENDANCE :
-Impossible à tester tant que le Login n'est pas fonctionnel.
-
-[BLOQUÉ PAR : TCAAS3883-495]
-
-```
-
-#### 🎫 Ticket : TCAAS3883-498 (Bouton Login décalé...)
-
-* **Assigné à :** Fahem
-* **Statut :** A Traiter
-* **📝 Nouvelle Description :** (Pas de changement majeur nécessaire, juste du contexte)
-
-```text
-Sur iPhone (Safari), le bouton "Se connecter" chevauche le footer.
-Problème CSS probable dans le flex-container.
-
-```
+**Thème :** "De la Donnée JIRA à l'Intelligence Opérationnelle"
+**Principe clé :** L'Agent ne se contente pas de lire des champs; il lit le texte (Descriptions) et détecte la réalité du terrain (Commentaires) pour contredire ou enrichir l'information.
 
 ---
 
-### 🟠 SCÉNARIO 2 : AGENT INVESTIGATOR (Release Verification)
+## 👥 LE CASTING (Les Acteurs)
 
-*⚠️ Note importante : Je ne vois pas le ticket "Livraison Production v1.2" dans ta liste (IMG_0334). Si tu ne l'as pas créé, crée-le maintenant. J'utiliserai **[ID_RELEASE]** ci-dessous, remplace-le par le vrai numéro quand tu l'auras.*
+Pour donner de la vie au graphe, nous simulons une équipe de 4 personnes :
 
-#### 🎫 Ticket : [ID_RELEASE] (Livraison Production v1.2)
-
-* **Titre à créer :** Livraison Production v1.2
-* **Assigné à :** Vinh-thuy TRAN
-* **Statut :** **Terminé (Done)**
-* **📝 Nouvelle Description (Copier-Coller) :**
-
-```text
-SCOPE DE LA RELEASE :
-- Composant Back-end (API) : Version v1.2.0
-- Composant Front-end (Web) : Version v1.2.0
-
-Checklist :
-- Smoke test OK.
-- Validé en UAT.
-
-```
-
-#### 🎫 Ticket : TCAAS3883-504 (Fix Memory Leak Panier)
-
-* **Assigné à :** Romain
-* **Statut :** **Terminé (Done)**
-* **📝 Nouvelle Description (Copier-Coller) :**
-
-```text
-Analyse Heap Dump : Les objets CartSession ne sont pas nettoyés.
-Fix appliqué dans ShoppingCartService.java.
-
-[INCLUS DANS VERSION : v1.2]
-
-```
-
-#### 🎫 Ticket : TCAAS3883-505 (Update Swagger Docs)
-
-* **Assigné à :** Romain
-* **Statut :** **Terminé (Done)**
-* **📝 Nouvelle Description (Copier-Coller) :**
-
-```text
-Régénération de la spécification OpenAPI v3.
-Le endpoint /api/v1/cart/validate est maintenant documenté.
-
-[INCLUS DANS VERSION : v1.2]
-
-```
+| Rôle | Acteur JIRA | Responsabilités |
+| --- | --- | --- |
+| **PO / Lead** | **Vinh-thuy TRAN** | User Stories, Releases, Vision Métier. |
+| **Tech Lead** | **Romain** | Architecture Back-end, API, Base de données. |
+| **Front / UX** | **Fahem** | Design, Bugs visuels, Mobile. |
+| **Ops / DBA** | **Amani** | Infrastructure, Patchs, Certificats, Backups. |
 
 ---
 
-### 🔴 SCÉNARIO 3 : AGENT INVESTIGATOR (Database Check)
+## 🟢 PARTIE 1 : AGENT REPORTER (Vision Projet)
 
-*Le piège du redémarrage oublié.*
+### SCÉNARIO A : "Le Blocker Dynamique" (Intelligence Contextuelle)
 
-#### 🎫 Ticket : TCAAS3883-506 (Patch Sécurité PostgreSQL)
+* **L'histoire :** Une User Story semble simple. Mais en lisant les détails, l'Agent découvre qu'elle dépend d'une tâche technique. Pire, en lisant les commentaires récents, il découvre qu'un imprévu technique bloque tout.
+* **La logique Twin :**
+1. Lit la Story → Trouve le tag `[BLOQUÉ PAR...]` dans la Description.
+2. Va voir le Ticket Bloquant.
+3. Lit le dernier Commentaire → Détecte le mot "Conflit" / "Alerte".
 
-* **Assigné à :** Amani
-* **Statut :** **Terminé (Done)** (⚠️ Vérifie qu'il est bien passé à Done aujourd'hui)
-* **📝 Nouvelle Description (Copier-Coller) :**
 
-```text
-Objet : Application du patch de sécurité CVE-2024-5678.
-Cible : Cluster PostgreSQL Production.
+* **🗣️ Le Prompt (La Question) :**
+> *"Pourquoi ma User Story 'Login SSO' n'avance pas ?"*
 
-Procédure :
-1. Update des binaires via yum update.
-2. 🛑 ACTION REQUISE IMPÉRATIVE : Un Redémarrage complet du service (systemctl restart postgresql) est obligatoire pour que le patch soit effectif.
 
-```
+* **💡 La Réponse attendue :**
+> *"Ton ticket est bloqué techniquement par la mise à jour de la base de données (Ticket 496). Attention : un commentaire récent de Romain signale un conflit critique sur le driver JDBC qui compromet la résolution aujourd'hui."*
 
-#### 🎫 Ticket : TCAAS3883-507 (Backup Pré-Patch Prod)
 
-* **Assigné à :** Amani
-* **Statut :** **Terminé (Done)**
-* **📝 Nouvelle Description (Copier-Coller) :**
 
-```text
-Exécution d'un pg_dump complet de la base avant application du patch critique.
-Dump stocké sur le montage NFS /mnt/backup/pre-patch.
+### SCÉNARIO B : "Le Résumé Intelligent" (Synthèse & Filtrage)
 
-[LIÉ À : TCAAS3883-506]
+* **L'histoire :** Le sprint est pollué par 20 tickets. Le métier veut savoir ce qui avance vraiment sans être noyé sous les détails techniques ("Rotation logs", "Upgrade Lodash").
+* **La logique Twin :** L'Agent scanne tous les tickets, ignore le "Bruit" (Maintenance, Administratif) et regroupe les tickets Métier par thèmes.
+* **🗣️ Le Prompt (La Question) :**
+> *"Fais-moi un résumé du sprint pour le métier."*
 
-```
+
+* **💡 La Réponse attendue :**
+> *"L'équipe se concentre sur 3 axes :
+> 1. **Authentification** : Le Login SSO est prioritaire mais bloqué par la DB.
+> 2. **Expérience Utilisateur** : Correctifs sur le mobile et la page Profil.
+> 3. **Sécurité** : Patch critique PostgreSQL et renouvellement SSL en cours.
+> *(Note : J'ai masqué 12 tâches de maintenance interne et refactoring)*"*
+> 
+> 
+
+
 
 ---
 
-### ✅ Checklist Finale pour toi Vinh :
+## 🟠 PARTIE 2 : AGENT INVESTIGATOR (Vision Infra)
 
-1. Mets à jour les descriptions des tickets **495, 496, 497** (C'est le cœur de la démo "Reporter").
-2. Mets à jour **506 et 507** (C'est le cœur de la démo "Investigator DB").
-3. **Crée le ticket Release** (si ce n'est pas fait) et mets-le en "Terminé".
-4. C'est prêt !
+### SCÉNARIO C : "La Release Incomplète" (Cross-Check)
 
-Ton JIRA est maintenant "Agent-Ready" sans avoir touché une seule ligne de configuration d'attributs.
+* **L'histoire :** Le PO a validé la Release v1.2 administrativement (Ticket "Done"). Mais techniquement, le déploiement a échoué silencieusement sur le Backend.
+* **La logique Twin :**
+1. Lit le ticket Release → Extrait "Scope : Backend v1.2".
+2. Interroge le Graphe (Discovery) → Voit "Container Backend : Tag v1.1".
+3. Compare et alerte.
+
+
+* **🗣️ Le Prompt (La Question) :**
+> *"Confirme-moi que la Production est bien alignée avec la Release v1.2."*
+
+
+* **💡 La Réponse attendue :**
+> *"Négatif. Incohérence détectée.
+> Le ticket JIRA promet la v1.2.0, mais le Digital Twin détecte que le conteneur Backend tourne toujours en version v1.1. La livraison est partielle."*
+
+
+
+### SCÉNARIO D : "Le Mensonge par Omission" (Compliance)
+
+* **L'histoire :** Amani a appliqué un patch DB. Elle commente "C'est fait". Mais elle a oublié le redémarrage obligatoire mentionné dans la procédure.
+* **La logique Twin :**
+1. Lit la Description → Identifie "ACTION REQUISE : Redémarrage".
+2. Lit le Commentaire → Voit "Fermé/Succès".
+3. Vérifie la Métrique → "Uptime : 30 jours".
+
+
+* **🗣️ Le Prompt (La Question) :**
+> *"Le patch de sécurité PostgreSQL est-il actif ?"*
+
+
+* **💡 La Réponse attendue :**
+> *"Risque détecté. Le ticket est fermé, MAIS l'uptime du serveur (30 jours) indique qu'aucun redémarrage n'a eu lieu. Or, la procédure spécifie qu'un restart est impératif. Le patch n'est probablement pas actif en mémoire."*
+
+
+
+---
+
+## 📋 LISTING COMPLET DES TICKETS À CRÉER
+
+### 1. LES TICKETS "CLÉS" (Avec Description Spécifique & Commentaires)
+
+| ID JIRA | Type | Titre | Assigné | Statut | ⚠️ Action Spéciale (Texte à copier) |
+| --- | --- | --- | --- | --- | --- |
+| **495** | Story | **Implémentation Login SSO** | **Vinh** | To Do | **Desc:** `En tant qu'utilisateur... [BLOQUÉ PAR : TCAAS3883-496]` |
+| **496** | Task | **Update Schema DB** | **Romain** | In Progress | **Desc:** `ALTER TABLE users... [BLOQUE : TCAAS3883-495]`<br>
+
+<br>**💬 Commentaire (Romain) :** "⚠️ Alerte : Conflit de driver JDBC. Je dois fixer ça avant de migrer. Ça bloque le ticket SSO." |
+| **497** | Story | **Page Profil Utilisateur** | **Vinh** | To Do | **Desc:** `Visualisation profil... [BLOQUÉ PAR : TCAAS3883-495]` |
+| **506** | Change | **Patch Sécurité PostgreSQL** | **Amani** | **Done** (Auj.) | **Desc:** `Update binaires... ACTION REQUISE : Redémarrage complet (systemctl restart).`<br>
+
+<br>**💬 Commentaire (Amani) :** "Update binaires OK. Logs propres. Je ferme le ticket." |
+| **507** | Task | **Backup Pré-Patch Prod** | **Amani** | **Done** | **Desc:** `pg_dump effectué... [LIÉ À : TCAAS3883-506]` |
+| **[NEW]** | Release | **Livraison Production v1.2** | **Vinh** | **Done** | **Desc:** `SCOPE : Backend v1.2.0, Frontend v1.2.0.`<br>
+
+<br>**💬 Commentaire :** "Déploiement terminé, dashboard au vert." |
+| **504** | Defect | **Fix Memory Leak Panier** | **Romain** | **Done** | **Desc:** `Fix Memory Leak... [INCLUS DANS VERSION : v1.2]` |
+| **505** | Task | **Update Swagger Docs** | **Romain** | **Done** | **Desc:** `Doc API à jour... [INCLUS DANS VERSION : v1.2]` |
+
+---
+
+### 2. LE PACK "BRUIT" (Pour le réalisme & tri)
+
+*Crée ces tickets rapidement (titre seulement) pour peupler le sprint.*
+
+| ID (Est.) | Titre | Assigné | Statut | Catégorie (Pour l'IA) |
+| --- | --- | --- | --- | --- |
+| **498** | Bouton Login décalé sur mobile | Fahem | To Do | UX / Bug |
+| **499** | Fix CORS headers on API Gateway | Romain | In Progress | Tech |
+| **500** | Renewal certificat SSL Wildcard | Amani | In Progress | Sécurité |
+| **510** | Rotation des logs Apache (Archivage) | Amani | Done | Maintenance |
+| **511** | Faute de frappe footer "Mentions Legales" | Fahem | To Do | Cosmétique |
+| **512** | Mise à jour charte graphique (Couleurs H1) | Fahem | In Progress | Design |
+| **513** | Rédaction CR réunion Architecture | Vinh | Done | Admin |
+| **514** | Erreur 404 image logo signature mail | Fahem | To Do | Cosmétique |
+| **515** | Nettoyage espace disque /tmp SRV-DEV | Amani | Done | Maintenance |
+| **516** | Refactoring classe DateUtils (SonarQube) | Romain | To Do | Dette Tech |
+| **517** | Renouvellement licence IntelliJ Équipe | Vinh | In Progress | Admin |
+| **518** | Texte "Chargement..." persistant (Edge case) | Romain | To Do | Bug |
+| **519** | Préparation slides Comex | Vinh | To Do | Admin |
+| **520** | Upgrade librairie lodash (Faille mineure) | Romain | Done | Sécurité |
+| **521** | Ajout lien "Aide" menu principal | Fahem | Done | Fonctionnel |
