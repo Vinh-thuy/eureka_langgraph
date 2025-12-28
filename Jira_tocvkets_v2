@@ -1,152 +1,258 @@
-C'est parti Vinh. Voici ton **Runbook de Démo Digital Twin**.
+C'est bien noté Vinh. On s'adapte à ton schéma JIRA spécifique (SAFe / Agile à l'échelle).
 
-C'est le document de référence unique. Il contient tout : la logique, le casting, les tickets à saisir, et les questions à poser le jour J.
-
----
-
-# 📘 DIGITAL TWIN DEMO RUNBOOK
-
-**Thème :** "De la Donnée JIRA à l'Intelligence Opérationnelle"
-**Principe clé :** L'Agent ne se contente pas de lire des champs; il lit le texte (Descriptions) et détecte la réalité du terrain (Commentaires) pour contredire ou enrichir l'information.
+Voici la **Version Finale et Exhaustive** du Runbook.
+J'ai converti tous les types de tickets pour coller strictement à ta liste : `Technical Story`, `Task`, `Enabler`, `Amélioration`.
 
 ---
 
-## 👥 LE CASTING (Les Acteurs)
+# 📘 RUNBOOK DÉMO DIGITAL TWIN (Version SAFe JIRA)
 
-Pour donner de la vie au graphe, nous simulons une équipe de 4 personnes :
+**Concept :** Le Digital Twin ne se contente pas des champs JIRA. Il lit les **Descriptions** (le plan) et les **Commentaires** (la réalité) pour détecter les blocages et les incohérences.
 
-| Rôle | Acteur JIRA | Responsabilités |
+## 🎭 LE CASTING
+
+| Rôle | Acteur JIRA | Type de tickets gérés |
 | --- | --- | --- |
-| **PO / Lead** | **Vinh-thuy TRAN** | User Stories, Releases, Vision Métier. |
-| **Tech Lead** | **Romain** | Architecture Back-end, API, Base de données. |
-| **Front / UX** | **Fahem** | Design, Bugs visuels, Mobile. |
-| **Ops / DBA** | **Amani** | Infrastructure, Patchs, Certificats, Backups. |
+| **PO / Lead** | **Vinh-thuy TRAN** | Technical Story, Enabler (Releases) |
+| **Tech Lead** | **Romain** | Task (Back/DB), Technical Story |
+| **Front / UX** | **Fahem** | Amélioration (UI), Task (Fix) |
+| **Ops / DBA** | **Amani** | Enabler (Infra), Task (Maintenance) |
 
 ---
 
-## 🟢 PARTIE 1 : AGENT REPORTER (Vision Projet)
+## 🟢 SCÉNARIO 1 : AGENT REPORTER (Vision Projet)
 
-### SCÉNARIO A : "Le Blocker Dynamique" (Intelligence Contextuelle)
+### 🎯 Use Case A : "Le Blocker Dynamique"
 
-* **L'histoire :** Une User Story semble simple. Mais en lisant les détails, l'Agent découvre qu'elle dépend d'une tâche technique. Pire, en lisant les commentaires récents, il découvre qu'un imprévu technique bloque tout.
-* **La logique Twin :**
-1. Lit la Story → Trouve le tag `[BLOQUÉ PAR...]` dans la Description.
-2. Va voir le Ticket Bloquant.
-3. Lit le dernier Commentaire → Détecte le mot "Conflit" / "Alerte".
+**L'histoire :** Une Story dépend d'une tâche technique. Cette tâche technique rencontre un imprévu (signalé en commentaire). L'Agent doit remonter la chaîne.
+
+#### 🗣️ La Question (Prompt)
+
+> *"Pourquoi ma Story 'Login SSO' n'avance pas ?"*
+
+#### 🎫 Les Tickets à créer (Exhaustif)
+
+**1. Ticket : TCAAS3883-495**
+
+* **Type :** `Technical Story`
+* **Titre :** Implémentation Login SSO
+* **Assigné à :** Vinh-thuy TRAN
+* **Statut :** A Traiter (To Do)
+* **📝 Description Complète :**
+```text
+En tant qu'utilisateur interne, je veux me connecter via le SSO Corporate (OAuth2).
+
+OBJECTIFS :
+- Intégration du provider d'identité.
+- Gestion du retour de token JWT.
+
+⚠️ PRÉ-REQUIS TECHNIQUE :
+Ce ticket nécessite que le modèle de données soit à jour pour stocker le token.
+
+[DÉPEND DE : TCAAS3883-496]
+
+```
 
 
-* **🗣️ Le Prompt (La Question) :**
-> *"Pourquoi ma User Story 'Login SSO' n'avance pas ?"*
+
+**2. Ticket : TCAAS3883-496**
+
+* **Type :** `Task`
+* **Titre :** Update Schema DB (Table Users)
+* **Assigné à :** Romain
+* **Statut :** En cours (In Progress)
+* **📝 Description Complète :**
+```text
+Tâche technique pour supporter le SSO.
+Script SQL à passer :
+ALTER TABLE users ADD COLUMN oauth_token VARCHAR(255);
+Mise à jour des entités Hibernate nécessaire.
+
+[IMPACTE : TCAAS3883-495]
+
+```
 
 
-* **💡 La Réponse attendue :**
-> *"Ton ticket est bloqué techniquement par la mise à jour de la base de données (Ticket 496). Attention : un commentaire récent de Romain signale un conflit critique sur le driver JDBC qui compromet la résolution aujourd'hui."*
+* **💬 Commentaire à poster (Romain) :**
+> "⚠️ **ALERTE :** Je rencontre un conflit de version majeur sur le driver JDBC lors des tests de migration. Impossible de commiter le schéma tant que ce n'est pas résolu. Ça bloque tout le sujet SSO pour aujourd'hui."
 
 
 
-### SCÉNARIO B : "Le Résumé Intelligent" (Synthèse & Filtrage)
+**3. Ticket : TCAAS3883-497**
 
-* **L'histoire :** Le sprint est pollué par 20 tickets. Le métier veut savoir ce qui avance vraiment sans être noyé sous les détails techniques ("Rotation logs", "Upgrade Lodash").
-* **La logique Twin :** L'Agent scanne tous les tickets, ignore le "Bruit" (Maintenance, Administratif) et regroupe les tickets Métier par thèmes.
-* **🗣️ Le Prompt (La Question) :**
+* **Type :** `Technical Story`
+* **Titre :** Page Profil Utilisateur
+* **Assigné à :** Vinh-thuy TRAN
+* **Statut :** A Traiter (To Do)
+* **📝 Description Complète :**
+```text
+Visualisation des informations personnelles (Nom, Matricule, Rôle).
+Affichage des droits d'accès.
+
+⚠️ PRÉ-REQUIS FONCTIONNEL :
+Le profil ne peut pas être affiché tant que l'utilisateur n'est pas authentifié.
+
+[DÉPEND DE : TCAAS3883-495]
+
+```
+
+
+
+---
+
+### 🎯 Use Case B : "Le Résumé Intelligent"
+
+**L'histoire :** Filtrer le bruit pour donner une vision claire au management.
+
+#### 🗣️ La Question (Prompt)
+
 > *"Fais-moi un résumé du sprint pour le métier."*
 
+#### 🎫 Les Tickets de "Bruit" (À créer pour le volume)
 
-* **💡 La Réponse attendue :**
-> *"L'équipe se concentre sur 3 axes :
-> 1. **Authentification** : Le Login SSO est prioritaire mais bloqué par la DB.
-> 2. **Expérience Utilisateur** : Correctifs sur le mobile et la page Profil.
-> 3. **Sécurité** : Patch critique PostgreSQL et renouvellement SSL en cours.
-> *(Note : J'ai masqué 12 tâches de maintenance interne et refactoring)*"*
-> 
-> 
+*Pas besoin de descriptions complexes ici, le titre suffit.*
 
-
+| ID (Est.) | Type | Titre | Assigné | Statut |
+| --- | --- | --- | --- | --- |
+| **510** | `Task` | Rotation des logs Apache (Archivage) | Amani | Done |
+| **511** | `Amélioration` | Correction typo footer "Mentions Legales" | Fahem | To Do |
+| **512** | `Amélioration` | Mise à jour charte graphique (H1 Blue) | Fahem | In Progress |
+| **513** | `Task` | Rédaction CR réunion Architecture | Vinh | Done |
+| **514** | `Task` | Fix erreur 404 image signature mail | Fahem | To Do |
+| **515** | `Task` | Nettoyage espace disque /tmp SRV-DEV | Amani | Done |
+| **516** | `Task` | Refactoring classe DateUtils (Dette Tech) | Romain | To Do |
+| **517** | `Task` | Renouvellement licence IntelliJ Équipe | Vinh | In Progress |
 
 ---
 
-## 🟠 PARTIE 2 : AGENT INVESTIGATOR (Vision Infra)
+## 🟠 SCÉNARIO 2 : AGENT INVESTIGATOR (Vision Infra)
 
-### SCÉNARIO C : "La Release Incomplète" (Cross-Check)
+### 🎯 Use Case C : "La Release Incomplète"
 
-* **L'histoire :** Le PO a validé la Release v1.2 administrativement (Ticket "Done"). Mais techniquement, le déploiement a échoué silencieusement sur le Backend.
-* **La logique Twin :**
-1. Lit le ticket Release → Extrait "Scope : Backend v1.2".
-2. Interroge le Graphe (Discovery) → Voit "Container Backend : Tag v1.1".
-3. Compare et alerte.
+**L'histoire :** On déclare la v1.2 livrée, mais le graphe montre que le Backend est resté en v1.1.
 
+#### 🗣️ La Question (Prompt)
 
-* **🗣️ Le Prompt (La Question) :**
 > *"Confirme-moi que la Production est bien alignée avec la Release v1.2."*
 
+#### 🎫 Les Tickets à créer
 
-* **💡 La Réponse attendue :**
-> *"Négatif. Incohérence détectée.
-> Le ticket JIRA promet la v1.2.0, mais le Digital Twin détecte que le conteneur Backend tourne toujours en version v1.1. La livraison est partielle."*
+**4. Ticket : [ID_RELEASE] (ex: 520)**
+
+* **Type :** `Enabler` *(On utilise Enabler pour une Release)*
+* **Titre :** Livraison Production v1.2
+* **Assigné à :** Vinh-thuy TRAN
+* **Statut :** **Terminé (Done)**
+* **📝 Description Complète :**
+```text
+Ticket de suivi de la mise en production v1.2.
+
+SCOPE DE LA RELEASE :
+- Composant Back-end (API) : Version v1.2.0
+- Composant Front-end (Web) : Version v1.2.0
+
+Checklist :
+- Smoke test OK.
+- Validé en UAT.
+
+```
+
+
+* **💬 Commentaire à poster (Vinh) :**
+> "Déploiement terminé. Tous les voyants sont au vert sur le dashboard."
 
 
 
-### SCÉNARIO D : "Le Mensonge par Omission" (Compliance)
+**5. Ticket : TCAAS3883-504**
 
-* **L'histoire :** Amani a appliqué un patch DB. Elle commente "C'est fait". Mais elle a oublié le redémarrage obligatoire mentionné dans la procédure.
-* **La logique Twin :**
-1. Lit la Description → Identifie "ACTION REQUISE : Redémarrage".
-2. Lit le Commentaire → Voit "Fermé/Succès".
-3. Vérifie la Métrique → "Uptime : 30 jours".
+* **Type :** `Task`
+* **Titre :** Fix Memory Leak Panier
+* **Assigné à :** Romain
+* **Statut :** **Terminé (Done)**
+* **📝 Description Complète :**
+```text
+Correction de la fuite mémoire sur les objets CartSession.
+Fix validé en pré-prod.
+
+[INCLUS DANS VERSION : v1.2]
+
+```
 
 
-* **🗣️ Le Prompt (La Question) :**
+
+**6. Ticket : TCAAS3883-505**
+
+* **Type :** `Task`
+* **Titre :** Update Swagger Docs
+* **Assigné à :** Romain
+* **Statut :** **Terminé (Done)**
+* **📝 Description Complète :**
+```text
+Mise à jour de la documentation API.
+Endpoint /cart/validate ajouté.
+
+[INCLUS DANS VERSION : v1.2]
+
+```
+
+
+
+---
+
+### 🎯 Use Case D : "Le Mensonge par Omission" (Compliance)
+
+**L'histoire :** Le patch DB nécessite un redémarrage. Le ticket est fermé, le commentaire dit "OK", mais l'uptime serveur prouve le contraire.
+
+#### 🗣️ La Question (Prompt)
+
 > *"Le patch de sécurité PostgreSQL est-il actif ?"*
 
+#### 🎫 Les Tickets à créer
 
-* **💡 La Réponse attendue :**
-> *"Risque détecté. Le ticket est fermé, MAIS l'uptime du serveur (30 jours) indique qu'aucun redémarrage n'a eu lieu. Or, la procédure spécifie qu'un restart est impératif. Le patch n'est probablement pas actif en mémoire."*
+**7. Ticket : TCAAS3883-506**
+
+* **Type :** `Enabler` *(Pour un changement d'infra critique)*
+* **Titre :** Patch Sécurité PostgreSQL (Critical)
+* **Assigné à :** Amani
+* **Statut :** **Terminé (Done)** *(⚠️ DOIT ÊTRE PASSÉ À DONE AUJOURD'HUI)*
+* **📝 Description Complète :**
+```text
+Objet : Application du patch de sécurité CVE-2024-5678.
+Cible : Cluster PostgreSQL Production.
+
+PROCÉDURE OPÉRATOIRE :
+1. Mise à jour des binaires via `yum update postgresql-server`.
+2. 🛑 ACTION REQUISE IMPÉRATIVE : Un Redémarrage complet du service (`systemctl restart postgresql`) est obligatoire pour que le patch soit effectif en mémoire.
+
+```
+
+
+* **💬 Commentaire à poster (Amani) :**
+> "Mise à jour des paquets RPM effectuée avec succès. Aucune erreur dans les logs d'installation. Je clos le ticket."
+> *(Note : Elle ne mentionne pas le restart, c'est le piège).*
+
+
+
+**8. Ticket : TCAAS3883-507**
+
+* **Type :** `Task`
+* **Titre :** Backup Pré-Patch Prod
+* **Assigné à :** Amani
+* **Statut :** **Terminé (Done)**
+* **📝 Description Complète :**
+```text
+Exécution d'un pg_dump complet de la base avant application du patch critique.
+Dump stocké sur le montage NFS /mnt/backup/pre-patch.
+
+[LIÉ À : TCAAS3883-506]
+
+```
 
 
 
 ---
 
-## 📋 LISTING COMPLET DES TICKETS À CRÉER
+### ✅ Récapitulatif pour la Saisie
 
-### 1. LES TICKETS "CLÉS" (Avec Description Spécifique & Commentaires)
-
-| ID JIRA | Type | Titre | Assigné | Statut | ⚠️ Action Spéciale (Texte à copier) |
-| --- | --- | --- | --- | --- | --- |
-| **495** | Story | **Implémentation Login SSO** | **Vinh** | To Do | **Desc:** `En tant qu'utilisateur... [BLOQUÉ PAR : TCAAS3883-496]` |
-| **496** | Task | **Update Schema DB** | **Romain** | In Progress | **Desc:** `ALTER TABLE users... [BLOQUE : TCAAS3883-495]`<br>
-
-<br>**💬 Commentaire (Romain) :** "⚠️ Alerte : Conflit de driver JDBC. Je dois fixer ça avant de migrer. Ça bloque le ticket SSO." |
-| **497** | Story | **Page Profil Utilisateur** | **Vinh** | To Do | **Desc:** `Visualisation profil... [BLOQUÉ PAR : TCAAS3883-495]` |
-| **506** | Change | **Patch Sécurité PostgreSQL** | **Amani** | **Done** (Auj.) | **Desc:** `Update binaires... ACTION REQUISE : Redémarrage complet (systemctl restart).`<br>
-
-<br>**💬 Commentaire (Amani) :** "Update binaires OK. Logs propres. Je ferme le ticket." |
-| **507** | Task | **Backup Pré-Patch Prod** | **Amani** | **Done** | **Desc:** `pg_dump effectué... [LIÉ À : TCAAS3883-506]` |
-| **[NEW]** | Release | **Livraison Production v1.2** | **Vinh** | **Done** | **Desc:** `SCOPE : Backend v1.2.0, Frontend v1.2.0.`<br>
-
-<br>**💬 Commentaire :** "Déploiement terminé, dashboard au vert." |
-| **504** | Defect | **Fix Memory Leak Panier** | **Romain** | **Done** | **Desc:** `Fix Memory Leak... [INCLUS DANS VERSION : v1.2]` |
-| **505** | Task | **Update Swagger Docs** | **Romain** | **Done** | **Desc:** `Doc API à jour... [INCLUS DANS VERSION : v1.2]` |
-
----
-
-### 2. LE PACK "BRUIT" (Pour le réalisme & tri)
-
-*Crée ces tickets rapidement (titre seulement) pour peupler le sprint.*
-
-| ID (Est.) | Titre | Assigné | Statut | Catégorie (Pour l'IA) |
-| --- | --- | --- | --- | --- |
-| **498** | Bouton Login décalé sur mobile | Fahem | To Do | UX / Bug |
-| **499** | Fix CORS headers on API Gateway | Romain | In Progress | Tech |
-| **500** | Renewal certificat SSL Wildcard | Amani | In Progress | Sécurité |
-| **510** | Rotation des logs Apache (Archivage) | Amani | Done | Maintenance |
-| **511** | Faute de frappe footer "Mentions Legales" | Fahem | To Do | Cosmétique |
-| **512** | Mise à jour charte graphique (Couleurs H1) | Fahem | In Progress | Design |
-| **513** | Rédaction CR réunion Architecture | Vinh | Done | Admin |
-| **514** | Erreur 404 image logo signature mail | Fahem | To Do | Cosmétique |
-| **515** | Nettoyage espace disque /tmp SRV-DEV | Amani | Done | Maintenance |
-| **516** | Refactoring classe DateUtils (SonarQube) | Romain | To Do | Dette Tech |
-| **517** | Renouvellement licence IntelliJ Équipe | Vinh | In Progress | Admin |
-| **518** | Texte "Chargement..." persistant (Edge case) | Romain | To Do | Bug |
-| **519** | Préparation slides Comex | Vinh | To Do | Admin |
-| **520** | Upgrade librairie lodash (Faille mineure) | Romain | Done | Sécurité |
-| **521** | Ajout lien "Aide" menu principal | Fahem | Done | Fonctionnel |
+Tu as **8 tickets principaux** à soigner (Descriptions + Commentaires) et **8 tickets de bruit** (juste le titre).
+Avec ce fichier, tu couvres tous tes besoins pour la démo.
