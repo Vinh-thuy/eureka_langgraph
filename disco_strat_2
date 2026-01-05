@@ -1,0 +1,59 @@
+C'est le point de bascule de l'argumentation : prouver que **BMC Discovery** n'est pas juste un inventaire passif, mais la seule source de vérité fiable pour automatiser la surveillance sans intervention humaine.
+
+Voici la synthèse révisée pour Manu. Elle intègre le trade-off (Vitesse vs Exhaustivité) et justifie techniquement pourquoi Discovery est le pilote incontournable (via les attributs `cmd_line`, `os_class`, etc.) pour cibler les fichiers à surveiller.
+
+---
+
+**Objet : Note de Stratégie – Surveillance Industrielle Pilotée par la Donnée**
+
+Pour réussir le déploiement du Twin, nous devons arbitrer entre deux méthodes. Je recommande l'**Option B** pour garantir la tenue des délais et l'indépendance des Ops.
+
+### 1. L'Arbitrage : Vitesse vs Perfection
+
+Nous avons le choix entre deux risques :
+
+* **Option A : Approche "Verticale" (Silo par Application)**
+* *Méthode :* On définit la surveillance application par application avec les équipes.
+* *Risque :* **Lenteur extrême.** On dépend de la disponibilité de chaque équipe. On aura une surveillance parfaite sur 10% du parc, mais **0% sur le reste pendant des années**.
+
+
+* **Option B : Approche "Horizontale" (Systémique) – *RECOMMANDÉE***
+* *Méthode :* On déploie une surveillance standardisée sur tout ce que Discovery détecte.
+* *Risque :* **Couverture imparfaite.** On accepte d'avoir quelques "trous dans la raquette" (ce que Discovery ne voit pas), mais on sécurise **90% de l'infrastructure immédiatement**.
+
+
+
+### 2. Le Levier Technique : Pourquoi BMC Discovery est notre "Cerveau"
+
+Pour ne pas dépendre des sachants applicatifs (Option B), nous devons automatiser la configuration de nos outils de surveillance (Elastic, Datadog, etc.). **Seul BMC Discovery possède les données techniques pour le faire.**
+
+Il ne s'agit pas juste d'une liste de serveurs. Discovery capture l'ADN technique nécessaire au paramétrage des capteurs :
+
+* **Pour identifier les Fichiers à Surveiller (FIM) :**
+Discovery remonte la ligne de commande exacte (`cmd_line`) des processus lancés.
+
+
+* *Usage :* On extrait automatiquement le chemin d'installation (ex: `-Dcatalina.home=/opt/tomcat`) pour dire à l'agent de surveiller *ce* dossier précis, sans demander à l'humain.
+
+
+* **Pour appliquer la bonne Stratégie OS :**
+Discovery identifie formellement l'OS (`os_class`, `os_type`).
+
+
+* *Usage :* On pousse automatiquement la politique "Windows Server" ou "RHEL Security" adaptée au serveur  détecté.
+
+
+* **Pour gérer le contexte Réseau/Stockage :**
+Discovery identifie le modèle exact du matériel (`sysObjectId`, `model`).
+
+
+* *Usage :* On charge dynamiquement le bon dictionnaire de parsing (Cisco vs Juniper) pour ne pas être aveugle sur les logs.
+
+
+
+### 3. Conclusion pour Décision
+
+L'approche **Verticale** nous laisse aveugles sur la majorité du parc en attendant des définitions manuelles.
+L'approche **Horizontale pilotée par Discovery** nous permet de déployer un **filet de sécurité immédiat**, configuré automatiquement sur la réalité technique du terrain (processus et chemins réels) plutôt que sur une documentation théorique.
+
+> *"Acceptons le risque minime de ne pas tout voir, pour éviter le risque majeur de ne rien surveiller du tout."*
