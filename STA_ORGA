@@ -1,0 +1,115 @@
+C'est compris. Oublions les analogies. Voici une matrice RACI formelle et une définition stricte des périmètres techniques pour verrouiller les responsabilités et les interfaces.
+
+### 1. Définition des Rôles et Périmètres Stricts
+
+Voici la définition "Contractuelle" pour chaque responsable.
+
+* **Fabrice (Front & Access Layer)**
+* **Périmètre :** Twin Front (UI Web/Teams), Backend LISAB (Python), Pipeline d'ingestion documentaire (IT Doc Capture).
+* **Responsabilité unique :** Garantir que l'utilisateur est authentifié, que sa juridiction est respectée, et que les documents (KB) sont vecteursisés et disponibles. Il est le **Consommateur** des services de Dhia.
+* **Limite :** Il ne modifie jamais le code interne des Agents (LangGraph) ni la structure du Knowledge Graph.
+
+
+* **Dhia (Agentic Core)**
+* **Périmètre :** Plateforme Agentique (LangGraph), Logique d'orchestration, Prompt Engineering, Intégration LLM.
+* **Responsabilité unique :** Garantir la performance du raisonnement, la stabilité de l'exécution des agents et exposer une API d'inférence standardisée. Il est le **Fournisseur** de service pour Fabrice.
+* **Limite :** Il ne gère ni l'interface utilisateur, ni les droits d'accès (rôle de LISAB), ni l'ingestion de la donnée brute (rôle de JFD/Vinh).
+
+
+* **JFD & Vinh-thuy (Data & Events Ops)**
+* **Périmètre :** IT Data Capture (Discovery/CMDB), IT Event Capture (Elastic), TigerGraph Operations.
+* **Responsabilité unique :** Garantir l'alimentation, la fraîcheur et la disponibilité des données topologiques et événementielles dans le Graph.
+* **Limite :** Ils ne développent pas les agents. Ils fournissent la matière première structurée.
+
+
+* **Julien Madrid (Standards & Quality)**
+* **Périmètre :** Ontologie (Modèle de données Graph), Structure des index vectoriels (KB Schema).
+* **Responsabilité unique :** Valider la cohérence sémantique transverse. Il a un droit de veto sur les modifications de schéma de données qui casseraient l'interopérabilité.
+* **Limite :** Il n'opère pas les flux de production au quotidien (rôle de JFD/Fabrice).
+
+
+* **Stefano (& Vinh) (Use Case Definition)**
+* **Périmètre :** Spécifications techniques des cas d'usage, Règles de mapping Cloud/MZR.
+* **Responsabilité unique :** Traduire le besoin métier en spécifications techniques réalisables (Data, Doc, Agent). Valider la recette fonctionnelle (UAT).
+* **Limite :** Ils ne développent pas la solution finale (rôle de Dhia/JFD), ils la spécifient.
+
+
+
+---
+
+### 2. Matrice RACI (Responsible, Accountable, Consulted, Informed)
+
+* **R (Réalise) :** Fait le travail.
+* **A (Approuve/Responsable) :** Celui qui rend des comptes (un seul par ligne).
+* **C (Consulté) :** Donne des inputs (bidirectionnel).
+* **I (Informé) :** Reçoit l'info (unidirectionnel).
+
+| Activité / Tâche | **Fabrice** | **Dhia** | **JFD / Vinh-T** | **Julien Madrid** | **Stefano / Vinh** |
+| --- | --- | --- | --- | --- | --- |
+| **Gestion Identité & Juridiction (LISAB)** | **A/R** | I | I | I | C |
+| **Dév. Interface Utilisateur (Front)** | **A/R** | C (Format) | I | I | I |
+| **Dév. & Orchestration Agents (LangGraph)** | C (Specs) | **A/R** | C (Data Access) | C (Sémantique) | C (Validation) |
+| **Ingestion Données & Events (Graph)** | I | C (Besoin) | **A/R** | C (Schéma) | C (Règles) |
+| **Ingestion Documentation (Vector Store)** | **A/R** | C (Usage) | I | C (Structure) | C (Sources) |
+| **Validation Modèle de Données (Ontologie)** | I | C | R | **A** | C |
+| **Définition Use Case & Specs Techniques** | C (UX) | C (Faisabilité) | C (Data dispo) | C | **A/R** |
+
+---
+
+### 3. Contrats d'Interface Techniques (API Contracts)
+
+Voici comment les blocs communiquent techniquement. Chaque flèche du schéma doit respecter ce contrat strict.
+
+#### Interface 1 : Front-End ↔ Back-End Agentique
+
+**Responsable :** Fabrice (Appelant) / Dhia (Appelé)
+
+* **Composant intermédiaire :** **LISAB** (Layer for Intelligent Security and Access Backend).
+* **Règle d'Or :** L'Agent est aveugle à l'utilisateur réel. Il ne connaît que le "Contexte LISAB".
+* **Le Contrat (Flux JSON) :**
+1. **Fabrice (LISAB)** authentifie l'utilisateur et calcule ses droits (Juridiction).
+2. **Fabrice (LISAB)** envoie à **Dhia** : `Query` + `Jurisdiction_Filter` (ex: `zone: ['EU', 'FR']`) + `Roles`.
+3. **Dhia** exécute l'agent et retourne : `Réponse Markdown` + `Sources citées`.
+
+
+* *Interdiction :* Fabrice n'envoie jamais de prompt engineering (instructions système) dans la requête.
+
+
+
+#### Interface 2 : Agent ↔ Knowledge Graph
+
+**Responsable :** Dhia (Appelant) / JFD & Vinh-thuy (Appelé)
+
+* **Composant intermédiaire :** **TigerGraph Smart API** (Stored Procedures).
+* **Règle d'Or :** Accès en lecture seule (Read-Only) pour les Agents de production.
+* **Le Contrat :**
+1. **JFD** expose des endpoints nommés (ex: `/api/get_topology`, `/api/get_service_health`).
+2. **Dhia** appelle ces endpoints en injectant obligatoirement le `Jurisdiction_Filter` reçu de LISAB.
+
+
+* *Interdiction :* Dhia n'écrit pas de requêtes GSQL brutes dans le code de l'agent (sécurité & maintenance).
+
+
+
+#### Interface 3 : Agent ↔ Knowledge Base
+
+**Responsable :** Dhia (Appelant) / Fabrice (Appelé)
+
+* **Composant intermédiaire :** **Vector Store API** (ex: Elastic Vector Search ou Milvus).
+* **Règle d'Or :** Ségrégation des index documentaires.
+* **Le Contrat :**
+1. **Fabrice** indexe les documents avec des métadonnées strictes (`scope`, `min_role`, `expiry_date`).
+2. **Dhia** effectue des recherches vectorielles (RAG) en filtrant sur ces métadonnées.
+
+
+* *Interdiction :* L'Agent ne doit jamais pouvoir récupérer un document tagué "Confidentiel" si le `Role` transmis par LISAB est insuffisant.
+
+
+
+### Synthèse pour ta présentation
+
+1. **Fabrice** contrôle l'accès et l'expérience (via LISAB). Il est le gardien de la porte et le bibliothécaire (Doc).
+2. **Dhia** est le moteur d'intelligence. Il reçoit une requête sécurisée et rend une analyse. Il ne gère pas les droits.
+3. **JFD & Vinh-thuy** fournissent la vérité terrain (Data & Events) via des API standardisées.
+4. **Julien Madrid** garantit que tout le monde parle le même langage (Modèle de données).
+5. **Stefano & Vinh** écrivent les partitions (Use Cases) que les autres doivent jouer.
