@@ -1,0 +1,44 @@
+C'est noté. L'ajout de la stratégie "Horizontale" via Discovery est crucial : cela change l'échelle du projet (passage de "quelques apps" à "tout ce que voit Discovery"). J'ai également corrigé "Inatras" en **Dynatrace** (cohérent avec tes fichiers de contexte) et intégré Illumio et ServiceNow.
+
+Voici la version finale et enrichie pour Dhia :
+
+---
+
+**Objet :** Instructions et Vision Architecturale pour le meeting TWIN de demain (14h)
+
+Salut Dhia,
+
+Comme je ne serai pas là demain à 14h, je te laisse la main. Voici les directives mises à jour. Il est important que tu insistes sur le changement d'échelle (ingestion massive) en plus de la pratique des agents.
+
+**1. Le Modèle à suivre : APS Cardiff (Yuthay)**
+
+* Mets en avant le travail de **Yuthay** : il a utilisé les templates, mais surtout il a commencé à les **optimiser et les ajuster**.
+* C'est l'état d'esprit attendu : pratiquer, quitte à produire du code "jetable" pour apprendre, et faire remonter les améliorations.
+
+**2. Appel à l'action : "Code your Agent"**
+
+* Le mot d'ordre : **Produire**.
+* Qu'ils utilisent les templates. S'ils bloquent, ils peuvent les court-circuiter.
+* L'équipe Core gère la complexité (connecteurs), eux doivent se concentrer sur la logique métier.
+
+**3. La Vision Architecturale : Context (KG) & Knowledge Swarm (KB)**
+C'est ici qu'il faut partager la nouvelle orientation stratégique sur la donnée.
+
+* **Le Contexte (KG - TigerGraph) : Vers une ingestion massive.**
+* **Nouvelle Stratégie "Horizontale" :** On ne fait plus du cas par cas. L'objectif est d'exploiter **Discovery** pour alimenter le Twin de manière massive avec *tout* ce qui est découvert (Hosts, Software, Network).
+* Explique-leur qu'on utilise les données de Discovery (OS, cmd_line, modèles hardware) pour structurer le graphe.
+* **Enrichissement du Schéma :** On travaille actuellement pour injecter dans le schéma TigerGraph les données de **ServiceNow**, les **Événements**, et potentiellement **Dynatrace** et **Illumio**.
+* *Message clé :* Le graphe va devenir beaucoup plus riche et complet très bientôt.
+
+
+* **Le Savoir (KB - Architecture Cible) :**
+* Rappelle la vision du **Cluster Kubernetes "Knowledge Swarm"**.
+* On construit des KBs **In-Memory** ultra-performantes pour chaque domaine, accessibles via le graphe.
+
+
+
+On leur fournira bientôt un **template de démonstration** montrant la chaîne complète : *Contexte Discovery (KG)  Récupération du Savoir (KB).*
+
+Bon meeting !
+
+[Ton Prénom]
