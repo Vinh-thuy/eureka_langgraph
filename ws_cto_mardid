@@ -1,0 +1,76 @@
+Workshop 1 : La Feuille de Match (Focus : Agents & Rôles)
+L'Analogie : "Qui j'aligne sur le terrain ?"
+
+La Réalité Technique : Définition des Personas d'Agents et de leurs interactions.
+
+Le Mapping :
+
+
+Gardien de but : Agent The Guardian (Sécurité & Compliance). Il arrête les menaces avant qu'elles ne marquent.
+
+
+Défenseurs : Agents The Cartographer (Infra/Network). Ils assurent la couverture et la solidité des bases.
+
+
+Milieux de terrain : Agents The Librarian (Doc/Procédure) et The Investigator (Diag). Ils distribuent le jeu (la connaissance) et récupèrent les ballons (les logs/incidents).
++1
+
+
+Attaquants : Agents The Runner (Ops/Remediation). Ils marquent les buts (résolvent l'incident/déploient).
+
+Le Ballon : La Donnée (l'incident, le changement) qui circule entre les agents.
+
+Workshop 2 : Le Club & Le Staff (Focus : Système & Enablers)
+L'Analogie : "Une équipe ne gagne pas sans un bon centre d'entraînement, des kinés et des recruteurs."
+
+La Réalité Technique : Les 3 Piliers de capture (Event, Data, Doc) et la Gouvernance.
+
+Le Mapping :
+
+Le Centre d'entraînement (Formation) : Le Knowledge Graph et les Knowledge Bases. Un joueur (Agent) sans entraînement (sans Doc/Contexte) ne sait pas jouer.
++1
+
+Les Kinés / Staff Médical : IT Event Capture / Observability. Ils surveillent la santé des joueurs et du terrain (Golden Events, signaux faibles). Si le terrain (l'infra) est mauvais, on se blesse.
+
+Les Recruteurs (Mercato) : L'ingestion de nouvelles sources (IT Data Capture). Aller chercher des talents ailleurs (ServiceNow, Dynatrace) pour enrichir l'équipe.
+
+L'Arbitrage vidéo (VAR) : LangSmith & Gouvernance. Pour revoir les actions, tracer les décisions et vérifier la conformité.
+
+
+Salut Arnaud,
+
+Suite à nos échanges, voici la version affinée pour le format des workshops du CTO Day. L'idée est d'utiliser l'analogie du Football Manager pour rendre l'exercice stratégique et non technique. On place les CTO dans leur rôle de décideur : faire les bons choix de recrutement pour renforcer leur collectif.
+
+Matin (1h) : Revue d'Effectif & Mercato (The Squad Review)
+
+Concept : On ne part pas de zéro. Chaque CTO analyse son "équipe" actuelle (son IT Ops) pour identifier les faiblesses critiques.
+
+Action : "Quel joueur vous manque-t-il pour gagner ?"
+
+Besoin de renforcer la défense ? (Sécurité/Compliance -> Agent Guardian).
+
+Besoin de fluidifier le jeu ? (Accès à la connaissance -> Agent Librarian).
+
+Besoin de réalisme devant le but ? (Remédiation -> Agent Runner).
+
+Output : Une Shortlist de 3-4 Agents prioritaires à développer ou optimiser (la "Shopping List" du Manager). Pas de contrainte de nombre, on vise l'impact.
+
+Après-midi (1h30) : Le Staff & Le Système (The Club Strategy)
+
+Concept : Un joueur vedette (un Agent IA) ne gagne pas seul. Il lui faut un staff et des infrastructures.
+
+Action : Analyse des "Enablers" nécessaires pour que les Agents de la shortlist performent.
+
+Le Centre d'entraînement = La qualité de la Documentation & CMDB.
+
+Le Staff Médical = L'Observabilité (détecter les blessures/incidents).
+
+La Tactique = L'Orchestration (qui fait la passe à qui ?).
+
+Output : Une roadmap systémique : "Pour activer mon Agent Runner, je dois d'abord moderniser mon Centre d'entraînement (Data)."
+
+La Conférence de Presse (Clôture) Chaque CTO présente sa stratégie en 2 minutes : "Cette année, on mise tout sur l'attaque (Remédiation), donc on recrute un Agent Runner, et on investit massivement sur la qualité de nos données pour l'alimenter."
+
+Cela permet de lier directement leurs besoins métiers à notre architecture (Agents + Data + Graphe), sans jargon, et en respectant la maturité de chacun.
+
+Qu'en penses-tu ?
