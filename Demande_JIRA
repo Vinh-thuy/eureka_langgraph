@@ -1,0 +1,43 @@
+Objet : Suite CTO Day / Création Projet Jira "AI Initiatives" & Accès API Pilotage
+
+Salut Donatien,
+
+(Ana, Stephan, je vous mets en copie pour le suivi du lancement des initiatives IA).
+
+Suite à nos échanges et dans la continuité du CTO Day de la semaine dernière — où la démo de Twin a démontré la valeur critique de connecter nos outils pour le pilotage 2026 — je reviens vers toi pour acter deux points techniques essentiels.
+
+L'objectif est de permettre aux Top Managers et aux équipes opérationnelles d'utiliser les agents IA pour suivre l'avancement, identifier les blocages et synthétiser les KPIs, tout en garantissant la stabilité de la prod Jira.
+
+Voici les deux volets de notre demande d'accompagnement :
+
+1. Pilotage Stratégique : Création du projet "Global AI Initiatives"
+Nous avons besoin de créer rapidement ce projet Agile sur Jira Prod qui centralisera tous les use cases IA des différents CTOs.
+
+Pour répondre à tes recommandations de sécurité et garantir zéro impact sur les perfs de Jira, nous validons ton protocole technique :
+
+Mode d'ingestion : Pas de temps réel agressif.
+
+Fréquence : Récupération des tickets par Twin 3 fois par jour (08h, 13h, 17h).
+
+Volumétrie estimée : ~300 tickets.
+Cela reste totalement compatible avec vos paramètres de Rate Limiting et suffit amplement pour les besoins de reporting du Top Management.
+
+2. Pilotage Opérationnel : Accès API pour l'équipe Digital Twin
+Au-delà de la vision "Haute Altitude" pour les managers, nous souhaitons activer le volet "Assistance Quotidienne" de Twin pour l'équipe projet (sprints, gestion des tâches).
+
+J'aurais besoin de l'ouverture des accès API Jira spécifiquement pour mon projet d'équipe (je te fournirai le lien/clé du projet).
+
+Contexte : Démontrer l'aide au pilotage opérationnel en temps réel.
+
+Sécurité Volumétrie : L'accès est restreint à mon équipe (< 25-30 personnes).
+
+Impact : Estimation de 2 à 3 questions IA par jour et par personne. La charge sera négligeable et ne risque aucune sur-sollicitation de l'API.
+
+Est-ce que tu peux nous lancer là-dessus ? On est alignés sur ton approche pour que "tout le monde y trouve son compte sans freiner personne", comme tu l'as très bien dit.
+
+Merci pour ton aide précieuse là-dessus.
+
+Bien à toi,
+
+Vinh
+Lead Architect
