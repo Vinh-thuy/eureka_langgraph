@@ -1,0 +1,67 @@
+C'est une excellente initiative. Regrouper ces tâches isolées en un **"Onboarding Process"** structuré transforme une simple liste de tickets en une véritable procédure d'intégration standardisée pour les futures équipes. Cela professionnalise la démarche.
+
+J'ai donc fusionné les accès (Confluence, DevX, LGP/LangSmith) en un seul bloc d'action cohérent et supprimé la ligne sur les crédentials UI comme demandé.
+
+Voici la version **finale et optimisée** du compte-rendu :
+
+---
+
+**Subject:** RE: Minutes meeting / Alignment Stream 1 & TWIN
+
+**Topics addressed:**
+
+* **Architecture Overview:**
+* **1. Knowledge Graph Platform (TigerGraph):**
+* Acts as the central **Source of Truth** for IT Topology & Relations.
+* **Ingestion:** Fed by Open Data via a Data Engineering pipeline orchestrated by **Airflow** (Graflo STM).
+
+
+* **2. Knowledge Base Platform:**
+* **Capabilities:** Hybrid approach supporting **Vector Storage**, **GraphRAG**, **Standard RAG**, and direct **API** access.
+* **Roadmap:** Current interim solution is being built towards a target production architecture based on **Memgraph** (In-memory Graph DB) for high-performance retrieval.
+
+
+* **3. Agentic Platform (LangGraph):**
+* **Infrastructure:** Fully **Air-Gapped** environment deployed **On-Premise** on Kubernetes.
+* **CI/CD & Ops:** Automated pipelines to push and update agents via **GitOps** (ArgoCD).
+* **Observability:** Complete monitoring and tracing stack (via **LangSmith**) to ensure agent quality and auditability.
+
+
+
+
+* **Model Layer:**
+* **Gemini:** Large Language Model selected (integration planned, pending availability).
+
+
+
+**Required Accesses:**
+
+| Resource | Access Needed | Purpose |
+| --- | --- | --- |
+| **Twin Onboarding Kit** | Full Package | See "Action" section below for details |
+
+**Coordination & Follow Up:**
+
+* **Next Meeting:** This week on site session (include Stream 1 demo).
+* **Meeting Cadence:** To be defined.
+
+**First Joint Use Case:**
+
+* **Chosen Agent:** **Incident Management Support Assistant** (Priority: Integrate Stream 1 into TWIN first).
+* **Status:** Identified as the initial reference agent.
+
+**Action:**
+
+* **Trigger "Stream 1" Onboarding Process**  **Vinh-Thuy**
+* *Objective:* Enable full operational readiness for the dev team.
+* **Documentation:** Grant access to Confluence (Architecture & Specs).
+* **Dev Environment:** Support deployment of **DevX** (Remote VS Code on Kubernetes).
+* **Observability:** Grant access to **LGP (LangGraph Platform)** to leverage LangSmith features (Tracing & Monitoring).
+
+
+* **Schedule on site meeting** with AI Factory presentation  **Jean Marc**.
+* **Governance** between CIB Inno Lab & ITG Twin: propose a structure and schedule a meeting between Sylvain C, Vinh-Thuy T and Jean-Marc V  **Jean-Marc V**.
+
+---
+
+**Next Best Action :** Vinh, puisque nous officialisons ce "Process d'Onboarding", veux-tu que je te rédige la **Checklist d'Onboarding (format Markdown)** que tu pourras directement copier dans une page Confluence "Getting Started" pour les nouveaux arrivants ?
