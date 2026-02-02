@@ -1,67 +1,76 @@
-C'est une excellente initiative. Regrouper ces tâches isolées en un **"Onboarding Process"** structuré transforme une simple liste de tickets en une véritable procédure d'intégration standardisée pour les futures équipes. Cela professionnalise la démarche.
+C'est une excellente stratégie. Pour t'aider à garder le rythme et à être impactant malgré le stress ou la fatigue, j'ai rédigé ces scripts sous forme de **"Bullet Points de Parole"**.
 
-J'ai donc fusionné les accès (Confluence, DevX, LGP/LangSmith) en un seul bloc d'action cohérent et supprimé la ligne sur les crédentials UI comme demandé.
+Chaque ligne est une courte phrase. Fais une micro-pause à chaque retour à la ligne. Les mots en **gras** sont ceux sur lesquels tu dois appuyer (mettre l'accent tonique).
 
-Voici la version **finale et optimisée** du compte-rendu :
-
----
-
-**Subject:** RE: Minutes meeting / Alignment Stream 1 & TWIN
-
-**Topics addressed:**
-
-* **Architecture Overview:**
-* **1. Knowledge Graph Platform (TigerGraph):**
-* Acts as the central **Source of Truth** for IT Topology & Relations.
-* **Ingestion:** Fed by Open Data via a Data Engineering pipeline orchestrated by **Airflow** (Graflo STM).
-
-
-* **2. Knowledge Base Platform:**
-* **Capabilities:** Hybrid approach supporting **Vector Storage**, **GraphRAG**, **Standard RAG**, and direct **API** access.
-* **Roadmap:** Current interim solution is being built towards a target production architecture based on **Memgraph** (In-memory Graph DB) for high-performance retrieval.
-
-
-* **3. Agentic Platform (LangGraph):**
-* **Infrastructure:** Fully **Air-Gapped** environment deployed **On-Premise** on Kubernetes.
-* **CI/CD & Ops:** Automated pipelines to push and update agents via **GitOps** (ArgoCD).
-* **Observability:** Complete monitoring and tracing stack (via **LangSmith**) to ensure agent quality and auditability.
-
-
-
-
-* **Model Layer:**
-* **Gemini:** Large Language Model selected (integration planned, pending availability).
-
-
-
-**Required Accesses:**
-
-| Resource | Access Needed | Purpose |
-| --- | --- | --- |
-| **Twin Onboarding Kit** | Full Package | See "Action" section below for details |
-
-**Coordination & Follow Up:**
-
-* **Next Meeting:** This week on site session (include Stream 1 demo).
-* **Meeting Cadence:** To be defined.
-
-**First Joint Use Case:**
-
-* **Chosen Agent:** **Incident Management Support Assistant** (Priority: Integrate Stream 1 into TWIN first).
-* **Status:** Identified as the initial reference agent.
-
-**Action:**
-
-* **Trigger "Stream 1" Onboarding Process**  **Vinh-Thuy**
-* *Objective:* Enable full operational readiness for the dev team.
-* **Documentation:** Grant access to Confluence (Architecture & Specs).
-* **Dev Environment:** Support deployment of **DevX** (Remote VS Code on Kubernetes).
-* **Observability:** Grant access to **LGP (LangGraph Platform)** to leverage LangSmith features (Tracing & Monitoring).
-
-
-* **Schedule on site meeting** with AI Factory presentation  **Jean Marc**.
-* **Governance** between CIB Inno Lab & ITG Twin: propose a structure and schedule a meeting between Sylvain C, Vinh-Thuy T and Jean-Marc V  **Jean-Marc V**.
+Voici ton "antisèche" (Cheat Sheet) pour demain :
 
 ---
 
-**Next Best Action :** Vinh, puisque nous officialisons ce "Process d'Onboarding", veux-tu que je te rédige la **Checklist d'Onboarding (format Markdown)** que tu pourras directement copier dans une page Confluence "Getting Started" pour les nouveaux arrivants ?
+### Slide 1: Not a Chatbot (The Definition)
+
+*Message : On pose le décor. Ce n'est pas un jouet.*
+
+* "First, let's be clear."
+* "**Twin** is **not** a Chatbot."
+* "A chatbot is for **talking**. Twin is for **working**."
+* "It is an **Operational System** for Production."
+* "We are not building a gadget. We are building **resilience**."
+
+---
+
+### Slide 2: The LLM Paradox (System 1 vs System 2)
+
+*Message : Le problème des LLM (ils sont créatifs mais menteurs).*
+
+* "So, what is the problem with AI today?"
+* "LLMs work like **System 1**. They are **fast**. They are **creative**. But..."
+* "They **hallucinate**. They invent facts."
+* "In a Bank, we need **System 2**. We need **Logic**. We need **Truth**."
+* "We cannot rely on **probability**. We need **certainty**."
+
+---
+
+### Slide 3: The Brain Analogy (The Inspiration)
+
+*Message : L'analogie biologique (Cortex vs Hippocampe).*
+
+* "To solve this, we looked at the **human brain**."
+* "The brain has two parts."
+* "The **Cortex** handles intuition and language."
+* "The **Hippocampus** handles memory and facts."
+* "If you have the Cortex **without** the Hippocampus... you have **Alzheimer’s**."
+* "You can speak, but you have **no memory** of the truth."
+
+---
+
+### Slide 4: The Architecture (Neuro-Symbolic)
+
+*Message : La solution technique (Graph + Agents).*
+
+* "Twin is exactly like a **healthy brain**. It is **Neuro-Symbolic**."
+* "The **Agents** are the Cortex. They understand what you want."
+* "The **Knowledge Graph** is the Hippocampus. It holds the **Truth**."
+* "This is what we call **Grounding**."
+* "Our Agents **never** guess. They check the Graph first."
+
+---
+
+### Slide 5: Conclusion (The Accelerator)
+
+*Message : L'appel à l'action. Tout est prêt pour eux.*
+
+* "So, here is the good news."
+* "This complex brain... is **already built**."
+* "The data pipelines are **done**. The security is **ready**."
+* "Twin is the **Operating System** for your innovation."
+* "You don't have to build the **brain**. You just have to teach it a **new skill**."
+
+---
+
+### Conseil de Coach pour ta présentation :
+
+* **Respire** entre chaque ligne.
+* Ne cherche pas à aller vite. Parler lentement donne de l'autorité (et c'est plus facile pour l'anglais).
+* Si tu as un trou de mémoire, lis simplement la phrase en gras sur la slide, ça suffit souvent.
+
+C'est simple, logique et puissant. Tu vas gérer !
