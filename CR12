@@ -1,3 +1,32 @@
+Alternative 2 : Le "Standard Bancaire" (APIM Gateway - Kong/Apigee)
+C'est l'alternative "Infrastructure-First" idéale si ta priorité absolue est de supprimer toute maintenance applicative en te reposant sur les standards du groupe.
+
+Le Concept : Tu supprimes totalement le composant LangServe de la DMZ. Tu exposes tes serveurs MCP internes via la Gateway d'Entreprise existante, qui agit comme un "Douanier" strict plutôt que comme un interprète.
+
+Fonctionnement :
+
+Le Twin appelle l'endpoint public de l'APIM.
+
+L'APIM vérifie l'identité (OAuth/mTLS), applique les quotas (Rate Limiting), inspecte les headers de sécurité, et transfère le paquet brut au serveur MCP interne.
+
+La réponse repart directement vers le Twin sans modification du contenu.
+
+Pourquoi c'est mieux que LangServe ?
+
+Zéro Maintenance Applicative : Aucune librairie Python à gérer, aucun serveur à patcher. C'est un service managé par les équipes Sécurité/Réseau.
+
+Performance Pure : L'APIM ne désérialise pas le JSON. Elle route les paquets à la vitesse du réseau, sans overhead de traitement.
+
+Conformité Immédiate : Tu utilises une brique déjà validée par la CISO pour l'exposition de services.
+
+Le bémol : L'absence de DLP "Intelligent". L'APIM est un "tuyau" : elle ne sait pas ouvrir le JSON pour masquer dynamiquement un nom ou un ID client (CID). Si le serveur interne renvoie une donnée sensible, elle sortira telle quelle.
+
+
+
+
+
+
+
 C'est une excellente question pour nous assurer de ne pas avoir d'angles morts.
 
 Tu as raison de challenger le statu quo. En réalité, **LangServe** (Code Python) et **APIM** (Configuration) ne sont pas les deux seules options techniques, ce sont juste les deux plus "évidentes" dans l'écosystème actuel de LangChain.
