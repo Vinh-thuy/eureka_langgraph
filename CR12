@@ -1,188 +1,189 @@
-Alternative 2 : Le "Standard Bancaire" (APIM Gateway - Kong/Apigee)
-C'est l'alternative "Infrastructure-First" idéale si ta priorité absolue est de supprimer toute maintenance applicative en te reposant sur les standards du groupe.
+Tu as raison, ces questions sont critiques pour le **Capacity Planning**. Un projet d'IA, même avec une architecture géniale, échoue souvent faute de disponibilité des SMEs (Subject Matter Experts) pour valider les résultats ou faute de budget pour l'infrastructure (surtout en mode "Franchise").
 
-Le Concept : Tu supprimes totalement le composant LangServe de la DMZ. Tu exposes tes serveurs MCP internes via la Gateway d'Entreprise existante, qui agit comme un "Douanier" strict plutôt que comme un interprète.
+J'ai intégré ces éléments dans une nouvelle section **"Execution & Planning"**.
 
-Fonctionnement :
-
-Le Twin appelle l'endpoint public de l'APIM.
-
-L'APIM vérifie l'identité (OAuth/mTLS), applique les quotas (Rate Limiting), inspecte les headers de sécurité, et transfère le paquet brut au serveur MCP interne.
-
-La réponse repart directement vers le Twin sans modification du contenu.
-
-Pourquoi c'est mieux que LangServe ?
-
-Zéro Maintenance Applicative : Aucune librairie Python à gérer, aucun serveur à patcher. C'est un service managé par les équipes Sécurité/Réseau.
-
-Performance Pure : L'APIM ne désérialise pas le JSON. Elle route les paquets à la vitesse du réseau, sans overhead de traitement.
-
-Conformité Immédiate : Tu utilises une brique déjà validée par la CISO pour l'exposition de services.
-
-Le bémol : L'absence de DLP "Intelligent". L'APIM est un "tuyau" : elle ne sait pas ouvrir le JSON pour masquer dynamiquement un nom ou un ID client (CID). Si le serveur interne renvoie une donnée sensible, elle sortira telle quelle.
-
-
-
-
-
-
-
-C'est une excellente question pour nous assurer de ne pas avoir d'angles morts.
-
-Tu as raison de challenger le statu quo. En réalité, **LangServe** (Code Python) et **APIM** (Configuration) ne sont pas les deux seules options techniques, ce sont juste les deux plus "évidentes" dans l'écosystème actuel de LangChain.
-
-Si tu veux sortir de la dualité "Serveur à gérer" vs "Gateway trop bête", voici **3 alternatives architecturales concrètes** qui pourraient mieux convenir à ton contexte bancaire suisse.
+Voici la version **finale et complète** (en Anglais), structurée pour Microsoft Forms. Tu n'as plus qu'à copier-coller.
 
 ---
 
-### Alternative 1 : Le "Serverless Proxy" (Azure Functions / AWS Lambda)
+# 📝 Form Title: Digital Twin AI Use Case Intake
 
-C'est l'alternative la plus crédible pour remplacer LangServe si ton souci est la **maintenance des serveurs**.
-
-* **Le Concept :** Au lieu d'avoir un serveur LangServe qui tourne 24/7 (et qu'il faut patcher), tu déploies ton code de "Filtrage + Routing" dans une **Fonction Serverless**.
-* **Fonctionnement :**
-1. Le Twin appelle une URL HTTPS (déclencheur).
-2. La fonction "s'allume", vérifie le token, applique le DLP (masquage des données), transmet la demande au serveur MCP interne, récupère la réponse, et "s'éteint".
-
-
-* **Pourquoi c'est mieux que LangServe ?**
-* **Zéro Maintenance OS :** Pas de Linux à mettre à jour. C'est du PaaS pur.
-* **Coût :** Tu paies à la milliseconde d'exécution.
-* **Sécurité :** Les environnements sont éphémères. Si une fonction est corrompue, elle disparaît quelques secondes plus tard.
-
-
-* **Le bémol :** Le "Cold Start" (démarrage à froid) peut ajouter 1 ou 2 secondes de latence à la première requête. Pour du chat, c'est perceptible.
-
-### Alternative 2 : Le "Reverse Tunneling Sécurisé" (Azure Relay / Cloudflare Tunnel)
-
-C'est l'alternative "Zéro Port Ouvert" (proche du Polling mais plus réactif).
-
-* **Le Concept :** Au lieu d'ouvrir un port dans ton Firewall (Inbound rule) pour laisser entrer le Twin, tu utilises un agent interne qui ouvre un tunnel sortant vers un relais sécurisé dans le cloud.
-* **Fonctionnement :**
-1. Le Twin se connecte à un relais sécurisé (ex: Azure Relay) dans le Cloud.
-2. Ton serveur interne maintient une connexion sortante vers ce même relais.
-3. Les paquets s'échangent à travers ce tunnel établi *depuis* l'intérieur.
-
-
-* **Pourquoi c'est mieux que l'APIM ?**
-* **Firewall Fermé :** Tu n'ouvres **aucun** port en entrée sur la DMZ. C'est le rêve de tout CISO.
-* **Simplicité Réseau :** Pas de règles de NAT complexes ou de configuration DNS publique compliquée.
-
-
-* **Le bémol :** Tu perds le contrôle centralisé de l'APIM (monitoring, quotas) si tu ne fais pas attention. Et cela nécessite d'approuver un service de "Relay" externe.
-
-### Alternative 3 : Les "AI Gateways" Spécialisées (Kong AI, Cloudflare AI Gateway, Portkey)
-
-C'est la nouvelle génération d'APIM, conçue spécifiquement pour les LLM.
-
-* **Le Concept :** Ce sont des APIM qui "parlent" le langage des LLM. Contrairement à une APIM classique qui voit passer du binaire, une AI Gateway sait lire le JSON d'OpenAI ou d'Anthropic.
-* **Fonctionnement :**
-* Elles intègrent nativement des modules de "PII Redaction" (DLP) pour détecter les numéros de carte de crédit, les emails ou les noms *à la volée*.
-
-
-* **Pourquoi c'est mieux que le duo APIM + LangServe ?**
-* **Tout-en-un :** Tu as la sécurité de l'APIM + l'intelligence de filtrage de LangServe, mais dans un produit sur étagère (COTS).
-
-
-* **Le bémol :** C'est une technologie très jeune (émergente en 2024/2025). Il faut vérifier si elles supportent bien le protocole **MCP** (qui est spécifique) ou seulement les APIs standard OpenAI.
+**Form Description:** Use this form to submit new AI use case proposals for the Digital Twin. This data will be used to assess technical feasibility, architectural fit (Standard vs. Franchise), and business prioritization.
 
 ---
 
-### Synthèse Comparative pour la Suisse
+## 🟢 SECTION 1: Identity & Context
 
-Voici comment situer la solution du PDF (LangServe) par rapport à ces alternatives :
+*Goal: Identify the requester and the scope to manage RBAC (Role-Based Access Control).*
 
-| Solution | Facilité Ops (Maintenance) | Sécurité Réseau | Capacité DLP (Suisse) | Latence |
-| --- | --- | --- | --- | --- |
-| **LangServe (PDF)** | 🔴 Faible (Patching OS) | 🟡 Standard | 🟢 Excellente (Code Custom) | 🟢 Faible |
-| **APIM Classique** | 🟢 Excellente (Managé) | 🟢 Excellente | 🔴 Nulle (Aveugle) | 🟢 Très Faible |
-| **Serverless (FaaS)** | 🟢 Très Bonne | 🟢 Excellente | 🟢 Excellente (Code Custom) | 🟡 Moyenne (Cold Start) |
-| **Reverse Tunnel** | 🟢 Bonne | 🔵 Paranoïaque | 🔴 Nulle (Tuyau pur) | 🟢 Faible |
-| **AI Gateway** | 🟢 Excellente | 🟢 Excellente | 🟡 Bonne (Patterns standards) | 🟢 Très Faible |
+### 1. What is your primary role regarding this use case?
 
-### Ma Recommandation Finale
+*Type: Choice (Single Selection)*
 
-Si tu veux mon avis d'Architecte pour remplacer la slide :
+* **Business/Product Owner** (I define the "Why" and "What")
+* **Project Manager** (I manage the delivery and timeline)
+* **IT Ops / SRE** (I handle production, incidents, and run)
+* **Architect / Lead Tech** (I define the technical solution)
+* **Security / Compliance Officer** (I validate rules and risks)
+* **Developer / Data Engineer** (I build the solution)
 
-1. **L'idéal moderne :** **Alternative 1 (Serverless FaaS)**.
-Développe ton connecteur MCP en **Azure Functions** (ou équivalent Google/AWS).
-* Tu gardes la logique "Intelligente" (DLP).
-* Tu supprimes la contrainte "Serveur à patcher" qui t'inquiète.
-* C'est validable par la sécurité comme du "Code éphémère".
+### 2. Which technical domain does this use case cover?
 
+*Type: Choice (Multiple Selection)*
 
-
-Est-ce que l'approche **Serverless** te semble être le bon compromis pour rassurer tes équipes Ops tout en gardant la main sur le code ?
-
-
-
-C'est noté Vinh. Voici la version enrichie et consolidée du mail. Elle intègre le contexte, la critique, les alternatives techniques et le tableau comparatif pour donner toutes les billes à ton équipe.
+* **Application Support** (Business Logic, specific Apps)
+* **Infrastructure** (Servers, Network, Cloud, Storage)
+* **Mainframe / Core Banking** (z/OS, Cobol, JCL, DB2)
+* **Cybersecurity & IAM** (Identity, Vulnerabilities, Certificates)
+* **IT Service Management** (Processes, Change, Incident Management)
 
 ---
 
-**Objet :** 🚩 Review Architecture Critique & Alternatives - Digital Twin Suisse (Secure Bubble)
+## 🟡 SECTION 2: The "AS-IS" (Diagnosis)
 
-Hello la Team,
+*Goal: Understand the current pain point and the "raw material" available.*
 
-Nous attaquons le chantier de déploiement du Digital Twin pour la filiale Suisse. Le contexte réglementaire (FINMA) est strict : aucune donnée client (CID) non chiffrée ne doit sortir du territoire, mais le Twin (hébergé en Zone Externe/Cloud) doit pouvoir interagir avec nos outils internes via le protocole MCP.
+### 3. Problem Statement & Pain Point
 
-La proposition d'architecture actuelle (voir **Slide 2** du dossier) suggère de placer un composant applicatif **"LangServe Client"** au cœur de la DMZ pour faire office de proxy et de filtre de sécurité.
+*Type: Text (Long Answer)*
+*Subtitle: Describe the specific problem. Example: "It takes 4 hours to correlate an alert on App X with the database logs," or "Information is scattered across 10 different Wiki pages."*
 
-Avant de valider ce design, j'ai besoin de votre expertise Ops/SRE pour challenger cette approche "Code-First".
+### 4. How is this process performed TODAY?
 
-### 1. Analyse critique de la solution actuelle (LangServe en DMZ)
+*Type: Choice (Single Selection)*
 
-J'ai identifié trois zones de risques majeurs sur lesquelles je veux votre avis :
+* **Manual & Tribal:** We ask a specific expert (knowledge is in their head).
+* **Manual & Documented:** We follow a written procedure (PDF/Wiki) step-by-step.
+* **Semi-Automated:** We run local scripts (Python, Shell, SQL) manually.
+* **Reactive:** We wait for a ticket/call to react.
+* **It does not exist:** This is a completely new capability.
 
-* **Surface d'Attaque & MCO :** Le "LangServe" n'est pas une appliance de sécurité durcie, c'est une librairie applicative (Python/Node). En le plaçant en DMZ, on s'oblige à maintenir un OS, un runtime et à patcher les vulnérabilités de l'application elle-même. Est-on prêts à assumer ce MCO ou est-ce une cible trop facile ?
-* **Performance & Latence :** Le Twin repose sur du streaming. Ajouter ce "middleman" applicatif qui désérialise/resérialise le JSON risque de casser la fluidité (Time to First Token).
-* **"Fausse Sécurité" :** Si ce client n'agit que comme un proxy, une NGINX ou une APIM ferait mieux le travail. S'il effectue du filtrage lourd (DLP), il risque de devenir un goulot d'étranglement (Bottleneck) sous charge.
+### 5. What are the CURRENT data sources used to solve this?
 
-### 2. Les alternatives architecturales identifiées
+*Type: Choice (Multiple Selection)*
 
-Pour ne pas nous enfermer dans la solution de l'éditeur, j'ai listé 4 alternatives techniques :
+* **Shadow IT / Spreadsheets:** Excel, CSV, Google Sheets (Manually managed).
+* **Unstructured Documentation:** PDF, Word, PowerPoint, SharePoint.
+* **Collaborative Knowledge:** Confluence, Wiki, Notion pages.
+* **ITSM & Ticketing:** ServiceNow, Jira, BMC Remedy.
+* **Architecture & Models:** Visio, Draw.io, ArchiMate, Mega.
+* **Observability & Metrics:** Dynatrace, Prometheus, Centreon (Dashboards).
+* **Raw Logs:** Text files, Syslogs, Splunk/Elastic Raw indices.
+* **Job Schedulers (Banking):** Control-M, Autosys, $Universe, Batch Reports.
+* **Source Code & Scripts:** Git, Ansible, Terraform, Mainframe JCL.
+* **Databases:** SQL Dumps, DDL, Schemas.
 
-* **Hypothèse A : Standard APIM (Gateway Only)**
-On remplace LangServe par l'APIM Corporate (Kong/Apigee).
-* *Pour :* Standard, zéro maintenance OS.
-* *Contre :* Incapacité de faire du DLP sémantique (masquer un nom dans un JSON) et gestion complexe du Streaming/WebSockets.
+---
+
+## 🔵 SECTION 3: The "TO-BE" (Target Agents)
+
+*Goal: Map the intent to the correct LangGraph Agent.*
+
+### 6. What is the primary "Intent" of the AI Agent?
+
+*Type: Choice (Single Selection)*
+*Subtitle: Choose the archetype that best describes the desired behavior.*
+
+* **The Librarian (Search & FAQ):** "I want to ask a question and find the answer in a procedure/doc."
+* **The Mapper (Topology & Impact):** "I want to visualize dependencies and understand impact (Graph)."
+* **The Investigator (Diagnosis):** "I want to understand the root cause of an incident based on events."
+* **The Guardian (Compliance):** "I want to check if a configuration or access right is compliant."
+* **The Runner (Automation):** "I want to generate or execute a remediation script/action."
+* **The Reporter (Synthesis):** "I want a summary or status report for management."
+
+---
+
+## 🔴 SECTION 4: Target Data & Franchise Mode (Crucial)
+
+*Goal: Distinguish between Standard Twin (Synthesized Data) and Franchise Mode (Raw/Sensitive Data).*
+
+### 7. What NEW data must the Agent access to succeed?
+
+*Type: Choice (Multiple Selection)*
+
+* **[Standard] Knowledge Base:** Procedures, Docs, Wikis (Vector Store).
+* **[Standard] IT Topology:** CMDB, Relations, Assets (TigerGraph).
+* **[Standard] Golden Events:** Synthesized Health/Change/Anomaly states (No raw noise).
+* **[Standard] Live Metrics:** CPU, RAM, Latency, TPS (Time-Series).
+* **[Standard] Identity:** AD Groups, Permissions, Certificates.
+* **[FRANCHISE] High Volume Raw Data:** Full historical logs, debug traces (Requires Dedicated Storage).
+* **[FRANCHISE] Banking Secrets / PII:** Client Data, Account Numbers, Payment Details (Requires High Security).
+
+### 8. Does this Use Case require specific data retention or legal hold?
+
+*Type: Choice (Single Selection)*
+
+* **No:** Standard retention is fine.
+* **Yes:** We need to keep data for Audit/Legal reasons (Long term).
+
+---
+
+## 🟣 SECTION 5: Value & Maturity (ROI)
+
+*Goal: Assess business value.*
+
+### 9. What is the estimated business value (ROI)?
+
+*Type: Choice (Single Selection)*
+
+* **Efficiency:** Saves hours of manual work (Productivity).
+* **MTTR Reduction:** Faster incident resolution (Operational Excellence).
+* **Quality/Risk:** Reduces human error or compliance risk.
+* **Innovation:** Enables a capability that was previously impossible.
+
+### 10. What is the current maturity of this idea?
+
+*Type: Choice (Single Selection)*
+
+* **Ideation:** Just an idea, no technical specs yet.
+* **Documented:** We have the logic/procedure written down.
+* **POC / Prototype:** We have a script or code that works locally.
+* **In Production:** The logic exists in legacy, we want to migrate to AI.
+
+---
+
+## 🟠 SECTION 6: Execution & Planning (Resources)
+
+*Goal: Assess feasibility, budget, and timeline (Questions 12 & 13).*
+
+### 11. What is your desired Go-Live Date?
+
+*Type: Date*
+*Subtitle: When do you need this Agent to be production-ready?*
+
+### 12. Justification for this Date
+
+*Type: Text (Long Answer)*
+*Subtitle: Why is this date critical? (e.g., Regulatory deadline, Major Release, Budget Cycle end).*
+
+### 13. Available Resources & Budget (FTE/Budget)
+
+*Type: Text (Long Answer)*
+*Subtitle: What resources can YOU contribute? (e.g., "1 FTE Developer for 2 months", "SME available 2 days/week for validation", "Specific budget allocated for storage").*
+*Note: The Digital Twin team provides the platform, but business logic requires Subject Matter Expert availability.*
+
+---
+
+## 💡 Logic Guide for the Program Team (Do not include in Forms)
+
+*Use this key to triage responses into Jira:*
+
+1. **If Q7 contains "[FRANCHISE]":**
+* **Action:** Flag as **High Complexity** & **Cost Impact**. Requires Architecture Review.
+* **Risk:** Storage cost & Compliance (PII).
 
 
-* **Hypothèse B : Serverless Proxy (Azure Functions / Cloud Run)**
-On déploie le code de filtrage (LangServe logic) dans un conteneur éphémère.
-* *Pour :* Pas d'OS à gérer, scaling à la demande, sécu par l'éphémère.
-* *Contre :* Latence potentielle au démarrage (Cold Start).
+2. **If Q13 is "None" or "Unknown":**
+* **Action:** **RISK**. If the requester cannot provide an SME to validate the AI's output, the project will fail (Hallucination risk).
 
 
-* **Hypothèse C : Reverse Tunneling (Azure Relay)**
-Aucun port ouvert en entrée. L'interne initie un tunnel sortant vers un relais sécurisé.
-* *Pour :* Sécurité maximale (Zéro Inbound).
-* *Contre :* Architecture plus exotique, perte de visibilité centrale APIM.
+3. **If Q11 (Go-Live) is < 1 month AND Q10 (Maturity) is "Ideation":**
+* **Action:** **REJECT** or reset expectations. Unrealistic timeline.
 
 
-* **Hypothèse D : AI Gateway (New Gen)**
-Utilisation de Gateways spécialisées LLM (Kong AI, Portkey) qui intègrent le DLP natif.
-* *Pour :* Le meilleur des deux mondes.
-* *Contre :* Maturité techno à valider.
+4. **If Q6 is "The Mapper" AND Q5 includes "Excel/Shadow IT":**
+* **Action:** Assign to **Graflo STM Team**. Needs data modeling in TigerGraph.
 
 
-
-### 3. Synthèse pour aide à la décision
-
-Voici un comparatif rapide des compromis que nous devons arbitrer ensemble :
-
-| Solution | Facilité Ops (Maintenance) | Sécurité Réseau | Capacité DLP (Critique Suisse) | Latence |
-| --- | --- | --- | --- | --- |
-| **LangServe (Actuel)** | 🔴 Faible (Patching OS) | 🟡 Standard | 🟢 Excellente (Code Custom) | 🟢 Faible |
-| **APIM Classique** | 🟢 Excellente (Managé) | 🟢 Excellente | 🔴 Nulle (Aveugle au contenu) | 🟢 Très Faible |
-| **Serverless (FaaS)** | 🟢 Très Bonne | 🟢 Excellente | 🟢 Excellente (Code Custom) | 🟡 Moyenne (Cold Start) |
-| **Reverse Tunnel** | 🟢 Bonne | 🔵 Paranoïaque | 🔴 Nulle (Tuyau pur) | 🟢 Faible |
-| **AI Gateway** | 🟢 Excellente | 🟢 Excellente | 🟡 Bonne (Patterns standards) | 🟢 Très Faible |
-
-**Next Steps :**
-J'aimerais que vous reveniez vers moi pour me dire quelle option (LangServe vs Serverless vs APIM) vous semble la plus viable opérationnellement pour garantir nos SLAs tout en satisfaisant la Sécurité.
-
-Merci,
-
-**Vinh**
-*Lead Architect*
+5. **If Q6 is "The Librarian" AND Q4 is "Manual & Documented":**
+* **Action:** Assign to **RAG Team**. Low complexity (Ingestion of PDF/Wiki).
