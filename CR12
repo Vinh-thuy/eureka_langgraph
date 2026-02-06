@@ -1,189 +1,49 @@
-Tu as raison, ces questions sont critiques pour le **Capacity Planning**. Un projet d'IA, même avec une architecture géniale, échoue souvent faute de disponibilité des SMEs (Subject Matter Experts) pour valider les résultats ou faute de budget pour l'infrastructure (surtout en mode "Franchise").
+C'est noté. J'ai harmonisé la description du pôle "Agentic Factory" pour qu'elle suive exactement le même format narratif et fluide que les deux autres pôles, sans les sous-puces "Profils/Responsabilités".
 
-J'ai intégré ces éléments dans une nouvelle section **"Execution & Planning"**.
-
-Voici la version **finale et complète** (en Anglais), structurée pour Microsoft Forms. Tu n'as plus qu'à copier-coller.
+Voici la version finale du mail, parfaitement cohérente sur la forme et le fond.
 
 ---
 
-# 📝 Form Title: Digital Twin AI Use Case Intake
+**Objet :** Organisation cible Factory Twin (Inde) - Structure finale et Gouvernance
 
-**Form Description:** Use this form to submit new AI use case proposals for the Digital Twin. This data will be used to assess technical feasibility, architectural fit (Standard vs. Franchise), and business prioritization.
+Salut,
 
----
+Suite à nos derniers arbitrages, voici la structure définitive pour l'équipe de 10 ETP en Inde. Cette organisation est taillée pour répondre à notre double impératif : passer à l'échelle industrielle tout en garantissant une qualité irréprochable sur la donnée et le code.
 
-## 🟢 SECTION 1: Identity & Context
+L'équipe est structurée en trois pôles complémentaires à la Core Team de Paris.
 
-*Goal: Identify the requester and the scope to manage RBAC (Role-Based Access Control).*
+**1. LE PÔLE "KNOWLEDGE OPS" (4 Personnes)**
+*Mission : Garantir la complétude et la fiabilité de l'AKG (Actionable Knowledge Graph).*
 
-### 1. What is your primary role regarding this use case?
+* **2 Knowledge Graph & Event Analysts (Les "Deep Divers") :**
+Leur rôle est d'alimenter le Graphe selon deux modes d'intervention. En mode transverse (Sprint), ils travaillent technologie par technologie pour mapper en profondeur tous les attributs et logs nécessaires. En mode tactique (On-Demand), ils peuvent mettre en pause le sprint pour collecter en urgence des attributs manquants dans Discovery, en lien direct avec le pilotage de Stefano à Paris, afin de débloquer des cas d'usage spécifiques.
+* **2 Knowledge Bases Curators (Les "Release Managers") :**
+Ils opèrent la "Quality Gate" humaine dans notre chaîne CI/CD documentaire. Ils ne produisent pas le contenu mais auditent ce qui est livré par le Métier : ils valident que la documentation est connectée au bon nœud du Graphe, gèrent les rejets automatiques, et surtout, ils certifient les "Jeux de Tests" (PB de recette) fournis par les propriétaires de données, qui serviront au monitoring continu de la qualité des réponses.
 
-*Type: Choice (Single Selection)*
+**2. LE PÔLE "AGENTIC FACTORY" (4 Personnes)**
+*Mission : Construire les capacités d'action et fiabiliser le code, sous le pilotage architectural de Dhia.*
 
-* **Business/Product Owner** (I define the "Why" and "What")
-* **Project Manager** (I manage the delivery and timeline)
-* **IT Ops / SRE** (I handle production, incidents, and run)
-* **Architect / Lead Tech** (I define the technical solution)
-* **Security / Compliance Officer** (I validate rules and risks)
-* **Developer / Data Engineer** (I build the solution)
+* **2 Tools Developers (Les "Software Craftsmen") :**
+Ce binôme, piloté par un Senior Tech Lead Python, apporte la rigueur industrielle qui manque parfois au code Data Science. Ils développent les connecteurs et APIs robustes. Le Tech Lead agit comme un relais de qualité : il impose les standards de code, effectue les revues critiques, et contribue au "durcissement" du Framework (optimisation, maintenance) via un processus de contribution contrôlé (RFC), tout en laissant la logique "Cœur" à l'équipe de Dhia.
+* **2 Agent Developers (Les "Accélérateurs") :**
+Ces profils hybrides Data/Dev assemblent les briques techniques pour livrer des "Agents Génériques" ou des "Compétences" prêtes à l'emploi (ex: un Agent de Diagnostic Réseau). Leur production permet à nos Data Scientists parisiens de ne plus partir de zéro et d'accélérer considérablement la livraison des cas d'usage complexes aux CTOs.
 
-### 2. Which technical domain does this use case cover?
+**3. LE PÔLE "TWIN GUARDIANS" (2 Personnes)**
+*Mission : Surveillance proactive et Amélioration Continue.*
 
-*Type: Choice (Multiple Selection)*
+* **2 Twin Guardians (Analystes Run & Qualité) :**
+Ils exploitent le décalage horaire pour sécuriser la production avant l'arrivée de Paris. Ils réalisent le "Morning Check" quotidien (fraîcheur des données pipelines et santé des agents) pour un état des lieux à 8h30. Ils analysent également les logs d'interactions (LangSmith) pour détecter les mauvaises réponses et assigner les actions correctives, agissant comme un support de niveau 2 pour l'équipe parisienne.
 
-* **Application Support** (Business Logic, specific Apps)
-* **Infrastructure** (Servers, Network, Cloud, Storage)
-* **Mainframe / Core Banking** (z/OS, Cobol, JCL, DB2)
-* **Cybersecurity & IAM** (Identity, Vulnerabilities, Certificates)
-* **IT Service Management** (Processes, Change, Incident Management)
+**Synthèse de la valeur ajoutée :**
 
----
+* **Agilité & Profondeur :** Capacité à gérer l'ingestion de masse tout en réagissant aux urgences tactiques.
+* **Rigueur Industrielle :** Paris garde la vision (Architecture, Framework Core), l'Inde apporte la robustesse (Code Quality, Tests, Monitoring).
+* **Responsabilisation :** Chaque rôle a un périmètre clair qui ne marche pas sur les pieds des experts parisiens.
 
-## 🟡 SECTION 2: The "AS-IS" (Diagnosis)
+Je finalise les fiches de poste détaillées sur cette base pour mon déplacement de mai.
 
-*Goal: Understand the current pain point and the "raw material" available.*
+Dis-moi si cela te convient pour lancer les démarches.
 
-### 3. Problem Statement & Pain Point
+À plus,
 
-*Type: Text (Long Answer)*
-*Subtitle: Describe the specific problem. Example: "It takes 4 hours to correlate an alert on App X with the database logs," or "Information is scattered across 10 different Wiki pages."*
-
-### 4. How is this process performed TODAY?
-
-*Type: Choice (Single Selection)*
-
-* **Manual & Tribal:** We ask a specific expert (knowledge is in their head).
-* **Manual & Documented:** We follow a written procedure (PDF/Wiki) step-by-step.
-* **Semi-Automated:** We run local scripts (Python, Shell, SQL) manually.
-* **Reactive:** We wait for a ticket/call to react.
-* **It does not exist:** This is a completely new capability.
-
-### 5. What are the CURRENT data sources used to solve this?
-
-*Type: Choice (Multiple Selection)*
-
-* **Shadow IT / Spreadsheets:** Excel, CSV, Google Sheets (Manually managed).
-* **Unstructured Documentation:** PDF, Word, PowerPoint, SharePoint.
-* **Collaborative Knowledge:** Confluence, Wiki, Notion pages.
-* **ITSM & Ticketing:** ServiceNow, Jira, BMC Remedy.
-* **Architecture & Models:** Visio, Draw.io, ArchiMate, Mega.
-* **Observability & Metrics:** Dynatrace, Prometheus, Centreon (Dashboards).
-* **Raw Logs:** Text files, Syslogs, Splunk/Elastic Raw indices.
-* **Job Schedulers (Banking):** Control-M, Autosys, $Universe, Batch Reports.
-* **Source Code & Scripts:** Git, Ansible, Terraform, Mainframe JCL.
-* **Databases:** SQL Dumps, DDL, Schemas.
-
----
-
-## 🔵 SECTION 3: The "TO-BE" (Target Agents)
-
-*Goal: Map the intent to the correct LangGraph Agent.*
-
-### 6. What is the primary "Intent" of the AI Agent?
-
-*Type: Choice (Single Selection)*
-*Subtitle: Choose the archetype that best describes the desired behavior.*
-
-* **The Librarian (Search & FAQ):** "I want to ask a question and find the answer in a procedure/doc."
-* **The Mapper (Topology & Impact):** "I want to visualize dependencies and understand impact (Graph)."
-* **The Investigator (Diagnosis):** "I want to understand the root cause of an incident based on events."
-* **The Guardian (Compliance):** "I want to check if a configuration or access right is compliant."
-* **The Runner (Automation):** "I want to generate or execute a remediation script/action."
-* **The Reporter (Synthesis):** "I want a summary or status report for management."
-
----
-
-## 🔴 SECTION 4: Target Data & Franchise Mode (Crucial)
-
-*Goal: Distinguish between Standard Twin (Synthesized Data) and Franchise Mode (Raw/Sensitive Data).*
-
-### 7. What NEW data must the Agent access to succeed?
-
-*Type: Choice (Multiple Selection)*
-
-* **[Standard] Knowledge Base:** Procedures, Docs, Wikis (Vector Store).
-* **[Standard] IT Topology:** CMDB, Relations, Assets (TigerGraph).
-* **[Standard] Golden Events:** Synthesized Health/Change/Anomaly states (No raw noise).
-* **[Standard] Live Metrics:** CPU, RAM, Latency, TPS (Time-Series).
-* **[Standard] Identity:** AD Groups, Permissions, Certificates.
-* **[FRANCHISE] High Volume Raw Data:** Full historical logs, debug traces (Requires Dedicated Storage).
-* **[FRANCHISE] Banking Secrets / PII:** Client Data, Account Numbers, Payment Details (Requires High Security).
-
-### 8. Does this Use Case require specific data retention or legal hold?
-
-*Type: Choice (Single Selection)*
-
-* **No:** Standard retention is fine.
-* **Yes:** We need to keep data for Audit/Legal reasons (Long term).
-
----
-
-## 🟣 SECTION 5: Value & Maturity (ROI)
-
-*Goal: Assess business value.*
-
-### 9. What is the estimated business value (ROI)?
-
-*Type: Choice (Single Selection)*
-
-* **Efficiency:** Saves hours of manual work (Productivity).
-* **MTTR Reduction:** Faster incident resolution (Operational Excellence).
-* **Quality/Risk:** Reduces human error or compliance risk.
-* **Innovation:** Enables a capability that was previously impossible.
-
-### 10. What is the current maturity of this idea?
-
-*Type: Choice (Single Selection)*
-
-* **Ideation:** Just an idea, no technical specs yet.
-* **Documented:** We have the logic/procedure written down.
-* **POC / Prototype:** We have a script or code that works locally.
-* **In Production:** The logic exists in legacy, we want to migrate to AI.
-
----
-
-## 🟠 SECTION 6: Execution & Planning (Resources)
-
-*Goal: Assess feasibility, budget, and timeline (Questions 12 & 13).*
-
-### 11. What is your desired Go-Live Date?
-
-*Type: Date*
-*Subtitle: When do you need this Agent to be production-ready?*
-
-### 12. Justification for this Date
-
-*Type: Text (Long Answer)*
-*Subtitle: Why is this date critical? (e.g., Regulatory deadline, Major Release, Budget Cycle end).*
-
-### 13. Available Resources & Budget (FTE/Budget)
-
-*Type: Text (Long Answer)*
-*Subtitle: What resources can YOU contribute? (e.g., "1 FTE Developer for 2 months", "SME available 2 days/week for validation", "Specific budget allocated for storage").*
-*Note: The Digital Twin team provides the platform, but business logic requires Subject Matter Expert availability.*
-
----
-
-## 💡 Logic Guide for the Program Team (Do not include in Forms)
-
-*Use this key to triage responses into Jira:*
-
-1. **If Q7 contains "[FRANCHISE]":**
-* **Action:** Flag as **High Complexity** & **Cost Impact**. Requires Architecture Review.
-* **Risk:** Storage cost & Compliance (PII).
-
-
-2. **If Q13 is "None" or "Unknown":**
-* **Action:** **RISK**. If the requester cannot provide an SME to validate the AI's output, the project will fail (Hallucination risk).
-
-
-3. **If Q11 (Go-Live) is < 1 month AND Q10 (Maturity) is "Ideation":**
-* **Action:** **REJECT** or reset expectations. Unrealistic timeline.
-
-
-4. **If Q6 is "The Mapper" AND Q5 includes "Excel/Shadow IT":**
-* **Action:** Assign to **Graflo STM Team**. Needs data modeling in TigerGraph.
-
-
-5. **If Q6 is "The Librarian" AND Q4 is "Manual & Documented":**
-* **Action:** Assign to **RAG Team**. Low complexity (Ingestion of PDF/Wiki).
+Vinh
