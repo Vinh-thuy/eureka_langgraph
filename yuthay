@@ -1,49 +1,16 @@
-C'est une excellente question et tu peux rassurer ta collègue immédiatement : **non seulement c'est "OK", mais c'est même l'architecture recommandée (State-of-the-Art) pour construire des systèmes robustes.**
+Objet : Pilotage Factory : On passe sur Jira (Exemple inside)
 
-Voici les éléments de langage précis et techniques que tu peux lui transmettre, basés sur l'analyse de la vidéo et les bonnes pratiques actuelles (LangGraph/MCP).
+Salut Dhia, Salut Julien,
 
----
+Pour structurer le pilotage de la Factory et éviter de s'éparpiller, je souhaite qu'on centralise tout le suivi de production dans Jira.
 
-### 📨 La Réponse pour ta collègue
+L'idée est d'avoir un standard propre pour nos développements. J'ai d'ailleurs créé un premier ticket de type Technical Story qui servira de modèle, avec le template Markdown qu'on va utiliser.
 
-"J'ai analysé ton architecture cible : utiliser MCP comme **protocole interne** (backend) pour connecter tes outils/sous-agents, tout en gardant un **Agent Orchestrateur** (frontend) pour l'exposition aux autres."
+Jetez-y un œil pour voir le format :
+👉 [INSÉRER LE LIEN DE TON TICKET ICI]
 
-**✅ Verdict : C'est l'architecture idéale.**
+On se cale rapidement pour valider ce mode de fonctionnement ?
 
-Voici pourquoi, en 3 arguments clés :
+À plus,
 
-#### 1. Découplage et Standardisation (L'argument "USB-C")
-
-En utilisant MCP en interne, tu rends ton architecture **modulaire**.
-
-* **Sans MCP :** Ton Agent principal doit avoir du code spécifique pour chaque API ou outil (un script pour la BDD, un script pour le CRM, etc.). C'est lourd à maintenir.
-* **Avec MCP :** Ton Agent principal ne voit que des "interfaces standards". Si demain tu changes ta base de données ou ton outil interne, tu changes juste le serveur MCP. L'Agent principal, lui, ne change pas d'une ligne. C'est le principe du **"Plug & Play"**.
-
-#### 2. Gestion de la "Charge Cognitive" (Context Window)
-
-C'est le point crucial soulevé par *Jeremiah Lowin* (Prefect) :
-
-* Si tu codes tout en dur dans un seul gros Agent, tu satures sa fenêtre de contexte.
-* Avec MCP en interne, ton Agent principal peut se connecter/déconnecter dynamiquement de certains serveurs MCP selon le besoin. Il charge les outils "à la demande". Cela réduit les coûts de tokens et rend l'agent plus performant.
-
-#### 3. Sécurité et Contrôle (Le pattern "Gateway")
-
-Exposer directement des serveurs MCP à tout le monde peut être risqué.
-
-* Ton approche d'avoir un **Agent "Gardien" (Master Agent)** qui est le seul point d'entrée visible est excellente.
-* Cet agent joue le rôle d'API Gateway : il vérifie l'intention de l'utilisateur, valide la sécurité, et c'est lui seul qui a le droit d'appeler les serveurs MCP internes (bases de données, actions, etc.).
-
----
-
-### ⚠️ Le point de vigilance (La "Golden Rule")
-
-Pour que cela fonctionne bien, il y a une condition (tirée de la vidéo) :
-
-**Ne recrée pas des API REST en MCP.**
-Tes serveurs MCP internes ne doivent pas exposer des fonctions de bas niveau (ex: `get_row_by_id`, `update_field`).
-Ils doivent exposer des **Compétences Métier (High-Level Outcomes)**.
-
-* ❌ **Mauvais MCP interne :** `run_sql_query(query)` (Trop risqué, l'agent principal peut se tromper).
-* ✅ **Bon MCP interne :** `analyze_customer_churn(user_id)` (Une fonction intelligente qui encapsule la complexité).
-
-**En résumé :** Fonce. C'est exactement comme cela qu'on construit une "Service-Oriented Architecture" (SOA) pour l'IA.
+Vinh
