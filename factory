@@ -1,0 +1,60 @@
+# 🆔 1. CATÉGORIE DU DÉVELOPPEMENT
+* **Nom Technique :** [ex: Connector_Elastic_Logs / Tool_ServiceNow_GetIncident]
+* **Nature du Livrable (Cocher la case principale) :**
+
+> **🔌 A. DATA & CONNECTIVITY** (Récupérer/Envoyer de la donnée)
+> - [ ] **Source Connector** (Ingestion de données depuis un outil tiers)
+> - [ ] **Data Pipeline / ETL** (Transformation, Normalisation)
+> - [ ] **Autre (Data) :** [Préciser]
+
+> **🛠️ B. TOOLS & ACTIONS** (Capacité d'action ou d'interrogation)
+> - [ ] **System Action / Script** (ex: Restart Service, API Call)
+> - [ ] **Query Tool** (ex: Outil de recherche spécifique, SQL Wrapper)
+> - [ ] **Autre (Tool) :** [Préciser]
+
+> **🧠 C. INTELLIGENCE & LOGIC** (Logique métier et raisonnement)
+> - [ ] **Agent Logic** (Comportement complexe, prise de décision)
+> - [ ] **Router / Supervisor** (Aiguillage entre plusieurs outils)
+> - [ ] **Autre (AI) :** [Préciser]
+
+> **📚 D. KNOWLEDGE & RESOURCES** (Stockage du savoir)
+> - [ ] **Knowledge Base** (Indexation documentaire, Vector Store)
+> - [ ] **Knowledge Graph Model** (Ontologie, Schéma de données)
+> - [ ] **Autre (Knowledge) :** [Préciser]
+
+> **🏗️ E. INFRASTRUCTURE & CORE** (Le socle technique)
+> - [ ] **Hosting / Runtime** (Configuration serveur, Docker, K8s)
+> - [ ] **CI/CD & DevEx** (Pipelines, Tests, Outillage interne)
+> - [ ] **Autre (Infra) :** [Préciser]
+
+---
+
+# 📝 2. CONTEXTE & OBJECTIF
+* **Problème à résoudre :**
+  > [Pourquoi on fait ça ? ex: "Impossible de requêter Elastic sans connaître la syntaxe exacte"]
+* **Objectif Technique :**
+  > [Ce que le code va faire. ex: "Créer un wrapper Python qui expose une recherche simplifiée"]
+* **Use Case lié (si applicable) :** [Lien vers ticket EPIC]
+
+---
+
+# ⚙️ 3. SPÉCIFICATIONS D'INTERFACE (Contrat)
+*Comment ce composant sera-t-il utilisé par les autres ?*
+
+* **Entrées (Input) :**
+  > [Ce que le composant attend : Paramètres, Fichiers, JSON...]
+* **Sorties (Output) :**
+  > [Ce que le composant renvoie : Données, Statut, Logs...]
+* **Dépendances Techniques :**
+  > [ex: Bibliothèque Python spécifique, Accès Réseau, Token API]
+
+---
+
+# 🧪 4. ÉTAT & LIVRABLE
+* **Maturité visée :**
+  - [ ] **PoC / Expérimentation** (Exploratoire)
+  - [ ] **MVP** (Fonctionnel mais périmètre réduit)
+  - [ ] **Production Ready** (Robuste et documenté)
+
+* **Localisation du Code :** [Lien Repository Git]
+* **Documentation associée :** [Lien Wiki/Readme]
