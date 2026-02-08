@@ -1,112 +1,126 @@
-Bonjour Vinh. C'est un excellent point de départ. La structure en 3 pôles (Ops / Factory / Guardians) est cohérente avec une industrialisation à l'échelle.
-
-Cependant, tu as raison : la définition actuelle du **Knowledge Ops** est trop "passive" et le terme "log"  est un *red flag* qui risque de créer de la confusion avec une équipe d'exploitation classique (NOC/SOC). Il faut que ce rôle respire l'architecture et la modélisation, pas le nettoyage de données.
-
-Voici mon analyse et ma proposition de réécriture pour aligner ce mail sur notre vision **System & Guardrails**.
-
-### 1. Analyse & Correction du Pôle Knowledge Ops
-
-**Le Problème Actuel :**
-La phrase "cartographier en profondeur les attributs et logs"  suggère un travail manuel et une ingestion de données brutes. Or, nous voulons définir des **modèles** (Graflo STM) et des **signaux** (Golden Events).
-
-**La Correction Stratégique (Target Vision) :**
-
-* **Discovery comme Levier :** On ne "collecte" pas, on **ingère la topologie** par couche (Network, Compute, Middleware, App).
-* **Events ≠ Logs :** L'analyste ne regarde pas les logs bruts. Il définit la **signature** de l'événement (le Golden Event) qui compte pour une technologie donnée. C'est du *Monitoring as Code*.
-
-**Proposition de reformulation pour ce bloc :**
-
-> **Knowledge Graph & Event Analysts**
-> *Rôle : Architectes de la Donnée et des Signaux.*
-> * **Mode Transverse (Industrialisation Layer-by-Layer) :** Intervention méthodique par couche technologique (ex: Network, puis Compute, puis DB).
-> * **Mission Topology :** Mapper les attributs de **Discovery** vers le modèle de graphe (Graflo STM) pour garantir une représentation fidèle de l'infrastructure.
-> * **Mission Event (Monitoring as Code) :** Définir, pour chaque techno, les **Golden Events** (signaux vitaux) à capturer. Il ne s'agit pas de gérer des logs, mais de spécifier *quels* événements (Health, Change, Anomaly) doivent nourrir le Twin pour permettre le raisonnement des agents.
-> 
-> 
-> * **Mode Tactique (Fast Track) :** Débrayage ciblé pour enrichir le Graphe sur des attributs manquants bloquant des Use Cases urgents (en lien avec le pilotage Data Science).
-> 
-> 
+# 🆔 1. USE CASE IDENTITY
+* **1. UC ID :** TWIN-UC-0001 (Ref PPT: #1/12)
+* **2. Entity :** CPBS
+* **3. Name :** AI Agent for Incident Diagnosis & MTTR Reduction
+* **8. CTO Name :** [Nom du Sponsor]
 
 ---
 
-### 2. Revue des autres pôles (Cohérence & Robustesse)
-
-J'ai passé en revue les autres sections pour m'assurer qu'elles respectent nos principes. C'est globalement très bon, avec deux ajustements recommandés :
-
-A. Pole Agentic Factory 
-
-* *Observation :* La distinction "Tools" vs "Agents" est excellente.
-* 
-*Ajustement :* Pour les "Tools Developers", précise que les connecteurs doivent respecter des **Data Contracts** stricts. Un outil robuste ne doit pas casser si la source change.
-
-
-* 
-Pour les Agent Developers: Ajoute la notion de "Composants réutilisables" (LangGraph Nodes). Ils ne font pas juste des agents, ils créent des briques logiques (ex: une brique "Check IP Reputation" utilisable par tous les agents).
-
-
-
-B. Pole Twin Guardians 
-
-* 
-*Observation :* Le "Morning Check"  est vital. L'utilisation de LangSmith  est parfaite.
-
-
-* *Ajustement :* Sur la "Feedback Loop", ajoute la notion de **Non-Regression**. Quand ils détectent une erreur, ils doivent s'assurer que le correctif ne casse pas ce qui marchait avant (ajout de cas de test dans le dataset d'évaluation).
+# 🎯 2. BUSINESS DEFINITION
+* **4. Description (User Intent) :**
+  > "I want to analyze, diagnose and resolve incidents faster via automated correlation and guided remediation."
+* **10. Target Users :** SRE, Ops, Support N2/N3
+* **11. Business Value / ROI :**
+  - [x] Réduction MTTR (Target: 30-50%)
+  - [x] Réduction Alert Fatigue
+  - [x] Amélioration Data Quality
+* **7. Comment / Justification :**
+  > "High Stakes. Use case #1 in every entity. Requires strict orchestration & knowledge curation."
 
 ---
 
-### 3. Proposition de Mail Consolidée (Prêt à l'envoi)
-
-Voici la version révisée du corps du mail, intégrant tes corrections sur le Knowledge Ops et mes ajustements subtils sur le reste pour "professionnaliser" le vocabulaire Twin.
-
----
-
-**Objet :** Organisation cible Factory Twin (Inde) - Structure et Gouvernance
-
-[...]
-
-**1. POLE KNOWLEDGE OPS (4 ETP)**
-**Mission :** Garantir la richesse sémantique du Knowledge Graph (KG) et la fiabilité des Knowledge Bases (KB).
-
-* **Knowledge Graph & Event Analysts**
-* Leur rôle est d'alimenter le modèle de données (Graflo STM) selon 2 modes d'intervention :
-* **Mode Transverse (Industrialisation Layer-by-Layer) :** Approche systématique par couche technologique. Ils exploitent les données de **Discovery** pour modéliser la topologie (Noeuds/Relations) et définissent les **Golden Events** (les signaux critiques, et non les logs bruts) nécessaires au pilotage de chaque technologie. C'est du *Monitoring as Code*.
-* **Mode Tactique (Unblocking) :** Intervention "commando" pour collecter rapidement des attributs manquants bloquant des Use Cases urgents (pilotage Stefano).
-
-
-* **Knowledge Bases Curators**
-* Pilotage de la "Quality Gate" humaine dans notre pipeline documentaire.
-* **Validation du Mapping :** Vérification que chaque document (KB) est correctement ancré au bon objet technique du Graphe (Scope/Jurisdiction).
-* **Audit des jeux de tests (Offline Evaluation) :** Ils valident la robustesse des tests fournis par les Twin Franchise pour monitorer la dérive des réponses (Hallucination/Précision).
-
-
-
-**2. POLE AGENTIC FACTORY (4 ETP)**
-**Mission :** Construire les capacités d'action (Tools) et l'intelligence (Agents) sous le pilotage architectural de Dhia.
-
-* **Tools Developers (Backend/Python)**
-* *Focus :* Robustesse et Sécurité. Ils développent les Connecteurs et les Tools en respectant des **Data Contracts** stricts.
-* *Profil :* Senior Tech Lead requis pour garantir la qualité du code d'infrastructure.
-
-
-* **Agent Developers (LangGraph Logic)**
-* *Focus :* Logique et Orchestration. Profils hybrides Data/Dev qui assemblent des briques techniques pour produire des Agents Transverses ou des compétences prêtes à l'emploi.
-
-
-
-**3. POLE TWIN GUARDIANS (2 ETP)**
-**Mission :** Surveillance proactive, Protection de la Prod et Amélioration Continue.
-
-* **Morning Check (Timezone Arbitrage) :** Analyse quotidienne (avant 8h30 Paris) de la fraîcheur des données (Pipeline Airflow/Graflo) et de la santé des Agents.
-* **Feedback Loop & Continuous Improvement :** Analyse des logs d'interactions (via LangSmith) pour détecter les mauvaises réponses ou erreurs de routage. Création de tickets d'incident mais surtout enrichissement des **datasets d'évaluation** pour la non-régression.
-* **Support Niveau 2 :** Analyse technique approfondie des incidents escaladés par Paris.
-
-[...]
+# 🧠 3. REASONING & CONSTRAINTS
+* **5. Reasoning Archetype :** Analyzes & Plans (Diagnosis -> Proposal -> Action)
+* **6. Reasoning Category :** Incident Management / Remediation
+* **12. Local Constraints & Guardrails :**
+  > **Semi-Autonomous Mode:**
+  > * Actions limited to validated Runbooks.
+  > * **Human Validation** required for critical assets.
+  > * Mandatory Traceability/Rollback.
 
 ---
 
-### Next Best Action
+# 🤖 4. AGENT SPECIFICATION (Squad Enrichie)
+*D'après l'analyse des tâches (PPT Section 4) :*
+* **13. Target Category :**
+  - [x] **Investigator** (Correlate logs, metrics, alerts, RCA)
+  - [x] **Runner** (Propose step-by-step plan, Trigger scripts)
+  - [x] **Reporter** (Generate Incident Wiki, Post-Mortems/PIRs, Notifications)
+  - [ ] Mapper
+  - [x] **Librarian** (Search in Runbooks & PIRs)
+* **15. Maturity Level :** Level 4 (Orchestrated with Human-in-the-loop)
 
-Vinh, cette version clarifie nettement la distinction **Log vs Event** et insiste sur l'utilisation proactive de **Discovery**.
+---
 
-Est-ce que cette formulation "Layer-by-Layer" pour le mode transverse te convient ? Si oui, tu peux envoyer. Sinon, on affine encore le bullet point "Knowledge Graph".
+# 🏗️ 5. KNOWLEDGE & DATA INFRASTRUCTURE
+
+* **16. KB – IT Doc Capture (La Mémoire Long Terme) :**
+  > *Sources critiques identifiées dans le PPT :*
+  - [ ] **PIRs (Post Incident Reviews)** : Pour apprendre des résolutions passées.
+  - [ ] **Runbooks** : Procédures de remédiation officielles.
+  - [ ] **Solvium/Teams History** : Historique des conversations de crise.
+
+* **17. KG – IT Data Capture (Le Contexte Topologique) :**
+  > *Sources identifiées :*
+  - [ ] **ServiceNow CMDB** : Dépendances applicatives.
+  - [ ] **Sysdig / IBM Logs** : Traces spécifiques (Container/Mainframe).
+
+* **18. KG – IT Event Capture (Les Signaux Temps Réel) :**
+  > *Sources identifiées :*
+  - [ ] **Dynatrace Metrics** (CPU, RAM, I/O, Network).
+  - [ ] **Alert Streams** (Flux d'alertes corrélés).
+
+---
+
+# ⚙️ 6. TWIN CORE GOVERNANCE
+* **19. Twin Core SPOC :** [À assigner]
+* **20. Complexity Estimate :** XL (Implique 3 Agents + RAG complexe sur PIRs)
+
+
+
+
+# 🆔 1. USE CASE IDENTITY (General)
+* **1. UC ID :** TWIN-UC-0001
+* **2. Entity :** CPBS
+* **3. Name :** Incident Diagnosis & MTTR
+* **8. CTO Name :** [À compléter]
+* **9. Entity SPOC :** [À compléter]
+
+---
+
+# 🎯 2. BUSINESS DEFINITION
+* **4. Description (User Intent) :**
+  > "I want to reduce MTTR by automating the correlation and diagnosis of production incidents."
+* **10. Target Users :** Ops, L2 Support, Incident Managers
+* **11. Business Value / ROI :**
+  > -30% MTTR, reduced on-call fatigue.
+* **7. Comment / Justification :**
+  > Premature. RCA requires perfect correlation between Topology and Golden Events. Risk of hallucination is high without synthesized logs.
+
+---
+
+# 🧠 3. REASONING & CONSTRAINTS
+* **5. Reasoning Archetype :** Analyzes symptoms to find the root cause (RCA).
+* **6. Reasoning Category :** Crisis management and real-time incidents.
+* **12. Local Constraints :**
+  > High risk of hallucination without synthesized logs.
+
+---
+
+# 🤖 4. AGENT SPECIFICATION
+* **13. Target Category (Twin Archétype) :**
+  - [x] **Investigator** (Diagnostic)
+  - [ ] Guardian
+  - [ ] Reporter
+  - [ ] Runner
+  - [ ] Mapper
+  - [ ] Librarian
+* **15. Maturity Level :** Lvl 4
+
+---
+
+# 🏗️ 5. KNOWLEDGE & DATA INFRASTRUCTURE
+* **16. KB – IT Doc Capture (Documents) :**
+  > *Tickets Incidents Passés (ServiceNow History), Runbooks de remédiation.*
+
+* **17. KG – IT Data Capture (Structured Data) :**
+  > *ServiceNow CMDB (Topology), Dynatrace (Topology & Metrics).*
+
+* **18. KG – IT Event Capture (Signals) :**
+  > ⚠️ *Golden Events (Alertes synthétisées Dynatrace).*
+
+---
+
+# ⚙️ 6. TWIN CORE GOVERNANCE
+* **19. Twin Core SPOC :** [À assigner]
+* **20. Complexity Estimate :** High / XL
