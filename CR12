@@ -1,126 +1,180 @@
-# 🆔 1. USE CASE IDENTITY
-* **1. UC ID :** TWIN-UC-0001 (Ref PPT: #1/12)
-* **2. Entity :** CPBS
-* **3. Name :** AI Agent for Incident Diagnosis & MTTR Reduction
-* **8. CTO Name :** [Nom du Sponsor]
+SLIDE 1 : Titre
 
----
+🏛️ L'Organisation d'une Franchise Twin
 
-# 🎯 2. BUSINESS DEFINITION
-* **4. Description (User Intent) :**
-  > "I want to analyze, diagnose and resolve incidents faster via automated correlation and guided remediation."
-* **10. Target Users :** SRE, Ops, Support N2/N3
-* **11. Business Value / ROI :**
-  - [x] Réduction MTTR (Target: 30-50%)
-  - [x] Réduction Alert Fatigue
-  - [x] Amélioration Data Quality
-* **7. Comment / Justification :**
-  > "High Stakes. Use case #1 in every entity. Requires strict orchestration & knowledge curation."
+Transformer une expertise métier en Agents IA
 
----
+(Modèle Opérationnel Cible)
 
-# 🧠 3. REASONING & CONSTRAINTS
-* **5. Reasoning Archetype :** Analyzes & Plans (Diagnosis -> Proposal -> Action)
-* **6. Reasoning Category :** Incident Management / Remediation
-* **12. Local Constraints & Guardrails :**
-  > **Semi-Autonomous Mode:**
-  > * Actions limited to validated Runbooks.
-  > * **Human Validation** required for critical assets.
-  > * Mandatory Traceability/Rollback.
+La Philosophie :
+Une Franchise Twin opère comme une Entité Produit Autonome.
+Elle mobilise les expertises clés pour industrialiser des solutions IA à l'échelle, en alliant agilité d'exécution et robustesse bancaire.
 
----
+Objectif de ce deck : Définir les rôles, les responsabilités et la scalabilité de l'équipe.
 
-# 🤖 4. AGENT SPECIFICATION (Squad Enrichie)
-*D'après l'analyse des tâches (PPT Section 4) :*
-* **13. Target Category :**
-  - [x] **Investigator** (Correlate logs, metrics, alerts, RCA)
-  - [x] **Runner** (Propose step-by-step plan, Trigger scripts)
-  - [x] **Reporter** (Generate Incident Wiki, Post-Mortems/PIRs, Notifications)
-  - [ ] Mapper
-  - [x] **Librarian** (Search in Runbooks & PIRs)
-* **15. Maturity Level :** Level 4 (Orchestrated with Human-in-the-loop)
+SLIDE 2 : Pilier 1 - Le Pilotage (La Vision)
 
----
+👤 1. Le Franchise Leader (Twin Product Leader)
 
-# 🏗️ 5. KNOWLEDGE & DATA INFRASTRUCTURE
+"Le CEO de la Franchise"
 
-* **16. KB – IT Doc Capture (La Mémoire Long Terme) :**
-  > *Sources critiques identifiées dans le PPT :*
-  - [ ] **PIRs (Post Incident Reviews)** : Pour apprendre des résolutions passées.
-  - [ ] **Runbooks** : Procédures de remédiation officielles.
-  - [ ] **Solvium/Teams History** : Historique des conversations de crise.
+Son Mandat :
+Il porte la vision business. Il ne gère pas un planning IT, il gère un Produit. Il est l'interface unique avec Twin Core.
 
-* **17. KG – IT Data Capture (Le Contexte Topologique) :**
-  > *Sources identifiées :*
-  - [ ] **ServiceNow CMDB** : Dépendances applicatives.
-  - [ ] **Sysdig / IBM Logs** : Traces spécifiques (Container/Mainframe).
+Ses Responsabilités Clés :
 
-* **18. KG – IT Event Capture (Les Signaux Temps Réel) :**
-  > *Sources identifiées :*
-  - [ ] **Dynatrace Metrics** (CPU, RAM, I/O, Network).
-  - [ ] **Alert Streams** (Flux d'alertes corrélés).
+🎯 Roadmap & ROI : Arbitre les Use Cases selon la valeur métier.
 
----
+🚀 Adoption : Responsable de l'utilisation réelle des agents par les équipes terrain.
 
-# ⚙️ 6. TWIN CORE GOVERNANCE
-* **19. Twin Core SPOC :** [À assigner]
-* **20. Complexity Estimate :** XL (Implique 3 Agents + RAG complexe sur PIRs)
+🤝 Interface Core : Négocie les ressources et l'accès aux technologies centrales.
 
+➡️ Punchline : C'est le propriétaire du résultat, pas un chef de projet.
 
+SLIDE 3 : Pilier 2 - Le Savoir (Le Cerveau)
 
+L'IA n'est intelligente que si la donnée est juste.
 
-# 🆔 1. USE CASE IDENTITY (General)
-* **1. UC ID :** TWIN-UC-0001
-* **2. Entity :** CPBS
-* **3. Name :** Incident Diagnosis & MTTR
-* **8. CTO Name :** [À compléter]
-* **9. Entity SPOC :** [À compléter]
+🧠 2. Chief Knowledge Officer (CKO)
 
----
+"L'Architecte du Savoir" (Rôle Central)
 
-# 🎯 2. BUSINESS DEFINITION
-* **4. Description (User Intent) :**
-  > "I want to reduce MTTR by automating the correlation and diagnosis of production incidents."
-* **10. Target Users :** Ops, L2 Support, Incident Managers
-* **11. Business Value / ROI :**
-  > -30% MTTR, reduced on-call fatigue.
-* **7. Comment / Justification :**
-  > Premature. RCA requires perfect correlation between Topology and Golden Events. Risk of hallucination is high without synthesized logs.
+Mission : Définit l'Ontologie (le dictionnaire métier) et valide la logique de raisonnement des agents.
 
----
+➡️ Garantit que l'agent raisonne comme un expert senior.
 
-# 🧠 3. REASONING & CONSTRAINTS
-* **5. Reasoning Archetype :** Analyzes symptoms to find the root cause (RCA).
-* **6. Reasoning Category :** Crisis management and real-time incidents.
-* **12. Local Constraints :**
-  > High risk of hallucination without synthesized logs.
+🎓 6. Domain Experts (Infra, Ops, Change...)
 
----
+"La Vérité Terrain"
 
-# 🤖 4. AGENT SPECIFICATION
-* **13. Target Category (Twin Archétype) :**
-  - [x] **Investigator** (Diagnostic)
-  - [ ] Guardian
-  - [ ] Reporter
-  - [ ] Runner
-  - [ ] Mapper
-  - [ ] Librarian
-* **15. Maturity Level :** Lvl 4
+Mission : Fournissent la matière première (Docs, Procédures) et les Golden Datasets (Tests). Valident les résultats.
 
----
+➡️ Garantissent l'ancrage dans le réel. Vérifient si l'agent a RAISON.
 
-# 🏗️ 5. KNOWLEDGE & DATA INFRASTRUCTURE
-* **16. KB – IT Doc Capture (Documents) :**
-  > *Tickets Incidents Passés (ServiceNow History), Runbooks de remédiation.*
+📚 5. Knowledge Engineer (Graph & Vector)
 
-* **17. KG – IT Data Capture (Structured Data) :**
-  > *ServiceNow CMDB (Topology), Dynatrace (Topology & Metrics).*
+"L'Ingénieur de la Donnée"
 
-* **18. KG – IT Event Capture (Signals) :**
-  > ⚠️ *Golden Events (Alertes synthétisées Dynatrace).*
+Mission : Transforme la documentation et la donnée brute en actifs numériques exploitables (Data Mapping & Ingestion).
 
----
+➡️ Sans lui, vous avez des prompts, pas un Digital Twin.
 
-# ⚙️ 6. TWIN CORE GOVERNANCE
-* **19. Twin Core SPOC :** [À assigner]
-* **20. Complexity Estimate :** High / XL
+SLIDE 4 : Pilier 3 - La Construction (Le Moteur)
+
+Ceux qui assemblent les briques techniques.
+
+🛠️ 3. AI Engineer de la Franchise
+
+"Le Constructeur" (IA Appliquée)
+
+Profil : Ingénieur Logiciel / Dev Python.
+
+Responsabilités :
+
+Implémente les Workflows Agentiques (LangGraph).
+
+Code les Tools (API, Scripts d'action).
+
+Optimise la performance technique (Latence, Précision).
+
+➡️ Il ne fait pas de "recherche", il livre des agents utiles en production.
+
+🌉 4. AI Engineer Détaché (Modèle Hybride)
+
+"Le Pont Technique" (Optionnel / Support)
+
+Profil : Expert du Core "prêté" à la franchise.
+
+Responsabilités :
+
+Débloque les verrous techniques complexes (Multi-agents).
+
+Assure l'alignement architectural avec le Core.
+
+➡️ C'est un accélérateur d'excellence, pas une dépendance.
+
+SLIDE 5 : Pilier 4 - La Confiance (Le Garde-Fou)
+
+Ceux qui empêchent l'accident industriel.
+
+🛡️ 7. AI Trust & Reliability Owner
+
+"Le SRE de l'IA & Gardien ITAM"
+
+Son Mandat :
+Il s'assure que l'agent n'est ni dangereux, ni hors-la-loi.
+
+Ses Responsabilités Clés :
+
+🛑 Guardrails : Définit les barrières de sécurité (Anti-hallucination, Toxicité).
+
+🔍 Observabilité : Surveille les dérives (Drift) en production.
+
+📋 Conformité ITAM : S'assure que l'agent n'interagit qu'avec des actifs référencés et valides (Golden Source).
+
+➡️ Punchline : Il vérifie si l'agent est DANGEREUX ou NON CONFORME.
+
+SLIDE 6 : La Géométrie Variable (Sizing)
+
+Une structure adaptable selon la maturité de la franchise.
+
+🌱 Phase 1 : Le "Starter Mode" (Commando)
+
+Pour lancer un premier Use Case.
+
+1 Franchise Leader (Temps partiel, porte aussi la casquette CKO).
+
+1 AI Engineer (Temps plein, fait le Dev + le Data Mapping).
+
+Experts Terrain (Sollicités ponctuellement pour validation).
+
+Support Trust & Core : Fourni "As a Service" par l'équipe centrale.
+
+🌳 Phase 2 : Le "Full Scale" (Industrialisation)
+
+Pour une franchise critique (ex: Twin Infra, Twin Sec).
+
+1 Leader dédié.
+
+1 CKO dédié (Complexité métier élevée).
+
+2-3 AI Engineers (Squad de dev).
+
+1 Knowledge Engineer (Volume de données important).
+
+1 Trust Owner dédié (Risque opérationnel élevé).
+
+SLIDE 7 : Synthèse Visuelle
+
+PÔLE
+
+RÔLES
+
+LIVRABLES CLÉS
+
+VISION
+
+Franchise Leader
+
+Roadmap, ROI, Adoption.
+
+SAVOIR
+
+CKO + Experts + Knowledge Eng.
+
+Ontologie, Golden Datasets, Graphe mappé.
+
+TECH
+
+AI Engineer (+ Détaché)
+
+Code LangGraph, Tools (API), Tests.
+
+TRUST
+
+Trust Owner
+
+Guardrails, Audit Logs, Conformité ITAM.
+
+Le Mantra :
+"Le Leader donne la direction, le CKO donne la carte, l'Ingénieur construit la voiture, et le Trust Owner vérifie les freins."
