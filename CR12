@@ -1,180 +1,159 @@
-SLIDE 1 : Titre
+L'Équipe Franchise : Les 7 Rôles Clés
 
-🏛️ L'Organisation d'une Franchise Twin
+(Modèle opérationnel cible)
 
-Transformer une expertise métier en Agents IA
+1. Franchise Leader (Twin Product Leader)
 
-(Modèle Opérationnel Cible)
+Le "CEO" de la Franchise
 
-La Philosophie :
-Une Franchise Twin opère comme une Entité Produit Autonome.
-Elle mobilise les expertises clés pour industrialiser des solutions IA à l'échelle, en alliant agilité d'exécution et robustesse bancaire.
+Rôle :
 
-Objectif de ce deck : Définir les rôles, les responsabilités et la scalabilité de l'équipe.
+Responsable produit et business de la franchise.
 
-SLIDE 2 : Pilier 1 - Le Pilotage (La Vision)
+Porte la vision du domaine (infra, incident, change, logs…).
 
-👤 1. Le Franchise Leader (Twin Product Leader)
+Arbitre les priorités des use cases.
 
-"Le CEO de la Franchise"
-
-Son Mandat :
-Il porte la vision business. Il ne gère pas un planning IT, il gère un Produit. Il est l'interface unique avec Twin Core.
-
-Ses Responsabilités Clés :
-
-🎯 Roadmap & ROI : Arbitre les Use Cases selon la valeur métier.
-
-🚀 Adoption : Responsable de l'utilisation réelle des agents par les équipes terrain.
-
-🤝 Interface Core : Négocie les ressources et l'accès aux technologies centrales.
-
-➡️ Punchline : C'est le propriétaire du résultat, pas un chef de projet.
-
-SLIDE 3 : Pilier 2 - Le Savoir (Le Cerveau)
-
-L'IA n'est intelligente que si la donnée est juste.
-
-🧠 2. Chief Knowledge Officer (CKO)
-
-"L'Architecte du Savoir" (Rôle Central)
-
-Mission : Définit l'Ontologie (le dictionnaire métier) et valide la logique de raisonnement des agents.
-
-➡️ Garantit que l'agent raisonne comme un expert senior.
-
-🎓 6. Domain Experts (Infra, Ops, Change...)
-
-"La Vérité Terrain"
-
-Mission : Fournissent la matière première (Docs, Procédures) et les Golden Datasets (Tests). Valident les résultats.
-
-➡️ Garantissent l'ancrage dans le réel. Vérifient si l'agent a RAISON.
-
-📚 5. Knowledge Engineer (Graph & Vector)
-
-"L'Ingénieur de la Donnée"
-
-Mission : Transforme la documentation et la donnée brute en actifs numériques exploitables (Data Mapping & Ingestion).
-
-➡️ Sans lui, vous avez des prompts, pas un Digital Twin.
-
-SLIDE 4 : Pilier 3 - La Construction (Le Moteur)
-
-Ceux qui assemblent les briques techniques.
-
-🛠️ 3. AI Engineer de la Franchise
-
-"Le Constructeur" (IA Appliquée)
-
-Profil : Ingénieur Logiciel / Dev Python.
+Rend des comptes sur la valeur produite.
 
 Responsabilités :
 
-Implémente les Workflows Agentiques (LangGraph).
+Roadmap : Définit la stratégie des agents IA.
 
-Code les Tools (API, Scripts d'action).
+ROI Métier : Garantit la rentabilité et l'impact.
 
-Optimise la performance technique (Latence, Précision).
+Adoption : S'assure que les utilisateurs finaux utilisent réellement les agents.
 
-➡️ Il ne fait pas de "recherche", il livre des agents utiles en production.
+Interface : Point de contact unique avec Twin Core.
 
-🌉 4. AI Engineer Détaché (Modèle Hybride)
+➡️ C'est le propriétaire du résultat, pas un chef de projet.
 
-"Le Pont Technique" (Optionnel / Support)
+2. Chief Knowledge Officer (CKO)
 
-Profil : Expert du Core "prêté" à la franchise.
+L'Architecte du Savoir (Rôle central & non négociable)
+
+Rôle :
+
+Garant de la connaissance métier du domaine injectée dans le Twin.
+
+Définit les concepts, documents, données et relations causales.
+
+Fixe les règles de raisonnement métier et les limites de validité.
 
 Responsabilités :
 
-Débloque les verrous techniques complexes (Multi-agents).
+Qualité des bases de connaissances : Garant de la pertinence des bases de connaissances (Knowledge Bases).
 
-Assure l'alignement architectural avec le Core.
+Ontologie (Le "Dictionnaire" Métier) : Garant de la sémantique et du modèle dans le Knowledge Graph.
+
+Validation Logique : Valide la logique métier (Chain of Thought) des agents.
+
+➡️ Le CKO garantit que l'agent raisonne comme un expert humain senior du domaine.
+
+3. AI Engineer de la Franchise
+
+Le Constructeur (IA Appliquée)
+
+Rôle :
+
+Construisent et opèrent les agents IA experts.
+
+Implémentent les use cases concrets en workflow agentique.
+
+Optimisent la qualité technique des réponses.
+
+Responsabilités :
+
+Implémentation : Développement de la logique agentique (LangGraph) et des Tools selon le Framework Twin Core.
+
+Routing & Décision : Implémente la logique de choix (Scoring) et de priorisation des actions.
+
+Evals & Performance : Instrumente le code pour mesurer la précision, la confiance et la latence des agents.
+
+➡️ Ils ne font pas de "data science académique", ils livrent des agents utiles en production.
+
+4. AI Engineer Détaché (Modèle Hybride)
+
+Le Pont Technique
+
+Rôle :
+
+Experts fonctionnellement rattachés à la franchise mais techniquement a Twin Core.
+
+Travaillent sur le raisonnement multi-agents avancé et les cas limites complexes.
+
+Assurent la performance à grande échelle.
+
+Responsabilités :
+
+Débloque les verrous techniques majeurs.
+
+Assure l'alignement architectural avec le Twin Core.
+
+Facilite le transfert de compétences vers la franchise.
 
 ➡️ C'est un accélérateur d'excellence, pas une dépendance.
 
-SLIDE 5 : Pilier 4 - La Confiance (Le Garde-Fou)
+5. Knowledge Engineer (Graph & Vector)
 
-Ceux qui empêchent l'accident industriel.
+L'Ingénieur de la Donnée
 
-🛡️ 7. AI Trust & Reliability Owner
+Rôle :
 
-"Le SRE de l'IA & Gardien ITAM"
+Transformer la connaissance métier validée par le CKO en structures exploitables par les agents.
 
-Son Mandat :
-Il s'assure que l'agent n'est ni dangereux, ni hors-la-loi.
+Responsabilités :
 
-Ses Responsabilités Clés :
+Data Quality : Nettoyage, déduplication et alignement sémantique avant injection.
 
-🛑 Guardrails : Définit les barrières de sécurité (Anti-hallucination, Toxicité).
+Data Mapping : Connecte la Topologie et les Events vers le Core Model Graph.
 
-🔍 Observabilité : Surveille les dérives (Drift) en production.
+Pipeline Documentaire : Configure l'ingestion technique des documents du métier.
 
-📋 Conformité ITAM : S'assure que l'agent n'interagit qu'avec des actifs référencés et valides (Golden Source).
+Référentiel : Assure que les connaissances sont correctement cataloguées.
 
-➡️ Punchline : Il vérifie si l'agent est DANGEREUX ou NON CONFORME.
+➡️ Sans lui, tu as des prompts, pas un Digital Twin.
 
-SLIDE 6 : La Géométrie Variable (Sizing)
+6. Domain Experts (Infra, Ops, Change...)
 
-Une structure adaptable selon la maturité de la franchise.
+La Vérité Terrain
 
-🌱 Phase 1 : Le "Starter Mode" (Commando)
+Rôle :
 
-Pour lancer un premier Use Case.
+Apportent la connaissance terrain (le "Tacite").
 
-1 Franchise Leader (Temps partiel, porte aussi la casquette CKO).
+Valident les raisonnements des agents experts.
 
-1 AI Engineer (Temps plein, fait le Dev + le Data Mapping).
+Arbitrent les erreurs ou ambiguïtés des réponses agentiques.
 
-Experts Terrain (Sollicités ponctuellement pour validation).
+Responsabilités :
 
-Support Trust & Core : Fourni "As a Service" par l'équipe centrale.
+Golden Datasets : Fournissent la connaissance terrain (Docs, Procédures) ainsi que les couples "Question / Réponse idéale" pour l'évaluation.
 
-🌳 Phase 2 : Le "Full Scale" (Industrialisation)
+Human-in-the-loop : Confirment ou rejettent les réponses/actions des agents.
 
-Pour une franchise critique (ex: Twin Infra, Twin Sec).
+Feedback Production: Enrichissement continu et correction des erreurs en production.
 
-1 Leader dédié.
+➡️ Ils garantissent l'ancrage dans le réel. Ils vérifient si l'agent a RAISON.
 
-1 CKO dédié (Complexité métier élevée).
+7. AI Trust & Reliability Owner (+ Rôle ITAM)
 
-2-3 AI Engineers (Squad de dev).
+Le Gardien de la Conformité & SRE
 
-1 Knowledge Engineer (Volume de données important).
+Rôle :
 
-1 Trust Owner dédié (Risque opérationnel élevé).
+Garant de la fiabilité des agents IA.
 
-SLIDE 7 : Synthèse Visuelle
+Définit les garde-fous et surveille les dérives.
 
-PÔLE
+Porte le rôle de conformité ITAM (Asset Management).
 
-RÔLES
+Responsabilités :
 
-LIVRABLES CLÉS
+Auditabilité : S'assure que chaque décision est traçable et explicable.
 
-VISION
+Observabilité : Surveille les métriques de dérive (Drift).
 
-Franchise Leader
+Guardrails : S'assure de la conformité, de la sécurité et du respect du référentiel (ITAM).
 
-Roadmap, ROI, Adoption.
-
-SAVOIR
-
-CKO + Experts + Knowledge Eng.
-
-Ontologie, Golden Datasets, Graphe mappé.
-
-TECH
-
-AI Engineer (+ Détaché)
-
-Code LangGraph, Tools (API), Tests.
-
-TRUST
-
-Trust Owner
-
-Guardrails, Audit Logs, Conformité ITAM.
-
-Le Mantra :
-"Le Leader donne la direction, le CKO donne la carte, l'Ingénieur construit la voiture, et le Trust Owner vérifie les freins."
+➡️ Il vérifie si l'agent est DANGEREUX ou NON CONFORME.
