@@ -1,159 +1,78 @@
-L'Équipe Franchise : Les 7 Rôles Clés
+Compte Rendu de Réunion & Préparation des Workshops Techniques
 
-(Modèle opérationnel cible)
+Sujet : Synergies CIB x Twin Core (Exploration & Convergence)
+Date du Catch-up : [Date du jour]
+Interlocuteurs : Kaouther (CIB Stream Leader), Vinh (Twin Core Architect)
 
-1. Franchise Leader (Twin Product Leader)
+Objectif Global
 
-Le "CEO" de la Franchise
+Suite à l'échange constructif avec Kaouther, nous avons identifié des axes de travail communs autour de l'IA (Incidentologie), du Graph et de l'interopérabilité (MCP).
+L'objectif des sessions à venir est de partager nos avancements respectifs, comprendre les approches de chaque équipe et définir les opportunités de mutualisation et de convergence.
 
-Rôle :
+Date des Workshops : Mardi prochain (15h00 - 17h00 env.)
 
-Responsable produit et business de la franchise.
+Topic 1 : Graph Builder & Ontologies
 
-Porte la vision du domaine (infra, incident, change, logs…).
+Contexte : L'équipe CIB développe un "Graph Builder" capable de générer des graphes à la volée, contextuels et scopés au périmètre d'un incident pour alimenter les LLM. L'équipe Twin Core opère un Knowledge Graph persistant pour la Topologie IT et Events.
 
-Arbitre les priorités des use cases.
+Participants :
 
-Rend des comptes sur la valeur produite.
+Twin Core : Sacha, Julien, Dhia (en écoute/support).
 
-Responsabilités :
+CIB : Wassim Smiti, Aziz Anghour.
 
-Roadmap : Définit la stratégie des agents IA.
+Agenda de l'échange :
 
-ROI Métier : Garantit la rentabilité et l'impact.
+Approche CIB : Présentation de la logique du Graph Builder. Comment l'ontologie est-elle construite dynamiquement autour de l'incident ?
 
-Adoption : S'assure que les utilisateurs finaux utilisent réellement les agents.
+Approche Twin Core : Exposition de notre modèle de données actuel (Objets, Relations, Topologie), métriques du Knowledge Graph et logique d'ingestion (Pipeline Airflow & Framework Graflo).
 
-Interface : Point de contact unique avec Twin Core.
+Exploration :
 
-➡️ C'est le propriétaire du résultat, pas un chef de projet.
+Comparaison des objets métiers (Serveurs, Applications, Alertes).
 
-2. Chief Knowledge Officer (CKO)
+Identification des règles de gestion communes.
 
-L'Architecte du Savoir (Rôle central & non négociable)
+Discussion sur la complémentarité : Graph éphémère (Incident) vs Graph Persistant (Architecture).
 
-Rôle :
+Topic 2 : Gestion de la Mémoire & Contexte (Agentic Framework)
 
-Garant de la connaissance métier du domaine injectée dans le Twin.
+Contexte :
+Kaouther explore des pistes pour gérer la mémoire contextuelle des agents au-delà du cache immédiat (Redis).
+L'équipe Twin Core a implémenté un framework de gestion d'état (State Management) au sein de ses agents.
 
-Définit les concepts, documents, données et relations causales.
+Participants :
 
-Fixe les règles de raisonnement métier et les limites de validité.
+Twin Core : Dhia (Lead Data Scientist)
 
-Responsabilités :
+CIB : Kaouther & équipe.
 
-Qualité des bases de connaissances : Garant de la pertinence des bases de connaissances (Knowledge Bases).
+Agenda de l'échange :
 
-Ontologie (Le "Dictionnaire" Métier) : Garant de la sémantique et du modèle dans le Knowledge Graph.
+Vision CIB : Partage des réflexions actuelles sur la gestion du contexte et les limitations rencontrées (Redis, persistance).
 
-Validation Logique : Valide la logique métier (Chain of Thought) des agents.
+Démonstration Twin Core :
 
-➡️ Le CKO garantit que l'agent raisonne comme un expert humain senior du domaine.
+Présentation du framework agentique utilisé.
 
-3. AI Engineer de la Franchise
+Présentation des hypothèses de gestion de la mémoire interne (Short-term vs Long-term) dans la boucle d'exécution.
 
-Le Constructeur (IA Appliquée)
+Convergence : Échange sur les standards de persistance de l'information pour les futurs agents.
 
-Rôle :
+Topic 3 : Model Context Protocol (MCP) & Marketplace
 
-Construisent et opèrent les agents IA experts.
+Contexte : Le CIB a pour idée à terme de créer une "Marketplace MCP". À date, ils ont réalisé une implémentation MCP sur Kafka. L'objectif de cet échange est de voir comment capitaliser sur ce développement. Note : D'autres initiatives MCP sont en cours côté Twin  (Architecture "Suisse", Twin Logs avec Jonathan) mais feront l'objet d'échanges ultérieurs.
 
-Implémentent les use cases concrets en workflow agentique.
+Participants :
 
-Optimisent la qualité technique des réponses.
+Twin Core : Julien, Sacha et Dhia.
 
-Responsabilités :
+CIB : Kaouther & équipe.
 
-Implémentation : Développement de la logique agentique (LangGraph) et des Tools selon le Framework Twin Core.
+Agenda de l'échange :
 
-Routing & Décision : Implémente la logique de choix (Scoring) et de priorisation des actions.
+Réalisation CIB : Présentation technique du connecteur MCP Kafka (Capabilities, Architecture).
 
-Evals & Performance : Instrumente le code pour mesurer la précision, la confiance et la latence des agents.
+Capitalisation : Analyse de la réutilisabilité de ce module pour les besoins du Twin.
 
-➡️ Ils ne font pas de "data science académique", ils livrent des agents utiles en production.
-
-4. AI Engineer Détaché (Modèle Hybride)
-
-Le Pont Technique
-
-Rôle :
-
-Experts fonctionnellement rattachés à la franchise mais techniquement a Twin Core.
-
-Travaillent sur le raisonnement multi-agents avancé et les cas limites complexes.
-
-Assurent la performance à grande échelle.
-
-Responsabilités :
-
-Débloque les verrous techniques majeurs.
-
-Assure l'alignement architectural avec le Twin Core.
-
-Facilite le transfert de compétences vers la franchise.
-
-➡️ C'est un accélérateur d'excellence, pas une dépendance.
-
-5. Knowledge Engineer (Graph & Vector)
-
-L'Ingénieur de la Donnée
-
-Rôle :
-
-Transformer la connaissance métier validée par le CKO en structures exploitables par les agents.
-
-Responsabilités :
-
-Data Quality : Nettoyage, déduplication et alignement sémantique avant injection.
-
-Data Mapping : Connecte la Topologie et les Events vers le Core Model Graph.
-
-Pipeline Documentaire : Configure l'ingestion technique des documents du métier.
-
-Référentiel : Assure que les connaissances sont correctement cataloguées.
-
-➡️ Sans lui, tu as des prompts, pas un Digital Twin.
-
-6. Domain Experts (Infra, Ops, Change...)
-
-La Vérité Terrain
-
-Rôle :
-
-Apportent la connaissance terrain (le "Tacite").
-
-Valident les raisonnements des agents experts.
-
-Arbitrent les erreurs ou ambiguïtés des réponses agentiques.
-
-Responsabilités :
-
-Golden Datasets : Fournissent la connaissance terrain (Docs, Procédures) ainsi que les couples "Question / Réponse idéale" pour l'évaluation.
-
-Human-in-the-loop : Confirment ou rejettent les réponses/actions des agents.
-
-Feedback Production: Enrichissement continu et correction des erreurs en production.
-
-➡️ Ils garantissent l'ancrage dans le réel. Ils vérifient si l'agent a RAISON.
-
-7. AI Trust & Reliability Owner (+ Rôle ITAM)
-
-Le Gardien de la Conformité & SRE
-
-Rôle :
-
-Garant de la fiabilité des agents IA.
-
-Définit les garde-fous et surveille les dérives.
-
-Porte le rôle de conformité ITAM (Asset Management).
-
-Responsabilités :
-
-Auditabilité : S'assure que chaque décision est traçable et explicable.
-
-Observabilité : Surveille les métriques de dérive (Drift).
-
-Guardrails : S'assure de la conformité, de la sécurité et du respect du référentiel (ITAM).
-
-➡️ Il vérifie si l'agent est DANGEREUX ou NON CONFORME.
+Vision Marketplace : Échange sur l'ambition CIB concernant la Marketplace MCP future.
