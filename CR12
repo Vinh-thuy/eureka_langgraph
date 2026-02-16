@@ -1,78 +1,42 @@
-Compte Rendu de Réunion & Préparation des Workshops Techniques
+Voici une version ajustée, plus simple et plus pédagogique, tout en gardant le fond scientifique.
 
-Sujet : Synergies CIB x Twin Core (Exploration & Convergence)
-Date du Catch-up : [Date du jour]
-Interlocuteurs : Kaouther (CIB Stream Leader), Vinh (Twin Core Architect)
+---
 
-Objectif Global
+**Objet :** 🧪 Méthodo Simplifiée : Rationalisation des Tools & Dépendances (128 Use Cases)
 
-Suite à l'échange constructif avec Kaouther, nous avons identifié des axes de travail communs autour de l'IA (Incidentologie), du Graph et de l'interopérabilité (MCP).
-L'objectif des sessions à venir est de partager nos avancements respectifs, comprendre les approches de chaque équipe et définir les opportunités de mutualisation et de convergence.
+Hello la team,
 
-Date des Workshops : Mardi prochain (15h00 - 17h00 env.)
+J'ai passé le backlog à la moulinette pour rationaliser notre approche technique et sortir du "bricolage". L'idée est d'avoir une vision claire et industrielle pour les 128 cas d'usage.
 
-Topic 1 : Graph Builder & Ontologies
+Voici la démarche appliquée en 4 étapes simples :
 
-Contexte : L'équipe CIB développe un "Graph Builder" capable de générer des graphes à la volée, contextuels et scopés au périmètre d'un incident pour alimenter les LLM. L'équipe Twin Core opère un Knowledge Graph persistant pour la Topologie IT et Events.
+**1. On arrête de multiplier les outils : Les "11 Golden Tools"**
+Au lieu de créer un script par besoin, j'ai identifié **11 Moteurs Génériques** qui font tout le travail (Lire, Raisonner, Agir).
 
-Participants :
+* *Le principe :* L'outil est standard (ex: "Lire la Topologie"), c'est la demande (le Payload) qui change selon le cas d'usage.
+* *Gain :* On maintient 11 connecteurs robustes au lieu de 200 scripts spécifiques.
 
-Twin Core : Sacha, Julien, Dhia (en écoute/support).
+**2. On part du réel : Data Sources (Raw)**
+J'ai réalimenté et synthétisé la colonne "Data Source" en me basant uniquement sur l'existant (ce qu'on a vraiment dans nos PPTs et inventaires).
 
-CIB : Wassim Smiti, Aziz Anghour.
+* *Règle d'or :* On ne rêve pas la donnée. Si elle n'est pas dans nos sources actuelles, on ne l'invente pas.
 
-Agenda de l'échange :
+**3. On déduit l'Intelligence requise (Knowledge)**
+Plutôt que de deviner, j'ai déduit logiquement de quoi l'IA a besoin (KG ou KB) en fonction de la source identifiée :
 
-Approche CIB : Présentation de la logique du Graph Builder. Comment l'ontologie est-elle construite dynamiquement autour de l'incident ?
+* *Source Documentaire (PDF, Wiki) ?* -> Ça part en **KB** (Base de Connaissance / RAG).
+* *Source Relationnelle (Inventaire, Liens) ?* -> Ça part en **KG** (Graphe / Topologie).
+* *Source Temps Réel ?* -> Ça part dans le **Bus d'Événements**.
 
-Approche Twin Core : Exposition de notre modèle de données actuel (Objets, Relations, Topologie), métriques du Knowledge Graph et logique d'ingestion (Pipeline Airflow & Framework Graflo).
+**4. On identifie les vrais points de blocage (Dépendances)**
+Conséquence directe : la "Dépendance Bloquante" n'est plus une estimation, c'est un constat technique simple.
 
-Exploration :
+* Besoin de logs ? -> Bloqué par la **Télémétrie**.
+* Besoin de l'inventaire ? -> Bloqué par **Discovery**.
+* Besoin de docs ? -> **Dispo de suite** (via notre Plateforme KB).
 
-Comparaison des objets métiers (Serveurs, Applications, Alertes).
+Le fichier est à jour, carré et prêt pour l'ingestion.
 
-Identification des règles de gestion communes.
+À dispo pour creuser.
 
-Discussion sur la complémentarité : Graph éphémère (Incident) vs Graph Persistant (Architecture).
-
-Topic 2 : Gestion de la Mémoire & Contexte (Agentic Framework)
-
-Contexte :
-Kaouther explore des pistes pour gérer la mémoire contextuelle des agents au-delà du cache immédiat (Redis).
-L'équipe Twin Core a implémenté un framework de gestion d'état (State Management) au sein de ses agents.
-
-Participants :
-
-Twin Core : Dhia (Lead Data Scientist)
-
-CIB : Kaouther & équipe.
-
-Agenda de l'échange :
-
-Vision CIB : Partage des réflexions actuelles sur la gestion du contexte et les limitations rencontrées (Redis, persistance).
-
-Démonstration Twin Core :
-
-Présentation du framework agentique utilisé.
-
-Présentation des hypothèses de gestion de la mémoire interne (Short-term vs Long-term) dans la boucle d'exécution.
-
-Convergence : Échange sur les standards de persistance de l'information pour les futurs agents.
-
-Topic 3 : Model Context Protocol (MCP) & Marketplace
-
-Contexte : Le CIB a pour idée à terme de créer une "Marketplace MCP". À date, ils ont réalisé une implémentation MCP sur Kafka. L'objectif de cet échange est de voir comment capitaliser sur ce développement. Note : D'autres initiatives MCP sont en cours côté Twin  (Architecture "Suisse", Twin Logs avec Jonathan) mais feront l'objet d'échanges ultérieurs.
-
-Participants :
-
-Twin Core : Julien, Sacha et Dhia.
-
-CIB : Kaouther & équipe.
-
-Agenda de l'échange :
-
-Réalisation CIB : Présentation technique du connecteur MCP Kafka (Capabilities, Architecture).
-
-Capitalisation : Analyse de la réutilisabilité de ce module pour les besoins du Twin.
-
-Vision Marketplace : Échange sur l'ambition CIB concernant la Marketplace MCP future.
+Vinh
