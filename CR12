@@ -1,38 +1,110 @@
-Salut Vinh,
+PROMPTS["use_case_entity_extraction"] = """-Goal-
+You are given a text describing a Digital Twin Use Case.
+Your task is to extract structured entities, relationships, and descriptions from the text based on the following requirements, strictly mapping them to our Multi-Layered Knowledge Graph schema.
 
-Voici le compte rendu structuré suite à notre analyse de l'architecture pour sécuriser la démo du SteerCo IPS du 11 mars.
+CRUCIAL INSTRUCTIONS:
+- ABSOLUTE PROHIBITION of creating, inventing, or extrapolating information not present in the original text.
+- Use ONLY information explicitly mentioned in the source text.
+- If information is not clearly indicated, do NOT attempt to guess or complete it.
+- Your goal is to be a precise and faithful extractor, not an information generator.
+- In case of doubt about any information, prefer NOT to include it rather than risk inaccuracy.
+- Labels must be lowercase, without special characters, except for '_' and '/', and must not contain accents.
 
-Nous sommes ici sur une **Biométrie Variable** d'intégration ciblée (approche "Agent-Only"), axée sur le **Layer 2 (Cognitive)** pour un cas d'usage pur de **Document-to-Knowledge**.
+Key requirements:
 
----
+1. **Entity Types and Descriptions:**
+   - **use_case :** The central entity representing the Use Case Name. This entity MUST capture specific attributes in its description block as a JSON string containing: UC_ID, Description (User Story), OK/KO status, output, OUTPUT DATA, and twin core datascience.
+   - **agent_category :** Represents the Target Agent from the Business Squad (e.g., Mapper, Librarian, Investigator).
+   - **agent_tool :** Represents the key features, scripts, or APIs the agent uses to execute the task.
+   - **data_source_raw :** Represents local, raw data sources required for the use case (e.g., specific logs, external un-centralized APIs).
+   - **kg :** Represents the structured knowledge required from the central graph (Topologies, Golden Events).
+   - **kb :** Represents the unstructured or semi-structured knowledge bases required (Light Graphs, documentation).
+   - **entity_domain :** Represents the structural entity or CTO Domain concerned by the use case.
+   - **uc_roi :** Represents the Business Value or Return on Investment expected.
+   - **twin_owner :** Represents the accountability and Jurisdiction of the use case.
+   - **data_source_extrapolate :** Represents the extrapolated data module.
 
-### 📋 Compte-Rendu d'Architecture : Préparation SteerCo IPS (11 Mars)
+2. **Extraction Entity Guideline:**
+   - For each entity, extract:
+     - entity_name: Name of the entity.
+     - entity_type: One of the types: [use_case, agent_category, agent_tool, data_source_raw, kg, kb, entity_domain, uc_roi, twin_owner, data_source_extrapolate]
+     - entity_attributes: A JSON string containing node attributes (specifically for the use_case node). Leave empty {} for other nodes.
+     - entity_description: A detailed description of the entity's purpose.
+     - Format: (entity{tuple_delimiter}<entity_name>{tuple_delimiter}<entity_type>{tuple_delimiter}<entity_attributes>{tuple_delimiter}<entity_description>)
 
-**💡 Hypothèses (Hyp)**
+3. **Extraction Relationships Guideline:**
+   - For each relationship, extract:
+     - source_entity: The source entity name.
+     - target_entity: The target entity name.
+     - relationship_description: A specific explanation of why these entities are related based on the text.
+     - relationship_keywords: One or more high-level key words summarizing the relationship (e.g., "uses", "requires", "owned_by", "provides").
+     - Format: ("relationship"{tuple_delimiter}<source_entity>{tuple_delimiter}<target_entity>{tuple_delimiter}<relationship_description>{tuple_delimiter}<relationship_keywords>)
 
-* **Persistance Native :** Utilisation de la persistance de conversation native de la plateforme Agentique Twin (TwinCore). On ne recrée pas la roue localement.
-* **Capitalisation Code Factory :** Réutilisation maximale du code des agents déjà mis à disposition par le Twin Core (via Dhia et Anas) pour la connexion *LISAB -> RAG 1.5*.
+4. **Formatting & Language:**
+   - Use {record_delimiter} to separate entries.
+   - End output with {completion_delimiter}.
+   - All extracted entities, relationships, and keywords must be in French.
 
-**🤝 Décisions**
+5. **Structural Integrity Rules (The Guardrails):**
+   - Ensure that every identified entity MUST have at least one relationship explicitly linking it to the 'use_case' entity. If an entity cannot be directly or indirectly connected to the 'use_case', it should not be extracted.
+   - It is CRITICAL to extract ONLY ONE node with entity_type="use_case" per message. The only node that can have entity_type="use_case" is the primary Use Case Name described.
+   - It is STRICTLY FORBIDDEN to create a relationship between two entities with entity_type="use_case".
+   
+6. Return output in French as a single list of all the entities and relationships. Use **{record_delimiter}** as the list delimiter. When finished, output {completion_delimiter}.
+"""
 
-* **Posture Architecturale :** Déploiement du premier Agent IPS (profil *Librarian*) en environnement **DEV**, exposé sur le Front Twin Teams en **HPRD** via une table de routage à paramétrage manuel.
-* **Double Flux de Données :**
-* *Connaissance Métier :* Connexion au RAG 1.5 existant via LISAB. La donnée ingérée depuis leur Confluence PROD est segmentée par application (APP PF, APP IPS) pour garantir l'étanchéité des connaissances. Le passage vers les **Light Graphs** (New KB GraphRAG) est officiellement acté en phase "Next Step" (Flux 3).
-* *Comportement Agent :* Création d'un connecteur direct vers un Confluence spécifique (PROD) fonctionnant en mode "solution de paramétrage dynamique" pour piloter les consignes de l'agent.
 
+PROMPTS["use_case_extraction_examples"] = [
+    """
+Entity_types: ["use_case", "agent_category", "agent_tool", "data_source_raw", "kg", "kb", "entity_domain", "uc_roi", "twin_owner", "data_source_extrapolate"]
 
-* **Gouvernance :** Cet agent IPS a vocation à être référencé dans notre **Agentic Registry** global dès que son périmètre sera stabilisé.
+Text:
+UC_ID : TWIN-UC-201
+Use Case Name : Know your BAU
+Description (User Story) : En tant que Manager IT, je veux un BAU knowledge hub pour catégoriser et router les incidents automatiquement afin de réduire le MTTR.
+Target Agent (Business Squad) : The Router
+Tools (Fonctionnalités Clés) : LLM Classification
+Data Sources (Brutes) : ITSM Tickets (Raw Data)
+Knowledge (KG et KB) Requis : Layer 4 (Jurisdiction), Layer 3 (Agentic Registry)
+Entity / CTO Domain : Infra - Global
+Business Value / ROI : MTTR ≤ 8h, Cost reduction ~30%, Mis-assignment ≤ 5%
+OK / KO : OK
+ACOUNTABILITY : TWIN CORE
+output : Ticket routing
+data module 1 : Service Now
+data module 2 : Logs
+data module 3 : 
+data module 4 : Routing Engine
+data module 5 : 
+OUTPUT DATA : 
+twin core datascience : 
 
-**🚀 Actions**
-
-* **[Twin Core / IPS]** : Poursuivre et valider le développement du code du futur connecteur Confluence direct (sur la base du début de code déjà partagé).
-* **[IPS / Data Ops]** : Définir la stratégie et la fréquence de "refresh" de l'ingestion (via Crosspoint) entre la liste des pages Confluence PROD et le RAG 1.5.
-
-**🚨 Alertes**
-
-* **[CRITIQUE] Environnement RAG 1.5 & Stabilité :** L'agent IPS tournera en DEV, mais le métier exige une stabilité irréprochable pour la démo du 11 mars. *Arbitrage urgent d'architecture :* Devons-nous brancher cet agent DEV sur le RAG 1.5 de DEV (le Core peut-il en garantir la stabilité d'ici le SteerCo ?) ou devons-nous exceptionnellement cibler le RAG 1.5 de PROD ?
-* **[TECH] Volumétrie Connecteur Direct :** Attention au risque de surcharge et de latence ("Attention volumétrie" sur le schéma) concernant le futur connecteur Confluence direct utilisé pour le paramétrage dynamique (Flux 1).
-
----
-
-Dis-moi si *The Router* doit organiser un point d'urgence pour lever l'alerte sur l'environnement du RAG 1.5.
+################
+Output:
+("entity"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"use_case"{tuple_delimiter}"{\"UC_ID\": \"TWIN-UC-201\", \"Description\": \"En tant que Manager IT, je veux un BAU knowledge hub pour catégoriser et router les incidents automatiquement afin de réduire le MTTR.\", \"OK_KO\": \"OK\", \"output\": \"Ticket routing\", \"OUTPUT_DATA\": \"\", \"twin_core_datascience\": \"\"}"{tuple_delimiter}"Cas d'usage visant à catégoriser et router automatiquement les incidents pour réduire le temps de résolution."){record_delimiter}
+("entity"{tuple_delimiter}"the_router"{tuple_delimiter}"agent_category"{tuple_delimiter}"{}"{tuple_delimiter}"Agent de l'Orchestration Squad chargé de l'aiguillage intelligent des requêtes."){record_delimiter}
+("entity"{tuple_delimiter}"llm_classification"{tuple_delimiter}"agent_tool"{tuple_delimiter}"{}"{tuple_delimiter}"Fonctionnalité d'analyse sémantique utilisée pour catégoriser la donnée textuelle."){record_delimiter}
+("entity"{tuple_delimiter}"itsm_tickets_raw"{tuple_delimiter}"data_source_raw"{tuple_delimiter}"{}"{tuple_delimiter}"Données brutes des tickets ITSM."){record_delimiter}
+("entity"{tuple_delimiter}"layer_4_jurisdiction"{tuple_delimiter}"kg"{tuple_delimiter}"{}"{tuple_delimiter}"Couche du graphe de connaissance gérant les responsabilités."){record_delimiter}
+("entity"{tuple_delimiter}"layer_3_agentic_registry"{tuple_delimiter}"kg"{tuple_delimiter}"{}"{tuple_delimiter}"Couche du graphe recensant les agents disponibles."){record_delimiter}
+("entity"{tuple_delimiter}"infra_global"{tuple_delimiter}"entity_domain"{tuple_delimiter}"{}"{tuple_delimiter}"Périmètre d'infrastructure globale de l'entreprise."){record_delimiter}
+("entity"{tuple_delimiter}"reduction_mttr_et_couts"{tuple_delimiter}"uc_roi"{tuple_delimiter}"{}"{tuple_delimiter}"Baisse du MTTR sous 8h, réduction de 30% des coûts et moins de 5% d'erreurs."){record_delimiter}
+("entity"{tuple_delimiter}"twin_core"{tuple_delimiter}"twin_owner"{tuple_delimiter}"{}"{tuple_delimiter}"Franchise centrale garante des Golden Events et de la topologie."){record_delimiter}
+("entity"{tuple_delimiter}"service_now"{tuple_delimiter}"data_source_extrapolate"{tuple_delimiter}"{}"{tuple_delimiter}"Data module 1 extrapolé pour l'alimentation du cas d'usage."){record_delimiter}
+("entity"{tuple_delimiter}"logs"{tuple_delimiter}"data_source_extrapolate"{tuple_delimiter}"{}"{tuple_delimiter}"Data module 2 extrapolé pour l'alimentation du cas d'usage."){record_delimiter}
+("entity"{tuple_delimiter}"routing_engine"{tuple_delimiter}"data_source_extrapolate"{tuple_delimiter}"{}"{tuple_delimiter}"Data module 4 extrapolé pour le routage des données."){record_delimiter}
+("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"the_router"{tuple_delimiter}"Ce cas d'usage est orchestré par l'agent cible The Router."{tuple_delimiter}"orchestrated_by"){record_delimiter}
+("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"llm_classification"{tuple_delimiter}"Le cas d'usage s'appuie sur la classification LLM."{tuple_delimiter}"uses_tool"){record_delimiter}
+("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"itsm_tickets_raw"{tuple_delimiter}"Le cas d'usage s'alimente des tickets bruts."{tuple_delimiter}"consumes_raw_data"){record_delimiter}
+("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"layer_4_jurisdiction"{tuple_delimiter}"Nécessite de requêter la couche Jurisdiction du KG."{tuple_delimiter}"queries_kg"){record_delimiter}
+("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"layer_3_agentic_registry"{tuple_delimiter}"Nécessite la carte des agents (Layer 3)."{tuple_delimiter}"queries_kg"){record_delimiter}
+("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"infra_global"{tuple_delimiter}"Le périmètre d'action est l'infrastructure globale."{tuple_delimiter}"applies_to_domain"){record_delimiter}
+("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"reduction_mttr_et_couts"{tuple_delimiter}"Le succès de ce cas d'usage génère ce ROI."{tuple_delimiter}"generates_roi"){record_delimiter}
+("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"twin_core"{tuple_delimiter}"La responsabilité du cas d'usage appartient au Twin Core."{tuple_delimiter}"owned_by"){record_delimiter}
+("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"service_now"{tuple_delimiter}"Le cas d'usage requiert le module de données extrapolé Service Now."{tuple_delimiter}"requires_data_module"){record_delimiter}
+("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"logs"{tuple_delimiter}"Le cas d'usage requiert le module de données extrapolé Logs."{tuple_delimiter}"requires_data_module"){record_delimiter}
+("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"routing_engine"{tuple_delimiter}"Le cas d'usage requiert le module de données extrapolé Routing Engine."{tuple_delimiter}"requires_data_module"){record_delimiter}
+("content_keywords"{tuple_delimiter}"incident routing, itsm, mttr reduction, llm classification, orchestration, jurisdiction, infrastructure, data extrapolation"){completion_delimiter}
+#############################
+"""
+]
