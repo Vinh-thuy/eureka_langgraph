@@ -1,110 +1,19 @@
-PROMPTS["use_case_entity_extraction"] = """-Goal-
-You are given a text describing a Digital Twin Use Case.
-Your task is to extract structured entities, relationships, and descriptions from the text based on the following requirements, strictly mapping them to our Multi-Layered Knowledge Graph schema.
+Salut Anas,
 
-CRUCIAL INSTRUCTIONS:
-- ABSOLUTE PROHIBITION of creating, inventing, or extrapolating information not present in the original text.
-- Use ONLY information explicitly mentioned in the source text.
-- If information is not clearly indicated, do NOT attempt to guess or complete it.
-- Your goal is to be a precise and faithful extractor, not an information generator.
-- In case of doubt about any information, prefer NOT to include it rather than risk inaccuracy.
-- Labels must be lowercase, without special characters, except for '_' and '/', and must not contain accents.
+Merci encore pour l'excellent boulot sur les premiers agents Jira (connexion LangGraph / API Jira, query des sprints et backlogs). On va poursuivre sur cette lancée car on a un vrai défi qui nous attend : nous avons plus de 170 use cases qui arrivent pour le programme Twin et on a besoin de tes agents pour nous aider à piloter tout ça avec l'équipe Programme et la team Twin Core.
 
-Key requirements:
+L'objectif de cette nouvelle itération est de te concentrer sur deux capacités majeures :
 
-1. **Entity Types and Descriptions:**
-   - **use_case :** The central entity representing the Use Case Name. This entity MUST capture specific attributes in its description block as a JSON string containing: UC_ID, Description (User Story), OK/KO status, output, OUTPUT DATA, and twin core datascience.
-   - **agent_category :** Represents the Target Agent from the Business Squad (e.g., Mapper, Librarian, Investigator).
-   - **agent_tool :** Represents the key features, scripts, or APIs the agent uses to execute the task.
-   - **data_source_raw :** Represents local, raw data sources required for the use case (e.g., specific logs, external un-centralized APIs).
-   - **kg :** Represents the structured knowledge required from the central graph (Topologies, Golden Events).
-   - **kb :** Represents the unstructured or semi-structured knowledge bases required (Light Graphs, documentation).
-   - **entity_domain :** Represents the structural entity or CTO Domain concerned by the use case.
-   - **uc_roi :** Represents the Business Value or Return on Investment expected.
-   - **twin_owner :** Represents the accountability and Jurisdiction of the use case.
-   - **data_source_extrapolate :** Represents the extrapolated data module.
+1. L'Agent Jira Opérationnel (Read/Write)
+On continue les travaux des sprints précédents. L'idée est d'avoir un agent capable d'attaquer Jira non seulement en lecture, mais aussi en écriture. Il doit nous permettre de faciliter les updates en masse, de questionner les points de blocage, de compter les tickets et de faire tous les grands classiques d'analyse de backlog.
 
-2. **Extraction Entity Guideline:**
-   - For each entity, extract:
-     - entity_name: Name of the entity.
-     - entity_type: One of the types: [use_case, agent_category, agent_tool, data_source_raw, kg, kb, entity_domain, uc_roi, twin_owner, data_source_extrapolate]
-     - entity_attributes: A JSON string containing node attributes (specifically for the use_case node). Leave empty {} for other nodes.
-     - entity_description: A detailed description of the entity's purpose.
-     - Format: (entity{tuple_delimiter}<entity_name>{tuple_delimiter}<entity_type>{tuple_delimiter}<entity_attributes>{tuple_delimiter}<entity_description>)
+2. L'Agent d'Analyse Stratégique (Graph-RAG / Light Graphs)
+Ici, on bascule sur la couche Document-to-Knowledge. Je veux qu'on puisse traiter des questions plus qualitatives et logiques quand de nouveaux use cases arrivent. Par exemple : "Y a-t-il des similarités avec ce qu'on a déjà ?", "A-t-on déjà traité cette problématique ou thématique ?", "Combien de cas similaires avons-nous ?". On va s'appuyer sur du Graph-RAG, et particulièrement sur les Light Graphs, pour structurer cette intelligence.
 
-3. **Extraction Relationships Guideline:**
-   - For each relationship, extract:
-     - source_entity: The source entity name.
-     - target_entity: The target entity name.
-     - relationship_description: A specific explanation of why these entities are related based on the text.
-     - relationship_keywords: One or more high-level key words summarizing the relationship (e.g., "uses", "requires", "owned_by", "provides").
-     - Format: ("relationship"{tuple_delimiter}<source_entity>{tuple_delimiter}<target_entity>{tuple_delimiter}<relationship_description>{tuple_delimiter}<relationship_keywords>)
+La finalité :
+Donner à l'équipe la capacité de catégoriser ces 170+ use cases très rapidement. Ça va nous permettre d'identifier immédiatement les data sources et les tools nécessaires pour les traiter, d'enrichir notre Agentic Registry, et donc de prioriser nos développements (ex: ce qu'on doit orchestrer via Graflo STM et Astronomer en priorité).
 
-4. **Formatting & Language:**
-   - Use {record_delimiter} to separate entries.
-   - End output with {completion_delimiter}.
-   - All extracted entities, relationships, and keywords must be in French.
+Dis-moi quand tu as un moment pour qu'on se synchronise là-dessus !
 
-5. **Structural Integrity Rules (The Guardrails):**
-   - Ensure that every identified entity MUST have at least one relationship explicitly linking it to the 'use_case' entity. If an entity cannot be directly or indirectly connected to the 'use_case', it should not be extracted.
-   - It is CRITICAL to extract ONLY ONE node with entity_type="use_case" per message. The only node that can have entity_type="use_case" is the primary Use Case Name described.
-   - It is STRICTLY FORBIDDEN to create a relationship between two entities with entity_type="use_case".
-   
-6. Return output in French as a single list of all the entities and relationships. Use **{record_delimiter}** as the list delimiter. When finished, output {completion_delimiter}.
-"""
-
-
-PROMPTS["use_case_extraction_examples"] = [
-    """
-Entity_types: ["use_case", "agent_category", "agent_tool", "data_source_raw", "kg", "kb", "entity_domain", "uc_roi", "twin_owner", "data_source_extrapolate"]
-
-Text:
-UC_ID : TWIN-UC-201
-Use Case Name : Know your BAU
-Description (User Story) : En tant que Manager IT, je veux un BAU knowledge hub pour catégoriser et router les incidents automatiquement afin de réduire le MTTR.
-Target Agent (Business Squad) : The Router
-Tools (Fonctionnalités Clés) : LLM Classification
-Data Sources (Brutes) : ITSM Tickets (Raw Data)
-Knowledge (KG et KB) Requis : Layer 4 (Jurisdiction), Layer 3 (Agentic Registry)
-Entity / CTO Domain : Infra - Global
-Business Value / ROI : MTTR ≤ 8h, Cost reduction ~30%, Mis-assignment ≤ 5%
-OK / KO : OK
-ACOUNTABILITY : TWIN CORE
-output : Ticket routing
-data module 1 : Service Now
-data module 2 : Logs
-data module 3 : 
-data module 4 : Routing Engine
-data module 5 : 
-OUTPUT DATA : 
-twin core datascience : 
-
-################
-Output:
-("entity"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"use_case"{tuple_delimiter}"{\"UC_ID\": \"TWIN-UC-201\", \"Description\": \"En tant que Manager IT, je veux un BAU knowledge hub pour catégoriser et router les incidents automatiquement afin de réduire le MTTR.\", \"OK_KO\": \"OK\", \"output\": \"Ticket routing\", \"OUTPUT_DATA\": \"\", \"twin_core_datascience\": \"\"}"{tuple_delimiter}"Cas d'usage visant à catégoriser et router automatiquement les incidents pour réduire le temps de résolution."){record_delimiter}
-("entity"{tuple_delimiter}"the_router"{tuple_delimiter}"agent_category"{tuple_delimiter}"{}"{tuple_delimiter}"Agent de l'Orchestration Squad chargé de l'aiguillage intelligent des requêtes."){record_delimiter}
-("entity"{tuple_delimiter}"llm_classification"{tuple_delimiter}"agent_tool"{tuple_delimiter}"{}"{tuple_delimiter}"Fonctionnalité d'analyse sémantique utilisée pour catégoriser la donnée textuelle."){record_delimiter}
-("entity"{tuple_delimiter}"itsm_tickets_raw"{tuple_delimiter}"data_source_raw"{tuple_delimiter}"{}"{tuple_delimiter}"Données brutes des tickets ITSM."){record_delimiter}
-("entity"{tuple_delimiter}"layer_4_jurisdiction"{tuple_delimiter}"kg"{tuple_delimiter}"{}"{tuple_delimiter}"Couche du graphe de connaissance gérant les responsabilités."){record_delimiter}
-("entity"{tuple_delimiter}"layer_3_agentic_registry"{tuple_delimiter}"kg"{tuple_delimiter}"{}"{tuple_delimiter}"Couche du graphe recensant les agents disponibles."){record_delimiter}
-("entity"{tuple_delimiter}"infra_global"{tuple_delimiter}"entity_domain"{tuple_delimiter}"{}"{tuple_delimiter}"Périmètre d'infrastructure globale de l'entreprise."){record_delimiter}
-("entity"{tuple_delimiter}"reduction_mttr_et_couts"{tuple_delimiter}"uc_roi"{tuple_delimiter}"{}"{tuple_delimiter}"Baisse du MTTR sous 8h, réduction de 30% des coûts et moins de 5% d'erreurs."){record_delimiter}
-("entity"{tuple_delimiter}"twin_core"{tuple_delimiter}"twin_owner"{tuple_delimiter}"{}"{tuple_delimiter}"Franchise centrale garante des Golden Events et de la topologie."){record_delimiter}
-("entity"{tuple_delimiter}"service_now"{tuple_delimiter}"data_source_extrapolate"{tuple_delimiter}"{}"{tuple_delimiter}"Data module 1 extrapolé pour l'alimentation du cas d'usage."){record_delimiter}
-("entity"{tuple_delimiter}"logs"{tuple_delimiter}"data_source_extrapolate"{tuple_delimiter}"{}"{tuple_delimiter}"Data module 2 extrapolé pour l'alimentation du cas d'usage."){record_delimiter}
-("entity"{tuple_delimiter}"routing_engine"{tuple_delimiter}"data_source_extrapolate"{tuple_delimiter}"{}"{tuple_delimiter}"Data module 4 extrapolé pour le routage des données."){record_delimiter}
-("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"the_router"{tuple_delimiter}"Ce cas d'usage est orchestré par l'agent cible The Router."{tuple_delimiter}"orchestrated_by"){record_delimiter}
-("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"llm_classification"{tuple_delimiter}"Le cas d'usage s'appuie sur la classification LLM."{tuple_delimiter}"uses_tool"){record_delimiter}
-("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"itsm_tickets_raw"{tuple_delimiter}"Le cas d'usage s'alimente des tickets bruts."{tuple_delimiter}"consumes_raw_data"){record_delimiter}
-("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"layer_4_jurisdiction"{tuple_delimiter}"Nécessite de requêter la couche Jurisdiction du KG."{tuple_delimiter}"queries_kg"){record_delimiter}
-("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"layer_3_agentic_registry"{tuple_delimiter}"Nécessite la carte des agents (Layer 3)."{tuple_delimiter}"queries_kg"){record_delimiter}
-("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"infra_global"{tuple_delimiter}"Le périmètre d'action est l'infrastructure globale."{tuple_delimiter}"applies_to_domain"){record_delimiter}
-("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"reduction_mttr_et_couts"{tuple_delimiter}"Le succès de ce cas d'usage génère ce ROI."{tuple_delimiter}"generates_roi"){record_delimiter}
-("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"twin_core"{tuple_delimiter}"La responsabilité du cas d'usage appartient au Twin Core."{tuple_delimiter}"owned_by"){record_delimiter}
-("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"service_now"{tuple_delimiter}"Le cas d'usage requiert le module de données extrapolé Service Now."{tuple_delimiter}"requires_data_module"){record_delimiter}
-("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"logs"{tuple_delimiter}"Le cas d'usage requiert le module de données extrapolé Logs."{tuple_delimiter}"requires_data_module"){record_delimiter}
-("relationship"{tuple_delimiter}"know_your_bau"{tuple_delimiter}"routing_engine"{tuple_delimiter}"Le cas d'usage requiert le module de données extrapolé Routing Engine."{tuple_delimiter}"requires_data_module"){record_delimiter}
-("content_keywords"{tuple_delimiter}"incident routing, itsm, mttr reduction, llm classification, orchestration, jurisdiction, infrastructure, data extrapolation"){completion_delimiter}
-#############################
-"""
-]
+À très vite,
+Vinh
