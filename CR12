@@ -1,18 +1,24 @@
-# === LOCKED TEMPLATE START ===
-# SIGNATURE: STATE_V1_TYPEDDICT
+# SKILL: Agent Structure
 
-from typing import TypedDict, List, Optional
+## PURPOSE
+Standardize LangGraph agent structure.
 
+## REQUIRED FILES
+app/
+- state.py
+- router.py
+- nodes.py
+- graph.py
+- main.py
 
-class AgentState(TypedDict):
-    """
-    Canonical LangGraph Agent State.
-    Version: 1.0
-    """
+## RULES
+- state.py must copy template
+- router.py contains only routing logic
+- nodes.py contains business logic nodes
+- graph.py contains only graph wiring
+- main.py runs graph
 
-    user_input: str
-    route: Optional[str]
-    result: Optional[str]
-    intermediate_steps: List[str]
-
-# === LOCKED TEMPLATE END ===
+## CHECKLIST
+- [ ] Files separated
+- [ ] No mixed concerns
+- [ ] Typed state used
