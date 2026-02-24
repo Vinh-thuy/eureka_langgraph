@@ -1,19 +1,18 @@
-# CLINE RULES — Simple LangGraph Setup
+# === LOCKED TEMPLATE START ===
+# SIGNATURE: STATE_V1_TYPEDDICT
 
-Before writing code:
+from typing import TypedDict, List, Optional
 
-1. Load skills from /skills
-2. List loaded skills
-3. Provide a short architecture plan
-4. Then generate code
 
-When creating app/state.py:
-- Copy templates/state_v1.py exactly
-- Do not modify structure
-- Only modify inside editable blocks if present
+class AgentState(TypedDict):
+    """
+    Canonical LangGraph Agent State.
+    Version: 1.0
+    """
 
-Never mix:
-- state
-- router
-- nodes
-- graph wiring
+    user_input: str
+    route: Optional[str]
+    result: Optional[str]
+    intermediate_steps: List[str]
+
+# === LOCKED TEMPLATE END ===
