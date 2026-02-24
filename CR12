@@ -1,72 +1,19 @@
-Discours CTO : Industrialiser la Confiance avec LangSmith
+# CLINE RULES — Simple LangGraph Setup
 
-PARTIE 1 : LE DISCOURS (À lire ou adapter sur scène)
+Before writing code:
 
-[Transition après la démo du cas d'usage - Ton calme et assuré]
+1. Load skills from /skills
+2. List loaded skills
+3. Provide a short architecture plan
+4. Then generate code
 
-« Vous venez de voir ce dont notre architecture multi-agents est capable. Mais soyons honnêtes entre professionnels : dans un environnement bancaire ultra-réglementé, avec des données réparties sur 7 franchises opérationnelles différentes, réussir la démo du premier jour est la partie facile.
+When creating app/state.py:
+- Copy templates/state_v1.py exactly
+- Do not modify structure
+- Only modify inside editable blocks if present
 
-Le vrai défi de l'entreprise, c'est le centième jour. Comment prouver que notre système ne dérive pas ? Comment garantir qu'une mise à jour de prompt ne va pas soudainement faire halluciner notre agent sur des données d'infrastructure critiques ?
-
-C'est ici que LangSmith cesse d'être un simple outil de débogage pour devenir le cœur de notre gouvernance : notre Usine d'Amélioration Continue.
-
-[L'Annotation : La création de la vérité]
-
-Pour contrôler l'IA, il nous faut une base de vérité. Chez nous, cette boucle commence par l'utilisateur final. Lorsqu'un agent donne une réponse insatisfaisante, l'utilisateur nous envoie un simple signal : un pouce rouge.
-
-Mais l'utilisateur ne corrige pas l'IA. Ce pouce rouge agit comme une alarme qui envoie automatiquement toute la trace technique de la conversation — les requêtes, les appels d'API, les décisions de routage — dans ce que nous appelons l'Annotation Queue dans LangSmith.
-
-C'est là que nos experts métiers interviennent à froid. Ils ouvrent LangSmith, autopsient la trace, et annotent manuellement la conversation. Ils écrivent factuellement ce que l'agent aurait dû répondre et quels outils il aurait dû appeler. Ce travail d'orfèvre crée notre Golden Dataset.
-
-[Les 3 Piliers d'Évaluation - Énumérer clairement]
-
-Une fois ce Dataset de référence créé, nous l'utilisons pour évaluer automatiquement chaque nouvelle version de nos agents. Mais nous ne nous contentons pas d'un seul juge. Nous utilisons trois piliers d'évaluation distincts pour auditer nos agents LangGraph :
-
-D'abord, le LLM-as-a-Judge. C'est notre juge sémantique. Il lit la réponse et évalue la Complétude (a-t-on répondu à toute la question ?) et l'Hallucination (l'agent est-il resté fidèle au contexte ?).
-
-Ensuite, le Rule-Based Evaluator. Ici, pas d'IA, pas de probabilités. C'est notre juge technique intraitable. Il utilise des règles d'Exact Matching pour vérifier de manière binaire qu'un numéro de ticket d'incident ou qu'un nom de serveur critique est bien présent au caractère près.
-
-Enfin, et c'est crucial pour notre architecture fédérée : le Trajectory Evaluator. C'est l'auditeur de l'orchestration. Il ne lit pas le texte, il vérifie le chemin. L'agent a-t-il appelé le bon outil d'investigation ? A-t-il interrogé la base de données globale ou a-t-il fait l'effort de descendre dans les logs locaux ?
-
-[Le Pilotage visuel : La Matrice de Confusion]
-
-L'agrégation de ces milliers de scores quotidiens serait illisible sans un outil de pilotage. C'est pourquoi nous projetons tous ces résultats d'évaluation sur une Matrice de Confusion dans LangSmith, divisée en 4 quadrants.
-
-L'administrateur peut voir immédiatement si nos exécutions tombent dans la case Idéal, Incomplet, Échec, ou la plus dangereuse : la case Risqué.
-Un cas "Risqué", c'est un agent qui a donné une réponse très complète et très bien formulée, mais qui contient une hallucination technique indétectable par un utilisateur novice. Grâce à LangSmith, on intercepte ces trajectoires, on les isole, et on corrige le tir avant que cela n'impacte la production.
-
-[Conclusion : La Vision Neuro-Symbolique / Digital Twin - Plus d'intensité]
-
-Aujourd'hui, cette usine d'évaluation tourne à plein régime. Mais elle possède une limite inhérente à l'IT : l'obsolescence des datasets.
-
-Dans une banque, l'infrastructure change chaque minute. Si notre équipe fige une réponse de test statique aujourd'hui, elle sera fausse la semaine prochaine. L'évaluateur pénalisera l'agent alors que l'architecture aura simplement évolué !
-
-Notre prochaine frontière pour régler cela, c'est l'intégration native de LangSmith avec notre Digital Twin — notre Knowledge Graph d'entreprise propulsé par TigerGraph.
-
-Bientôt, nous n'aurons plus besoin de maintenir des milliers de réponses "attendues" écrites à la main. Lors des campagnes de tests automatisées, nos juges n'iront plus lire un dataset statique périmé. Ils extrairont les affirmations techniques générées par l'agent (le côté probabiliste) et les soumettront directement sous forme de requêtes à notre Graphe (le côté déterministe) pour faire du Fact-Checking en temps réel.
-
-Le Graphe devient le correcteur automatique, incorruptible et toujours à jour.
-
-Nous couplons le moteur de raisonnement le plus agile du marché, LangGraph, avec la source de vérité la plus déterministe qui soit, notre Digital Twin. Et c'est ainsi que nous passons de l'expérimentation IA à l'ingénierie bancaire.
-
-Je vous remercie. »
-
-PARTIE 2 : ANTISÈCHES DU CTO (POUR LES Q&A)
-
-Si quelqu'un dans le public (ou l'éditeur LangChain) pose des questions pointues après la présentation, voici les réponses "clés en main" pour le CTO.
-
-Q : "Qui fait l'annotation exactement ? Est-ce l'utilisateur final ?"
-
-Réponse CTO : "Non, surtout pas. L'utilisateur final (le banquier, l'opérateur IT) se contente de donner un signal faible (un pouce rouge 👎). L'annotation lourde dans LangSmith est faite en différé par nos Data Scientists ou nos Experts Métiers qui ouvrent la 'trace' d'exécution pour comprendre pourquoi l'agent s'est trompé. C'est de l'autopsie chirurgicale."
-
-Q : "Pourquoi avez-vous besoin d'un 'Trajectory Evaluator' si vous vérifiez déjà la réponse finale ?"
-
-Réponse CTO : "Parce qu'avoir la bonne réponse n'est pas suffisant si la méthode est mauvaise ou non sécurisée. Notre architecture est un 'Système Fédéré'. Si l'agent trouve la bonne réponse en appelant une API globale alors qu'il aurait dû utiliser un outil sécurisé d'investigation locale (Raw Data), c'est une faille d'architecture. La Trajectoire audite le respect de l'orchestration, pas juste le texte."
-
-Q : "Vous parlez d'adosser LangSmith à votre Knowledge Graph. Mais l'agent utilise déjà le Graph pour répondre via le RAG, non ? Quel est l'intérêt de le requêter à nouveau pour l'évaluation ?"
-
-Réponse CTO : "C'est une question fondamentale. L'agent fait son RAG en production, oui. Mais lors de nos campagnes massives de tests de non-régression (la nuit, par exemple), l'évaluateur a besoin d'un 'Corrigé Officiel' pour noter l'agent. Si ce corrigé est un vieux dataset JSON écrit à la main il y a un mois, l'évaluateur va punir l'agent car l'infrastructure aura changé entre-temps ! En connectant l'évaluateur LangSmith au Graphe, notre 'Corrigé Officiel' est dynamique et mis à jour à la seconde près. C'est la fin de l'obsolescence des tests."
-
-Q : "Qu'est-ce que le quadrant 'Risqué' dans votre matrice de confusion ?"
-
-Réponse CTO : "C'est le pire scénario en IA : le mensonge convaincant. L'agent LangGraph a produit une réponse très bien formatée (bonne Complétude), le LLM-Juge trouve ça très beau, mais factuellement, l'agent a inventé un lien entre deux serveurs (Hallucination détectée par notre Rule-Based ou notre Graphe). La matrice met ce cas en rouge clignotant."
+Never mix:
+- state
+- router
+- nodes
+- graph wiring
