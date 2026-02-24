@@ -1,20 +1,12 @@
-# SKILL: LLM Router
-
-## PURPOSE
-Use structured routing.
-
-## ROUTER OUTPUT FORMAT
-
-{
-  "route": "analysis" | "general" | "fallback"
-}
+# SKILL: Code Style
 
 ## RULES
-- Must validate output
-- Must fallback if invalid
-- Must not parse free-text
+- Type hints everywhere
+- One responsibility per function
+- No inline lambdas in routing
+- build_graph() must return compiled graph
 
 ## CHECKLIST
-- [ ] Structured JSON
-- [ ] Explicit routes
-- [ ] Fallback exists
+- [ ] Clean separation
+- [ ] Type hints
+- [ ] No executable logic except in main
