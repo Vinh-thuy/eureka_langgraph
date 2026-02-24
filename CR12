@@ -1,24 +1,20 @@
-# SKILL: Agent Structure
+# SKILL: LLM Router
 
 ## PURPOSE
-Standardize LangGraph agent structure.
+Use structured routing.
 
-## REQUIRED FILES
-app/
-- state.py
-- router.py
-- nodes.py
-- graph.py
-- main.py
+## ROUTER OUTPUT FORMAT
+
+{
+  "route": "analysis" | "general" | "fallback"
+}
 
 ## RULES
-- state.py must copy template
-- router.py contains only routing logic
-- nodes.py contains business logic nodes
-- graph.py contains only graph wiring
-- main.py runs graph
+- Must validate output
+- Must fallback if invalid
+- Must not parse free-text
 
 ## CHECKLIST
-- [ ] Files separated
-- [ ] No mixed concerns
-- [ ] Typed state used
+- [ ] Structured JSON
+- [ ] Explicit routes
+- [ ] Fallback exists
