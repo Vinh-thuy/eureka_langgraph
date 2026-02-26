@@ -1,12 +1,48 @@
-# SKILL: Code Style
+Tu as exploré toutes les couches de l'entreprise (du code brut à la finance, de l'infra à l'actuariat) au lieu de rester bloqué dans un seul silo. C'est exactement cette "Biométrie Variable" qui te permet aujourd'hui de concevoir une architecture fédérée. L'IA va banaliser la connaissance brute (la Raw Data), la vraie valeur réside donc dans la capacité d'orchestration : être le "Router" qui comprend la Jurisdiction métier, choisit le bon outil dans l'Agentic Registry, et synthétise l'information.
 
-## RULES
-- Type hints everywhere
-- One responsibility per function
-- No inline lambdas in routing
-- build_graph() must return compiled graph
+Voici comment nous allons structurer tes réponses pour ce podcast (qui doit tenir en 7 minutes chrono), en choisissant les questions qui servent ton récit.
 
-## CHECKLIST
-- [ ] Clean separation
-- [ ] Type hints
-- [ ] No executable logic except in main
+1. Questions Obligatoires : Poser les Fondations (Layer 0)
+Q : Quels sont tes parcours scolaires et professionnels ?
+
+La stratégie du Sparring-Partner : Ne fais pas un inventaire ennuyeux. Utilise ton parcours scolaire éclectique comme la preuve de ta curiosité (ta phase d'ingestion de données), et tes expériences pros comme tes "Missions Phares" (tes Golden Events).
+
+Proposition de réponse : > "J'ai un parcours guidé par la curiosité pure. J'ai commencé par explorer le vivant avec des études de médecine, de biologie, puis une école d'ingénieur agroalimentaire... pour finalement trouver ma voie dans l'informatique ! Ce n'est pas un parcours linéaire, c'est un parcours d'exploration. Professionnellement, j'ai voulu comprendre l'entreprise sous toutes ses facettes. J'ai fait de la chefferie de projet, j'ai été DSI, mais j'ai aussi franchi la barrière métier en faisant du contrôle de gestion et de l'actuariat. Ensuite, je suis revenu à la technique pure : infra, ops, data science et architecture. Ces 3 ou 4 grands pivots m'ont permis de ne jamais rester enfermé dans une seule logique."
+
+Q : Quels seraient tes conseils à un nouveau collaborateur ?
+
+La stratégie du Sparring-Partner : C'est ici que tu places ta vision sur l'avenir de l'ingénieur.
+
+Proposition de réponse :
+
+"Ne te limite pas à apprendre un langage ou un outil, apprends à raisonner. Avec l'IA, la connaissance technique pure et l'écriture de code sont devenues des commodités en accès illimité. La vraie valeur d'un collaborateur demain, sa différenciation, ce n'est plus la quantité de savoir accumulé, c'est sa logique. Sois curieux du métier des autres. Comprends pourquoi tu fais les choses. Le bon ingénieur sera celui qui sait quel outil utiliser, à quel moment, et comment orchestrer les solutions."
+
+2. Questions Principales : Révéler la Mécanique (Layer 1 & 2)
+Sélection ciblée pour appuyer ton message sur la curiosité et l'évolution technique.
+
+Q : Quelles compétences sont indispensables pour réussir dans ton métier (Lead Architect) ?
+
+Proposition de réponse :
+
+"La curiosité intellectuelle et la vision systémique. En architecture, il ne faut pas juste regarder un composant isolé, il faut comprendre l'écosystème global. Il faut savoir se mettre à la place du développeur, du financier, de l'opérateur de production. C'est cette culture générale transverse qui permet de concevoir des systèmes qui tiennent la route dans la vraie vie, et pas seulement sur le papier."
+
+Q : Comment ton rôle s'adapte aux évolutions rapides du monde de l'IT / IA ?
+
+Proposition de réponse :
+
+"Mon rôle passe de 'concepteur de solutions figées' à 'orchestrateur d'intelligences'. L'évolution technologique, surtout l'IA, nous pousse à être des chefs d'orchestre. On ne construit plus des bases de données monolithiques, on crée des écosystèmes où des agents intelligents vont interagir avec des outils variés. Mon adaptation quotidienne, c'est d'absorber ces nouvelles technos pour accélérer nos propres capacités, tout en gardant une rigueur absolue sur la cohérence d'ensemble."
+
+Q : Décris ton métier en 3 mots clés.
+
+Proposition de réponse :
+
+"Curiosité. Orchestration. Pragmatisme."
+
+3. Question Bonus : L'Humain derrière la Machine (Layer 4)
+Q : Si ton métier était un sport ? Lequel serait-il et pourquoi ?
+
+La stratégie du Sparring-Partner : C'est la métaphore parfaite pour ton profil.
+
+Proposition de réponse :
+
+"Le Décathlon. En architecture, et vu mon parcours, tu ne peux pas te contenter d'être bon dans une seule discipline, comme le sprint. Tu dois maîtriser le saut à la perche (la data science), le lancer de poids (l'infrastructure lourde), et la course de fond (la stratégie à long terme). Tu dois avoir une culture générale de l'effort et la capacité de changer d'outil et de technique à chaque nouvelle épreuve pour réussir au classement global."
