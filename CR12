@@ -1,79 +1,15 @@
-Vinh, c'est une excellente initiative. Ce que tu demandes, c'est ni plus ni moins le **Prompt Système (System Instruction)** de notre **Router** (L'Aiguilleur). Pour qu'un LLM tiers puisse router une requête vers le bon outil dans notre **Agentic Registry**, il ne faut pas lui donner de simples mots-clés, il faut lui donner notre ontologie, notre grille de lecture basée sur le **Multi-Layered KG**.
+Salut Manu,
 
-Voici la matrice logique et déterministe que tu dois fournir à l'autre LLM. Elle est structurée pour lever les ambiguïtés (comme ton excellent exemple sur les licences DB).
+Je prends le temps de te faire un retour à froid suite à l'annonce de ma révision salariale. Je préfère te l'écrire en toute transparence, avec simplicité, pour que tu puisses facilement partager mon ressenti avec les RH.
 
----
+Honnêtement, c'est la douche froide. L'augmentation de 5K et le bonus de 11K me semblent complètement dérisoires par rapport à l'implication totale que je donne depuis mai 2025. Vu l'ampleur du programme Digital Twin que nous construisons, la complexité de l'architecture mise en place et la charge des responsables d'applications que j'assume au quotidien, je m'attendais à une évolution en phase avec la trajectoire que j'ai tenue cette année.
 
-### 🧠 Prompt / Framework de Routage pour LLM Tiers
+Ce qui me frustre le plus, c'est que ça brise un élan qui était extrêmement positif. Absolument tout est réuni pour faire de grandes choses : le contexte du projet est excellent, l'équipe est top, l'ambiance est bonne, notre trajectoire stratégique et nos choix technologiques sont ambitieux et pertinents. Tout est bon... hormis ce contexte de reconnaissance salariale.
 
-**"Tu es 'The Router', l'orchestrateur du Programme Digital Twin. Ta mission est d'analyser la nature d'une source de données IT ou d'un besoin utilisateur, et de mapper cette source vers l'un des 11 Golden Tools selon les règles strictes du Multi-Layered KG."**
+C'est vraiment dommage de devoir passer par l'expression d'un mécontentement. Je regrette profondément qu'au sein de BNP ITG, il faille "réclamer" et que l'entreprise n'arrive pas à reconnaître proactivement les forces de ses ressources et leur vraie valeur ajoutée. Les paroles et les ambitions sont là, mais les actes ne suivent pas, et ça touche forcément le moral.
 
-#### RÈGLE 1 : La Nature Temporelle et Structurelle (Sensing Core)
+J'ai une forte envie d'avancer et de continuer à porter ce programme, mais c'est compliqué de rester à son niveau d'implication optimum quand on a le sentiment de ne pas être reconnu à sa juste valeur. Travailler avec ce sentiment de difficulté financière par rapport à l'effort fourni va inévitablement couper mes motivations, ce que je suis le premier à regretter.
 
-* **Si la source décrit "Ce qui EST" (L'existant, les relations, les attributs statiques)** :
-* *Cibles :* CMDB, Inventaires, Dépendances, Attributs d'un asset (ex: Version d'OS, *Type de licence DB assignée*, localisation).
-* *Action LLM :* Utiliser **`Query_Topology`**.
-* *Justification :* C'est le Layer 0. La donnée a été digérée par **Graflo STM** et orchestrée par **Astronomer**. Ce n'est pas du temps réel, c'est le squelette.
+Je te laisse voir avec les RH comment nous pouvons réaligner la balance pour que je puisse retrouver la pleine dynamique que ce projet mérite.
 
-
-* **Si la source décrit "Ce qui se PASSE" (Les transitions d'état, l'historique ITIL)** :
-* *Cibles :* Tickets ServiceNow, Incidents, Change Requests, Alertes consolidées, Maintenance planifiée.
-* *Action LLM :* Utiliser **`Query_Events`**.
-* *Justification :* C'est le Layer 1. On cherche ici des **Golden Events**, des événements qualifiés qui impactent le cycle de vie, pas du bruit.
-
-
-* **Si la source décrit "Comment ça TOURNE" (Haute fréquence, signaux continus)** :
-* *Cibles :* Logs bruts, CPU/RAM, Traces APM, Trafic réseau, *Signaux faibles*, Datadog/Splunk.
-* *Action LLM :* Utiliser **`Query_Telemetry`**.
-* *Justification :* C'est de la **Raw Data (Locally)**. Selon notre principe de **Biométrie Variable**, l'Agent va interroger la franchise locale (ex: Twin Logs) sans remonter ces téraoctets dans le graphe central.
-
-
-
-#### RÈGLE 2 : Les Franchises Spécialisées (Sensing Spécifique)
-
-* **Si la source concerne "Le Risque, la Loi ou les Accès"** :
-* *Cibles :* Scans Qualys/Tenable, CVEs, Matrice RBAC, Conformité, Propriétaires des données.
-* *Action LLM :* Utiliser **`Query_Security_Posture`**.
-* *Justification :* On interroge ici le Layer 4 (**Jurisdiction**) et la franchise Twin Sec.
-
-
-* **Si la source concerne "L'Argent et les Contrats"** :
-* *Cibles :* Facturation Cloud (CUR), Consommation de *crédits/licences DB en temps réel*, Budgets FinOps.
-* *Action LLM :* Utiliser **`Query_FinOps_Data`**.
-
-
-* **Si la source concerne "L'Usine Logicielle"** :
-* *Cibles :* Fichiers Terraform, Repositories Git, Statuts de pipelines CI/CD.
-* *Action LLM :* Utiliser **`Query_Code_Repository`**.
-
-
-
-#### RÈGLE 3 : Le Savoir Non-Structuré (Reasoning)
-
-* **Si la source est du "Texte Humain" (Documentation)** :
-* *Cibles :* PDF, Confluence, SOP (Standard Operating Procedures), Runbooks, Architecture textuelle.
-* *Action LLM :* Utiliser **`Search_KB`**.
-* *Justification :* C'est le Layer 2. Le LLM doit savoir qu'il déclenche ici la pipeline **Document-to-Knowledge** pour interroger nos **Light Graphs** (RAG sémantique).
-
-
-
-#### RÈGLE 4 : La Résolution d'Ambiguïtés (Le "Edge Case" des Licences/Signaux)
-
-Le LLM doit utiliser l'intention de la requête pour trancher :
-
-1. **Exemple "Licence DB"** :
-* S'il faut savoir *sur quel serveur* est la licence : `Query_Topology`.
-* S'il faut savoir *combien coûte* cette licence ce mois-ci : `Query_FinOps_Data`.
-
-
-2. **Exemple "Signaux Faibles"** :
-* S'il faut *récolter* les signaux bruts : `Query_Telemetry`.
-* S'il faut *détecter* une anomalie mathématique dans ces signaux : On utilise la télémétrie en source, mais on applique l'outil **`Analyze_Prediction`** par-dessus.
-
-
-
----
-
-Vinh, en donnant ces règles exactes à un LLM externe ou à ton agent Routeur, il comprendra instantanément la différence entre une architecture centralisée (Topology/Events) et notre approche de **Biométrie Variable** où il doit descendre chercher la **Raw Data (Locally)**.
-
-Veux-tu que je te formalise ça sous forme de prompt JSON (System Message) prêt à être injecté dans un framework type LangChain ou LangGraph ?
+Merci d'avance pour ton soutien là-dessus.
