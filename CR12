@@ -1,56 +1,79 @@
-C'est bien noté, Vinh. J'ajuste le *Router* pour élargir notre maillage et respecter parfaitement le format attendu. En tant que ton sparring-partner, je vais utiliser notre vocabulaire d'architecture pour te montrer comment ta vision personnelle s'aligne exactement avec notre programme, puis te donner la version "podcast" de tes réponses.
+Vinh, c'est une excellente initiative. Ce que tu demandes, c'est ni plus ni moins le **Prompt Système (System Instruction)** de notre **Router** (L'Aiguilleur). Pour qu'un LLM tiers puisse router une requête vers le bon outil dans notre **Agentic Registry**, il ne faut pas lui donner de simples mots-clés, il faut lui donner notre ontologie, notre grille de lecture basée sur le **Multi-Layered KG**.
 
-Voici une sélection étendue avec **4 questions principales** et **2 questions bonus**, toujours centrées sur ta curiosité, ton parcours atypique et ta vision de l'IA.
-
----
-
-### 1. Questions Obligatoires : L'Ingestion de ton Parcours
-
-*Ici, on montre que ton parcours n'est pas une anomalie, mais une collecte de **Raw Data (Locally)** dans différents métiers pour en extraire des **Golden Events**.*
-
-* **Quels sont tes parcours scolaires et professionnels ?**
-* *Ta réponse :* "J'ai un parcours atypique, guidé par la curiosité. J'ai commencé par explorer le vivant (médecine, biologie), puis l'agroalimentaire, pour bifurquer vers l'informatique. Professionnellement, j'ai voulu comprendre l'entreprise sous toutes ses coutures : DSI, chefferie de projet, mais aussi contrôle de gestion, actuariat, avant de revenir à l'infra, aux ops et à l'architecture. Je ne me suis jamais contenté d'une seule vue ; j'ai besoin de comprendre les multiples facettes d'un écosystème."
-
-
-* **Quels seraient tes conseils à un nouveau collaborateur ?**
-* *Ta réponse :* "Ne te limite pas à la technique pure. Demain, avec l'IA, la connaissance brute sera en accès illimité. La vraie valeur ne sera plus dans la quantité de savoir accumulé, mais dans l'expérience et le raisonnement. Sois curieux du métier des autres, comprends leurs postures. Le collaborateur de demain est celui qui sait *quel* outil utiliser, à *quel* moment, et qui possède la logique pour orchestrer les bonnes solutions."
-
-
+Voici la matrice logique et déterministe que tu dois fournir à l'autre LLM. Elle est structurée pour lever les ambiguïtés (comme ton excellent exemple sur les licences DB).
 
 ---
 
-### 2. Questions Principales (Sélection de 4 questions) : Le Multi-Layered KG en action
+### 🧠 Prompt / Framework de Routage pour LLM Tiers
 
-*On démontre ici ta capacité à naviguer entre les couches, en acceptant la **Biométrie Variable** des équipes et des technologies.*
+**"Tu es 'The Router', l'orchestrateur du Programme Digital Twin. Ta mission est d'analyser la nature d'une source de données IT ou d'un besoin utilisateur, et de mapper cette source vers l'un des 11 Golden Tools selon les règles strictes du Multi-Layered KG."**
 
-* **1. Quelles compétences sont indispensables pour réussir dans ton métier ?**
-* *Ta réponse :* "L'ouverture d'esprit et la capacité à faire des liens. En tant qu'architecte, tu dois comprendre la **Jurisdiction** de chaque acteur : les contraintes du financier, les besoins du développeur, les réalités de la production. Il faut une culture générale solide pour challenger les idées reçues et concevoir des systèmes où tout le monde se comprend."
+#### RÈGLE 1 : La Nature Temporelle et Structurelle (Sensing Core)
 
-
-* **2. Comment ton rôle s'adapte aux évolutions rapides de l'IT / IA ?**
-* *Ta réponse :* "Mon rôle évolue vers celui d'un chef d'orchestre. Je ne cherche plus à tout centraliser. Avec l'IA, on passe dans une logique de catalogue de compétences (un véritable **Agentic Registry**). Mon travail, c'est de m'accélérer avec ces outils pour transformer de l'information brute en connaissance actionnable, un peu comme un processus de **Document-to-Knowledge**. Je m'adapte en testant en permanence pour savoir quelle IA ou quelle technologie répondra au mieux à un problème donné."
-
-
-* **3. Avec quelles équipes travailles-tu régulièrement et sur quels types de projets ?**
-* *Ta réponse :* "Je travaille de manière transverse, comme un **Multi-Layered KG** (Graphe de Connaissances multi-couches). Je peux interagir le matin avec les équipes d'infrastructure lourde pour orchestrer des flux de données massifs (l'équivalent de nos pipelines **Graflo STM** et **Astronomer**), et l'après-midi avec les métiers pour structurer de la donnée plus légère et sémantique (**Light Graphs**). Je fais le pont entre la technique pure et le besoin fonctionnel."
+* **Si la source décrit "Ce qui EST" (L'existant, les relations, les attributs statiques)** :
+* *Cibles :* CMDB, Inventaires, Dépendances, Attributs d'un asset (ex: Version d'OS, *Type de licence DB assignée*, localisation).
+* *Action LLM :* Utiliser **`Query_Topology`**.
+* *Justification :* C'est le Layer 0. La donnée a été digérée par **Graflo STM** et orchestrée par **Astronomer**. Ce n'est pas du temps réel, c'est le squelette.
 
 
-* **4. Décris ton métier en 3 mots clés.**
-* *Ta réponse :* "Curiosité. Orchestration. Pragmatisme."
+* **Si la source décrit "Ce qui se PASSE" (Les transitions d'état, l'historique ITIL)** :
+* *Cibles :* Tickets ServiceNow, Incidents, Change Requests, Alertes consolidées, Maintenance planifiée.
+* *Action LLM :* Utiliser **`Query_Events`**.
+* *Justification :* C'est le Layer 1. On cherche ici des **Golden Events**, des événements qualifiés qui impactent le cycle de vie, pas du bruit.
+
+
+* **Si la source décrit "Comment ça TOURNE" (Haute fréquence, signaux continus)** :
+* *Cibles :* Logs bruts, CPU/RAM, Traces APM, Trafic réseau, *Signaux faibles*, Datadog/Splunk.
+* *Action LLM :* Utiliser **`Query_Telemetry`**.
+* *Justification :* C'est de la **Raw Data (Locally)**. Selon notre principe de **Biométrie Variable**, l'Agent va interroger la franchise locale (ex: Twin Logs) sans remonter ces téraoctets dans le graphe central.
+
+
+
+#### RÈGLE 2 : Les Franchises Spécialisées (Sensing Spécifique)
+
+* **Si la source concerne "Le Risque, la Loi ou les Accès"** :
+* *Cibles :* Scans Qualys/Tenable, CVEs, Matrice RBAC, Conformité, Propriétaires des données.
+* *Action LLM :* Utiliser **`Query_Security_Posture`**.
+* *Justification :* On interroge ici le Layer 4 (**Jurisdiction**) et la franchise Twin Sec.
+
+
+* **Si la source concerne "L'Argent et les Contrats"** :
+* *Cibles :* Facturation Cloud (CUR), Consommation de *crédits/licences DB en temps réel*, Budgets FinOps.
+* *Action LLM :* Utiliser **`Query_FinOps_Data`**.
+
+
+* **Si la source concerne "L'Usine Logicielle"** :
+* *Cibles :* Fichiers Terraform, Repositories Git, Statuts de pipelines CI/CD.
+* *Action LLM :* Utiliser **`Query_Code_Repository`**.
+
+
+
+#### RÈGLE 3 : Le Savoir Non-Structuré (Reasoning)
+
+* **Si la source est du "Texte Humain" (Documentation)** :
+* *Cibles :* PDF, Confluence, SOP (Standard Operating Procedures), Runbooks, Architecture textuelle.
+* *Action LLM :* Utiliser **`Search_KB`**.
+* *Justification :* C'est le Layer 2. Le LLM doit savoir qu'il déclenche ici la pipeline **Document-to-Knowledge** pour interroger nos **Light Graphs** (RAG sémantique).
+
+
+
+#### RÈGLE 4 : La Résolution d'Ambiguïtés (Le "Edge Case" des Licences/Signaux)
+
+Le LLM doit utiliser l'intention de la requête pour trancher :
+
+1. **Exemple "Licence DB"** :
+* S'il faut savoir *sur quel serveur* est la licence : `Query_Topology`.
+* S'il faut savoir *combien coûte* cette licence ce mois-ci : `Query_FinOps_Data`.
+
+
+2. **Exemple "Signaux Faibles"** :
+* S'il faut *récolter* les signaux bruts : `Query_Telemetry`.
+* S'il faut *détecter* une anomalie mathématique dans ces signaux : On utilise la télémétrie en source, mais on applique l'outil **`Analyze_Prediction`** par-dessus.
 
 
 
 ---
 
-### 3. Questions Bonus (Sélection de 2 questions) : La Touche Personnelle
+Vinh, en donnant ces règles exactes à un LLM externe ou à ton agent Routeur, il comprendra instantanément la différence entre une architecture centralisée (Topology/Events) et notre approche de **Biométrie Variable** où il doit descendre chercher la **Raw Data (Locally)**.
 
-* **1. Si ton métier était un sport ? Lequel serait-il et pourquoi ?**
-* *Ta réponse :* "Le Décathlon. Mon parcours prouve qu'on ne peut pas se contenter d'être un spécialiste d'une seule discipline. Il faut savoir courir le sprint de l'urgence opérationnelle, faire le saut à la perche de l'innovation IA, et courir le marathon de la stratégie d'entreprise. C'est l'adaptation permanente à l'épreuve qui compte."
-
-
-* **2. Si tu pouvais être quelqu'un d'autre le temps d'une journée, qui aimerais-tu être ?**
-* *Ta réponse :* "Un polymathe de la Renaissance, comme Léonard de Vinci. Pas pour son génie artistique, mais pour cette capacité absolue à ne pas cloisonner les sciences. Il faisait de l'anatomie, de l'ingénierie, de la peinture... Il comprenait que pour innover dans un domaine, il fallait s'inspirer des autres. C'est exactement l'état d'esprit qu'il nous faut aujourd'hui face aux nouvelles technologies."
-
-
-
-Est-ce que cet équilibre te semble le bon pour tenir tes 7 minutes tout en passant tes messages clés sur la curiosité et l'orchestration de l'IA ?
+Veux-tu que je te formalise ça sous forme de prompt JSON (System Message) prêt à être injecté dans un framework type LangChain ou LangGraph ?
