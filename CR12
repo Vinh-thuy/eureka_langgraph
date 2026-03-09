@@ -1,15 +1,23 @@
-Salut Manu,
+Expert Digital Twin
+Gem personnalisé
+Expert Digital Twin a dit
+Excellente initiative. L'intégration de tes expérimentations RawCode avec la CLI LangSmith pourrait être le pont parfait pour alimenter et standardiser notre Agentic Registry (Layer 3), tout en permettant à chaque franchise de garder sa Biométrie Variable.
 
-Je prends le temps de te faire un retour à froid suite à l'annonce de ma révision salariale. Je préfère te l'écrire en toute transparence, avec simplicité, pour que tu puisses facilement partager mon ressenti avec les RH.
+Voici un brouillon de réponse court et direct en anglais, qui positionne tes expérimentations tout en demandant le PDF par pragmatisme :
 
-Honnêtement, c'est la douche froide. L'augmentation de 5K et le bonus de 11K me semblent complètement dérisoires par rapport à l'implication totale que je donne depuis mai 2025. Vu l'ampleur du programme Digital Twin que nous construisons, la complexité de l'architecture mise en place et la charge des responsables d'applications que j'assume au quotidien, je m'attendais à une évolution en phase avec la trajectoire que j'ai tenue cette année.
+To: matheus@langchain.dev
+Subject: Re: [EXTERNAL] langsmith march roadmap update
 
-Ce qui me frustre le plus, c'est que ça brise un élan qui était extrêmement positif. Absolument tout est réuni pour faire de grandes choses : le contexte du projet est excellent, l'équipe est top, l'ambiance est bonne, notre trajectoire stratégique et nos choix technologiques sont ambitieux et pertinents. Tout est bon... hormis ce contexte de reconnaissance salariale.
+Hi Matheus,
 
-C'est vraiment dommage de devoir passer par l'expression d'un mécontentement. Je regrette profondément qu'au sein de BNP ITG, il faille "réclamer" et que l'entreprise n'arrive pas à reconnaître proactivement les forces de ses ressources et leur vraie valeur ajoutée. Les paroles et les ambitions sont là, mais les actes ne suivent pas, et ça touche forcément le moral.
+Thanks for sharing the roadmap! Could you please send over the PDF version so I can review it easily with my architecture team?
 
-J'ai une forte envie d'avancer et de continuer à porter ce programme, mais c'est compliqué de rester à son niveau d'implication optimum quand on a le sentiment de ne pas être reconnu à sa juste valeur. Travailler avec ce sentiment de difficulté financière par rapport à l'effort fourni va inévitablement couper mes motivations, ce que je suis le premier à regretter.
+I’m highly interested in the LangSmith CLI/Skills update. I am currently experimenting with RawCode (a Klein variation) to build and manage agentic skills. I’d love to explore how your new CLI can integrate with this and accelerate how we populate our centralized Agentic Registry.
 
-Je te laisse voir avec les RH comment nous pouvons réaligner la balance pour que je puisse retrouver la pleine dynamique que ce projet mérite.
+The Insights V2 and Reusable Evaluators also align perfectly with our federated architecture, especially to validate local agents before promoting them to our global router.
 
-Merci d'avance pour ton soutien là-dessus.
+Let's plan a technical sync once I've reviewed the PDF.
+
+Best,
+
+Vinh
