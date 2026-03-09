@@ -1,55 +1,7 @@
-TWIN CORE: The Federated Backbone of the Digital Twin
-The Vision
-At BNP Paribas, resolving complex IT issues requires more than isolated local tools: it demands a systemic understanding and the cooperation of multiple areas of expertise.
+Evolving from Federated Knowledge to a Predictive World Model (2026-2030):
 
-Knowledge is fragmented.
+From Mapping to Simulating: Upgrading the Multi-Layered KG into a dynamic "World Model" capable of continuously simulating the IT ecosystem's behavior.
 
-Creating effective AI agents from scratch is too slow and costly.
+Proactive & Anticipatory AI: Leveraging Graph Neural Networks (GNN) and Neurosymbolic AI to detect weak signals and predict systemic, cross-domain cascading failures before they impact the business.
 
-Local intelligences (domains) struggle to collaborate with each other.
-==> The IT environment lacks a federated backbone to unite these areas of expertise.
-
-Twin Core is the philosophy and the unifying foundation of the Digital Twin. It is a Variable Geometry ecosystem that provides the accelerators (Knowledge Graphs, Knowledge Bases, Agentic Platform) enabling franchises to build, orchestrate their agents, and solve their Use Cases massively faster.
-
-The Problem
-Business domains (Security, Infrastructure, Change) want to deploy AI but face a technological barrier. We are facing:
-
-The complexity of linking business documentation to technical reality.
-
-The "blank page" syndrome: recreating platforms, data access, and orchestrators for every new project.
-
-The inability to handle cross-functional incidents (e.g., an issue involving Security, Network, and Change simultaneously).
-
-The extreme difficulty of developing advanced AI algorithms in isolation.
-
-The Solution: Twin Core
-Twin Core = Knowledge Fabric (KG/KB) + Agentic Platform + Advanced AI Solutions
-Operating in a "Franchisor" logic, Twin Core provides the state-of-the-art equipment and engines to facilitate access to knowledge and accelerate the creation of local agents:
-
-1. The "Platform" Assets (Tools, Facilitators & Cooperation Hub):
-
-Knowledge Graph (KG) Platform: Provided "As-a-Service," this includes the central graph database and industrialized ingestion pipelines to seamlessly query the IT topology and Golden Events.
-
-Knowledge Base (KB) Platform: An advanced GraphRAG architecture (combining Vector search and Graph databases) enabling franchises to easily transform unstructured documentation into actionable, semantic knowledge.
-
-Agentic Platform & Central Registry: The mandatory hosting environment and central catalog to register local Skills. It offers a premium DevX (Developer Experience) with Coding Agents leveraging the SDD (Specification Driven Development) methodology to accelerate the build phase.
-
-2. The "AI" Assets (Complex Engines & Cognitive Frameworks):
-
-Ready-to-deploy Cognitive Engines: We abstract the deep, centralized R&D complexity required for systemic AI (such as Graph Neural Networks) into turnkey solutions. The first active release is the "Correlation Engine" (dynamically bridging Incidents and Changes).
-
-Neurosymbolic AI & Systemic Modeling: We build complex AI solutions blending the logical reasoning of the Graph (rules, Jurisdiction) with the power of LLMs to simulate IT behavior, paving the way for our future World Model.
-
-Cross-domain Orchestration Frameworks: AI routing patterns (The Router, The Synthesizer) designed to break down complex Use Cases and intelligently query the local data of the franchises.
-
-Twin Core is NOT a simple Chatbot, nor an isolated LLM. It is:
-
-The Orchestrator of Collective Intelligence: Where a chatbot answers simple questions, Twin Core makes dozens of specialized agents cooperate to solve systemic problems.
-
-A Neurosymbolic Engine: A simple LLM hallucinates; Twin Core anchors AI in the mathematical and topological reality of the IT system via the Knowledge Graph.
-
-An Agentic Production Factory: It doesn't just deliver a conversational interface; it provides franchises (via Variable Geometry) with the tools to build their own AIs and plug them into the IT ecosystem.
-
-"Twin Core does not centralize data; it orchestrates the cooperation of intelligences to solve complex IT problems."
-
-Twin Core halves the technological effort required by a franchise to launch its first agentic use cases.
+Autonomous Resilience: Maturing the Agentic ecosystem from "assisted analysis" to "autonomous remediation," where cooperating AI agents proactively secure and optimize the bank's infrastructure.
