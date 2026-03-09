@@ -40,8 +40,8 @@ Data Side: The franchise provides its business data and documentation. Our inges
 3. QUERY & COOPERATE (Interrogation & Orchestration):
 Local agents query our global platforms (Topology, Events, KB) to enrich their analysis context, without copying data. In return, our Central Orchestrator can solicit franchise agents to solve cross-domain use cases.
 
-Rules of Engagement (DO'S & DON'TS)
 
+Rules of Engagement (DO'S & DON'TS)
 DO: Twin Core provides the software factory (DevX, Ingestion Pipelines, Runtime) and orchestrates systemic routing.
 
 DON'T (Variable Geometry): Twin Core does not force the centralization of raw business data (Raw Data).
@@ -49,3 +49,32 @@ DON'T (Variable Geometry): Twin Core does not force the centralization of raw bu
 DON'T (Business Value): Twin Core does not develop the logic for expert business agents (Business Oriented AI). This is the exclusive responsibility of the franchise.
 
 DON'T (Local Governance): Twin Core is not responsible for the quality and curation of the business data or documentation injected by the franchise into the KB.
+
+
+
+
+TWIN CORE RESPONSIBILITIES (DO'S & DON'TS)
+
+The Twin Core foundation focuses on the technological foundation (Maximum Complexity), global orchestration, and AI governance.
+
+DO'S (What Twin Core does and provides)
+
+Builds and operates the mandatory Agentic Platform (LangGraph), ensuring global orchestration and the routing of complex cross-domain requests.
+
+Manages the Central Agent Catalog (Agentic Registry) to validate and reference each local AI.
+
+Maintains the Knowledge Graph (KG) Platform: dynamic mapping of the IT topology and correlation of major events.
+
+Provides and operates the Knowledge Base (KB) Platform: making the vector/graph architecture (Light RAG) available to enable franchises to extract semantics from their own documentation.
+
+Develops Transversal Intelligence Engines: such as the "Correlation Engine", infusing advanced AI capabilities into the ecosystem.
+
+DON'TS (What Twin Core DOES NOT do)
+
+Does not force the centralization of raw data: Thanks to variable geometry, using the central KG or KB is an opportunity. Raw business data can remain local.
+
+Does not develop local business use cases: It provides the templates and platforms but does not create the expert agents (Business Oriented AI). This is the exclusive responsibility of the franchises.
+
+Is not a simple Chatbot or an isolated LLM: It does not perform basic conversation; it orchestrates true multi-agent reasoning.
+
+Is not responsible for the quality of local business data: The curation of the knowledge ingested via Light RAG remains the exclusive responsibility of the franchise.
