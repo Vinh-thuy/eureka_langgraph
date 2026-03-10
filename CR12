@@ -1,15 +1,407 @@
-TWIN CORE - STRATEGIC POSITIONING & GAINS
-Strategic Positioning
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Twin - Architecture & Roadmap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-The Federated Backbone: Twin Core is the unifying foundation of the Digital Twin ecosystem. It provides the Agentic Platform, the Knowledge Fabric (Topological KG & GraphRAG KB), and the Advanced AI R&D required to scale systemic intelligence.
+    <style>
+        /* 1. THE SETUP */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-The "Franchisor" Logic: It empowers autonomous franchises with state-of-the-art accelerators (DevX, Starter-Kits) while ensuring global orchestration, security, and interoperability—without forcing raw data centralization.
+        body {
+            background-color: #e2e8f0;
+            display: grid;
+            gap: 30px;
+            grid-template-columns: 1fr;
+            margin: 0;
+            min-height: 100vh;
+            padding: 30px 0;
+            place-items: center;
+        }
 
-The Predictive Trajectory (2026-2030): Twin Core transitions the IT ecosystem from fragmented, reactive operations to a cohesive, anticipatory Enterprise World Model.
+        /* 1.1 BACKGROUND STYLING */
+        .slide-container {
+            align-items: center;
+            background-color: #0f0f11; /* Deep rich black */
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            font-family: 'Urbanist', sans-serif;
+            height: 720px;
+            justify-content: center;
+            overflow: hidden;
+            padding: 50px 60px;
+            position: relative;
+            width: 1280px;
+        }
 
-Global Gains for the Company
+        .slide-container::after {
+            background: linear-gradient(90deg, #deff9a 0%, rgba(222, 255, 154, 0) 100%);
+            bottom: 0;
+            content: '';
+            height: 4px;
+            left: 0;
+            position: absolute;
+            width: 100%;
+        }
 
+        /* 2. CONSISTENT TYPOGRAPHY */
+        .slide-container h1,
+        .slide-container h2,
+        .slide-container h3,
+        .slide-container h4 {
+            color: #f5f5f5;
+            font-weight: 600;
+        }
 
+        .slide-container p,
+        .slide-container li {
+            color: #b4b4b8;
+            font-weight: 400;
+        }
 
+        .slide-container strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
 
-AXISIMPACT & 2026-2030 PROJECTIONAI Time-to-Market (Agility)Immediate: -50% "Time-to-Agent" for Franchises. Turnkey environments (DevX) and coding agents allow domains to deploy AI twice as fast.2026-2030 Vision: A fully industrialized AI factory capable of scaling complex, cross-domain use cases on demand.Cost Avoidance (Mutualization)Immediate: Massive CapEx & OpEx Reduction. Centralizing heavy infrastructure and highly complex AI R&D prevents each franchise from funding redundant platforms.2026-2030 Vision: Sustainable, Group-wide AI scaling without exponential infrastructure and licensing costs.Cross-Domain ResolutionImmediate: Breaking IT Silos. Global orchestration enables specialized local agents (e.g., Security, Ops) to seamlessly cooperate, solving complex incidents faster.2026-2030 Vision: Autonomous cross-domain remediation orchestrated dynamically by the central router.Systemic Resilience (World Model)Immediate: Dynamic Correlation. Advanced engines (like the Correlation Engine) link heterogeneous events in real-time.2026-2030 Vision: Shift from Reactive to Anticipatory. The Digital Twin leverages GNNs to continuously simulate the IT ecosystem, predicting cascading impacts and preventing failures before they hit the business.
+        /* 3. TILE LAYOUT DEFINITIONS */
+        .slide-container.tile-layout {
+            align-items: flex-start;
+            display: grid;
+            gap: 50px;
+            grid-template-columns: 350px 1fr;
+            padding-top: 80px;
+        }
+
+        /* Left Column (Title & Context) */
+        .title-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        .slide-number {
+            color: #deff9a;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .slide-title {
+            color: #ffffff;
+            font-size: 46px;
+            line-height: 1.1;
+            margin: 0;
+        }
+
+        .slide-subtitle {
+            color: #daffde;
+            font-size: 20px;
+            line-height: 1.4;
+        }
+
+        /* Right Column (Tiles) */
+        .tiled-content {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            grid-auto-rows: 1fr;
+        }
+
+        .tile {
+            background-color: #1a1a1d;
+            border-left: 3px solid transparent;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 32px;
+            transition: border-color 0.3s ease;
+        }
+
+        .tile:nth-child(1) { border-left-color: #deff9a; }
+        .tile:nth-child(2) { border-left-color: #7dd3fc; }
+        .tile:nth-child(3) { border-left-color: #c084fc; }
+        .tile:nth-child(4) { border-left-color: #fca5a5; }
+
+        .tile.span-2 {
+            border-left-color: #4ade80;
+            grid-column: span 2;
+        }
+
+        .title-container {
+            align-items: flex-start;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .main-title {
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+
+        .sub-title {
+            color: #deff9a;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .icon-container {
+            align-items: center;
+            background-color: #27272a;
+            border-radius: 12px;
+            color: #f5f5f5;
+            display: flex;
+            font-size: 20px;
+            height: 48px;
+            justify-content: center;
+            width: 48px;
+        }
+
+        .tile:nth-child(1) .icon-container { color: #deff9a; }
+        .tile:nth-child(2) .icon-container { color: #7dd3fc; }
+        .tile:nth-child(3) .icon-container { color: #c084fc; }
+        .tile:nth-child(4) .icon-container { color: #fca5a5; }
+        .tile.span-2 .icon-container { color: #4ade80; }
+
+        .tile-content {
+            font-size: 18px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .tile-content ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .tile-content li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .tile-content li::before {
+            color: #deff9a;
+            content: '→';
+            font-weight: bold;
+            left: 0;
+            position: absolute;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Strategic Framework -->
+    <div class="slide-container tile-layout" id="slide1">
+        <div class="title-wrapper">
+            <span class="slide-number">01. Methodology</span>
+            <h2 class="slide-title">A Common Grammar</h2>
+            <p class="slide-subtitle">Bridging the CTO Vision with Operational Reality to build a systemic automation matrix.</p>
+        </div>
+        
+        <div class="tiled-content">
+            <!-- Tile 1: Top-Down -->
+            <div class="tile">
+                <div class="title-container">
+                    <div>
+                        <p class="main-title">Top-Down: The Map</p>
+                        <p class="sub-title">Theoretical Coverage</p>
+                    </div>
+                    <span class="icon-container"><i class="fa-solid fa-map"></i></span>
+                </div>
+                <div class="tile-content">
+                    <ul>
+                        <li><strong>Source:</strong> 200+ macro Use Cases from CTO Days.</li>
+                        <li><strong>Action:</strong> Grouped into functional Clusters.</li>
+                        <li><strong>Value:</strong> 100% <i>Jurisdiction Coverage</i>, including non-incident tasks like Self-Service & KB access.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tile 2: Bottom-Up -->
+            <div class="tile">
+                <div class="title-container">
+                    <div>
+                        <p class="main-title">Bottom-Up: Compass</p>
+                        <p class="sub-title">Operational Reality</p>
+                    </div>
+                    <span class="icon-container"><i class="fa-solid fa-compass"></i></span>
+                </div>
+                <div class="tile-content">
+                    <ul>
+                        <li><strong>Source:</strong> All P1 Incidents (Rolling Year).</li>
+                        <li><strong>Action:</strong> Mapped onto our CTO Clusters.</li>
+                        <li><strong>Value:</strong> Creates a real-world Heatmap to identify true friction zones and prioritize appropriately.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tile 3: The Result -->
+            <div class="tile span-2">
+                <div class="title-container">
+                    <div>
+                        <p class="main-title">The Unified Matrix</p>
+                        <p class="sub-title">Strategic Outcome</p>
+                    </div>
+                    <span class="icon-container"><i class="fa-solid fa-link"></i></span>
+                </div>
+                <p class="tile-content">
+                    By crossing exhaustive use cases with actual P1s, we define a <strong>Common Grammar</strong>. We stop reacting blindly to emergencies and start building agents based on proven, systemic patterns that drive actual business value.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Execution Model -->
+    <div class="slide-container tile-layout" id="slide2">
+        <div class="title-wrapper">
+            <span class="slide-number">02. Execution Model</span>
+            <h2 class="slide-title">The Agentic Factory</h2>
+            <p class="slide-subtitle">How we scale operations through Factorization and "By-Design" ROI.</p>
+        </div>
+        
+        <div class="tiled-content">
+            <!-- Tile 1 -->
+            <div class="tile">
+                <div class="title-container">
+                    <div>
+                        <p class="main-title">1. Factorization</p>
+                        <p class="sub-title">The Agentic Registry</p>
+                    </div>
+                    <span class="icon-container"><i class="fa-solid fa-layer-group"></i></span>
+                </div>
+                <p class="tile-content">
+                    We do not build 200 isolated bots.<br><br>
+                    Clusters define <strong>Generic Templates</strong> (e.g., <i>The Investigator</i>). Built once, added to the Layer 3 Registry, and instantly reusable by all 7 Franchises to drastically reduce IT build costs.
+                </p>
+            </div>
+
+            <!-- Tile 2 -->
+            <div class="tile">
+                <div class="title-container">
+                    <div>
+                        <p class="main-title">2. Variable Biometry</p>
+                        <p class="sub-title">Adaptive Data Routing</p>
+                    </div>
+                    <span class="icon-container"><i class="fa-solid fa-network-wired"></i></span>
+                </div>
+                <div class="tile-content">
+                    One agent template adapts to the entity's maturity level dynamically:
+                    <ul>
+                        <li><strong>Full Stack:</strong> Queries the Central Multi-Layered KG & Golden Events.</li>
+                        <li><strong>Agent-Only:</strong> Bypasses the center to safely query Local Raw Data.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tile 3 (Spanning to balance the 3-item grid) -->
+            <div class="tile span-2">
+                <div class="title-container">
+                    <div>
+                        <p class="main-title">3. Standardized KPIs</p>
+                        <p class="sub-title">ROI "By Design"</p>
+                    </div>
+                    <span class="icon-container"><i class="fa-solid fa-chart-line"></i></span>
+                </div>
+                <div class="tile-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <p>Because agents are standardized by Cluster, evaluation metrics are wired directly into their design and LangGraph traces.</p>
+                    <ul>
+                        <li><strong>MTTD:</strong> Faster contextual mapping.</li>
+                        <li><strong>MTTR:</strong> Automated diagnostic execution.</li>
+                        <li><strong>MTBF:</strong> Proactive compliance checks.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Delivery Roadmap -->
+    <div class="slide-container tile-layout" id="slide3">
+        <div class="title-wrapper">
+            <span class="slide-number">03. Target 2026</span>
+            <h2 class="slide-title">Delivery Roadmap</h2>
+            <p class="slide-subtitle">Translating the macro-schedule into 4 distinct Architectural Tracks.</p>
+        </div>
+        
+        <div class="tiled-content">
+            <!-- Tile 1 -->
+            <div class="tile">
+                <div class="title-container">
+                    <div>
+                        <p class="main-title">1. Platform & Agents</p>
+                        <p class="sub-title">The Engine & Baseline</p>
+                    </div>
+                    <span class="icon-container"><i class="fa-solid fa-server"></i></span>
+                </div>
+                <p class="tile-content">
+                    Deployment of the <strong>LangGraph</strong> infrastructure. Twin Core builds the system routers (Router, Guardian) AND the <strong>Transversal Agents</strong> (Investigator, Librarian) provided as a foundation.
+                </p>
+            </div>
+
+            <!-- Tile 2 -->
+            <div class="tile">
+                <div class="title-container">
+                    <div>
+                        <p class="main-title">2. Multi-Layered KG</p>
+                        <p class="sub-title">The Data Backbone</p>
+                    </div>
+                    <span class="icon-container"><i class="fa-solid fa-database"></i></span>
+                </div>
+                <p class="tile-content">
+                    Heavy data pipelines. Deployment of <strong>TigerGraph</strong>, orchestrated by Graflo STM & Astronomer. Ingesting Topo, Service Mapping, and Centralized Golden Events.
+                </p>
+            </div>
+
+            <!-- Tile 3 -->
+            <div class="tile">
+                <div class="title-container">
+                    <div>
+                        <p class="main-title">3. Distributed KB</p>
+                        <p class="sub-title">The Cognitive Layer</p>
+                    </div>
+                    <span class="icon-container"><i class="fa-solid fa-brain"></i></span>
+                </div>
+                <p class="tile-content">
+                    Separated from the KG. Processing unstructured data (ServiceNow, Confluence) via the <strong>Document-to-Knowledge</strong> pipeline into Light Graphs for RAG capabilities.
+                </p>
+            </div>
+
+            <!-- Tile 4 -->
+            <div class="tile">
+                <div class="title-container">
+                    <div>
+                        <p class="main-title">4. Co-Construction</p>
+                        <p class="sub-title">Franchise Federation</p>
+                    </div>
+                    <span class="icon-container"><i class="fa-solid fa-handshake-angle"></i></span>
+                </div>
+                <p class="tile-content">
+                    The contract: Franchises expose their Local APIs for federated querying, and contribute their specialized, domain-expert agents back into the central <strong>Layer 3 Registry</strong>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+```
