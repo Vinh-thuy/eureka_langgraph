@@ -1,15 +1,399 @@
-Program Governance
-   8. Program Management & Governance
 
-Platform Core
-   1. Knowledge Graph
-   2. Knowledge Bases
-   3. Agentic Platform
-   4. Agents & Tools
-   5. TwinForge
+# Programme Twin – Structure OPUS et EPIC (Version détaillée)
 
-Experience
-   6. User Interfaces
+Ce document sert de **référence structurante pour le programme Twin**.  
+Il est utilisé pour :
 
-Product & Adoption
-   7. TwinCore Platform
+- Structurer les **streams de travail (OPUS)**
+- Définir les **EPIC Jira**
+- Piloter les responsabilités et les ressources
+- Alimenter le **backlog technique**
+- Permettre l’analyse par des **agents LLM / LangGraph**
+- Prioriser les développements et organiser les sprints
+
+Le modèle de structuration utilisé est :
+
+OPUS → EPIC → FEATURE → STORY → SPRINT
+
+Les **EPIC servent au pilotage stratégique**, tandis que les features et stories servent au delivery technique.
+
+---
+
+# OPUS (Streams du programme)
+
+## 1. Knowledge Graph
+
+Responsabilité : équipe Knowledge Graph (ex : Sasha).
+
+Objectif :
+Construire et maintenir le **Knowledge Graph du Digital Twin**, qui représente la structure et les relations entre les assets IT, les événements et les capacités.
+
+Sujets couverts :
+
+### Modélisation des assets
+- applications
+- services
+- serveurs
+- réseaux
+- dépendances applicatives
+
+### Représentation de la topologie
+- mapping des dépendances
+- visualisation des chaînes applicatives
+- identification des impacts en cas d’incident
+
+### Gestion des événements
+- audit logs
+- événements DVM
+- métriques techniques
+
+### Gestion de la juridiction
+- droits utilisateurs
+- héritage des permissions
+- périmètres organisationnels
+
+### Interaction avec les agents
+- navigation dans la topologie
+- analyse des dépendances
+- support au root cause analysis
+
+---
+
+## 2. Knowledge Bases
+
+Objectif :
+Construire et gérer les bases de connaissances utilisées par les agents.
+
+Sujets couverts :
+
+- ingestion documentaire
+- structuration des connaissances
+- GraphRAG
+- LightRAG
+- Memgraph / LiteGraph
+- indexation documentaire
+- enrichissement sémantique
+
+Les Knowledge Bases sont utilisées pour :
+
+- répondre aux questions métiers
+- fournir du contexte aux agents
+- compléter les informations du Knowledge Graph
+
+---
+
+## 3. Plateforme Agentique (LangGraph)
+
+Objectif :
+Construire la plateforme permettant d’orchestrer et d’exécuter les agents.
+
+Sujets couverts :
+
+### Orchestration des agents
+- runtime LangGraph
+- workflows multi-agents
+- coordination des capacités
+
+### Evaluation des agents
+- LangSmith
+- datasets d’évaluation
+- benchmarks
+
+### Gestion des modèles LLM
+
+Inclut :
+
+- tests de nouveaux modèles
+- benchmark des performances
+- suivi des modèles disponibles via **LLM as a Service**
+- test de modèles comme **Gemini**
+
+Objectif :
+identifier le meilleur modèle selon les tâches (routing, génération, reasoning, RAG).
+
+---
+
+## 4. Agents et Tools
+
+Objectif :
+Construire les **agents et outils réutilisables par toutes les franchises**.
+
+Sujets couverts :
+
+- agents métiers
+- connecteurs systèmes
+- tools factorisés
+- observabilité des agents
+- routage intelligent entre agents
+- tests LLM
+
+Exemples de capabilities :
+
+### Agent Topologie
+Permet d’explorer le Knowledge Graph pour identifier les relations entre assets.
+
+Exemples de questions :
+
+- quelle infrastructure supporte telle application ?
+- quels serveurs sont liés à tel service ?
+- quels assets sont impactés par un incident ?
+
+---
+
+## 5. TwinForge (SDK & Factory développeur)
+
+Objectif :
+Industrialiser le développement d’agents et accélérer la création de nouvelles capacités.
+
+Sujets couverts :
+
+- SDK TwinForge
+- templates d’agents
+- templates d’outils
+- patterns d’architecture
+- standardisation des pratiques
+
+Alignement nécessaire avec :
+
+- initiatives **TwinApps**
+- autres équipes CIB
+
+Objectif :
+éviter les duplications et converger vers un **SDK de référence**.
+
+---
+
+## 6. Interfaces Utilisateurs
+
+Objectif :
+Fournir les interfaces permettant d’interagir avec le Digital Twin.
+
+Inclut :
+
+- intégration Microsoft Teams
+- Web UI
+- gestion de la contextualisation utilisateur
+- interaction avec les agents
+
+Ces interfaces permettent aux utilisateurs de :
+
+- poser des questions
+- analyser des incidents
+- naviguer dans la topologie
+
+---
+
+## 7. Plateforme TwinCore
+
+Objectif :
+Piloter la vision produit et l’adoption de la plateforme.
+
+Sujets couverts :
+
+- gestion des use cases
+- priorisation des initiatives
+- stratégie de démonstration
+- communication
+- adoption par les franchises
+
+TwinCore peut intervenir selon plusieurs modes :
+
+- Builder
+- Co‑builder
+- Accelerator
+- Advisory
+
+---
+
+## 8. Gouvernance et Pilotage du Programme
+
+Objectif :
+Assurer la coordination globale du programme.
+
+Inclut :
+
+- gouvernance programme
+- coordination des OPUS
+- interaction avec les franchises
+
+Instances de gouvernance :
+
+- SteerCo
+- MAP
+- QAP
+- comités projet
+
+---
+
+# EPIC (Pilotage des grands sujets)
+
+## EPIC 1 – Pilotage du portefeuille de use cases
+
+Objectif :
+Structurer et analyser les use cases Twin afin de permettre leur priorisation.
+
+Sujets couverts :
+
+- intégration des use cases CTO Days (~170)
+- clustering des use cases
+- identification des data sources
+- identification des tools nécessaires
+
+Mapping avec KPI :
+
+- MTTR
+- MTTD
+- MTBF
+
+Utilisation de Jira pour :
+
+- structurer le backlog
+- analyser les duplications
+- permettre l’analyse par agents.
+
+---
+
+## EPIC 2 – Gouvernance des franchises
+
+Objectif :
+Structurer les interactions entre TwinCore et les franchises.
+
+Sujets couverts :
+
+- cartographie des franchises
+- identification des use cases par franchise
+- transition vers la gouvernance programme
+
+Modes d’engagement :
+
+- Builder
+- Co‑builder
+- Accelerator
+- Advisory
+
+---
+
+## EPIC 3 – Stratégie de démonstration et adoption
+
+Objectif :
+Structurer la gestion des démonstrations.
+
+Sujets couverts :
+
+- règles pour accepter une démo
+- priorisation des demandes
+- onboarding des franchises
+
+Industrialisation possible :
+
+- vidéos
+- formations
+- documentation
+- agent explicatif
+
+---
+
+## EPIC 4 – Ownership gestion des incidents
+
+Objectif :
+Clarifier la responsabilité sur les incidents.
+
+Sujets couverts :
+
+- arbitrage entre Twin Solve et Twin Change
+- articulation avec ServiceNow
+
+---
+
+## EPIC 5 – Stratégie MCP
+
+Objectif :
+Définir la vision autour du Model Context Protocol.
+
+Sujets couverts :
+
+- coordination entre franchises
+- alignement avec BP2I
+- collaboration avec partenaires (ex : Lensys)
+
+---
+
+## EPIC 6 – Plateforme développeur TwinForge
+
+Objectif :
+Industrialiser le développement d’agents.
+
+Sujets couverts :
+
+- SDK TwinForge
+- templates agents
+- templates tools
+- convergence avec TwinApps
+
+---
+
+## EPIC 7 – Catalogue des capacités
+
+Objectif :
+Donner de la visibilité aux franchises.
+
+Sujets couverts :
+
+- catalogue agents
+- catalogue tools
+- ownership
+- niveau de maturité
+- roadmap des capacités
+
+---
+
+## EPIC 8 – Suivi gouvernance programme
+
+Objectif :
+Suivre les mécanismes de gouvernance.
+
+Sujets couverts :
+
+- suivi SteerCo
+- suivi MAP
+- suivi QAP
+- coordination des OPUS
+
+---
+
+## EPIC 9 – Modélisation Knowledge Graph
+
+Objectif :
+Définir le modèle du Knowledge Graph.
+
+Sujets couverts :
+
+- modélisation des assets
+- dépendances
+- événements (audit logs, DVM)
+- juridiction
+- catalogue des agents
+
+---
+
+## EPIC 10 – Support et gestion incidents Twin
+
+Objectif :
+Définir le modèle de support pour la plateforme Twin.
+
+Sujets couverts :
+
+- incidents remontés par franchises
+- incidents utilisateurs
+- triage des incidents
+- attribution aux équipes :
+
+  - Knowledge Graph
+  - Knowledge Bases
+  - Agents
+  - Interfaces
+
+Livrables :
+
+- processus de support
+- visibilité sur les incidents
