@@ -1,1 +1,54 @@
-Expérimenter et définir le niveau de contrainte sémantique optimal lors de l'ingestion de documents dans les Light Graphs de LightRAG. L'objectif est d'améliorer la pertinence des réponses de notre agent The Librarian tout en minimisant la pollution du graphe.
+Tu as parfaitement raison de me challenger, Vinh. En tant que ton sparring-partner, je plaide coupable : j'ai pris trop de recul et j'ai regroupé tes travaux en "Macro-Thèmes" stratégiques plutôt qu'en véritables Épiques Jira opérationnelles. 
+
+Avec 86 tickets dans un sprint, avoir seulement 3 Épiques signifierait que chacune d'elles contiendrait près de 30 tickets. C'est un anti-pattern Agile : une Épique serait beaucoup trop grosse et ne livrerait pas de valeur assez vite.
+
+Reprenons le scalpel. En analysant la granularité exacte des tâches de ton PDF (les préfixes `[IAM]`, `[LISAB]`, `[TwinForge]`, `[RAG]`, `[Teams]`, `[INFRA]`), je vois une structure beaucoup plus fine. 
+
+Voici la véritable cartographie en **8 Épiques distinctes**, parfaitement alignées avec tes Opus, que tu peux déduire de ton sprint actuel :
+
+### L'Initiative `[TWIN]Platform Core` (Le Moteur)
+
+**1. Épique : IAM & Opale Authorization Engine**
+* **L'objectif :** Gérer l'authentification et les permissions basées sur les entités pour sécuriser l'accès de LangGraph (LGP).
+* **Les tickets de ton sprint qui vont dedans :** Tous les tickets `[IAM]`. [cite_start]L'envoi de l'user ID à LGP [cite: 24][cite_start], l'ajout du client Opale [cite: 24][cite_start], la logique d'autorisation par entité [cite: 24][cite_start], la communication LGP/TAS [cite: 35][cite_start], et la recherche récursive d'entités en prod[cite: 33].
+
+**2. Épique : LISAB Core Routing & Telemetry**
+* **L'objectif :** Stabiliser le "cerveau" de la plateforme (ton Agent Router) et assurer la traçabilité de bout en bout.
+* [cite_start]**Les tickets de ton sprint qui vont dedans :** Le routing refactor [cite: 47][cite_start], le transfert du user prompt à LGP [cite: 9][cite_start], la gestion des timeouts LGP [cite: 12][cite_start], et l'injection des `request-id` [cite: 19] [cite_start]et `conversation_id` dans les logs[cite: 20].
+
+**3. Épique : TwinForge Bootstrap & Validation API (V1)**
+* **L'objectif :** Livrer les fondations de la forge pour permettre aux Franchises de créer leurs agents.
+* **Les tickets de ton sprint qui vont dedans :** C'est ton énorme bloc de tickets `[TwinForge]`. [cite_start]La définition des niveaux [cite: 28][cite_start], l'architecture HLD [cite: 30][cite_start], l'API de validation [cite: 43][cite_start], la commande `init` pour les templates [cite: 44][cite_start], et les checks de qualité (pre-commit, type hinting, coverage)[cite: 45, 46].
+
+**4. Épique : Architecture Discovery & Security Design**
+* **L'objectif :** La phase d'étude et de conception ("Shift-Left") avant de coder de nouvelles capacités agentiques ou graphe.
+* [cite_start]**Les tickets de ton sprint qui vont dedans :** Les études sur les mécanismes d'authentification du Knowledge Graph [cite: 15][cite_start], l'architecture des permissions Agents/KG [cite: 16][cite_start], et le template de création d'agent[cite: 14].
+
+### L'Initiative `[TWIN]Knowledge Bases` (La Couche Cognitive)
+
+**5. Épique : RAG Pipeline Optimization (Reranker & Rewriter)**
+* **L'objectif :** Augmenter la précision de *The Librarian* en réduisant les hallucinations et le bruit.
+* [cite_start]**Les tickets de ton sprint qui vont dedans :** La parallélisation du Reranker [cite: 18][cite_start], le "denoising" du rewriter [cite: 24][cite_start], la persistance des sources de messages en base de données [cite: 24][cite_start], et l'upload de documents[cite: 16].
+
+### L'Initiative `[TWIN]User Experience` (Le Front)
+
+**6. Épique : MS Teams Bot Experience & UX**
+* **L'objectif :** Améliorer l'interface conversationnelle et la gestion des fichiers directement dans MS Teams.
+* [cite_start]**Les tickets de ton sprint qui vont dedans :** Le bouton de désélection de fichiers [cite: 37][cite_start], la correction de la sensibilité à la casse (CodeAP) [cite: 36][cite_start], le résumé des mises à jour (Release) [cite: 17][cite_start], et la résolution du bug des messages déclinés[cite: 11].
+
+**7. Épique : Web App Integration & UI Refactoring**
+* **L'objectif :** Stabiliser l'application Web Twin et y intégrer les agents front-end.
+* [cite_start]**Les tickets de ton sprint qui vont dedans :** Le bouton "Delete All Conversations" [cite: 73][cite_start], l'activation de l'Agent Integration sur le Front [cite: 74][cite_start], et le redesign du rendu Markdown / coloration syntaxique[cite: 48].
+
+### L'Initiative Transverse (Ops & Run)
+
+**8. Épique : Infra, SRE & Technical Debt Eradication**
+* **L'objectif :** Maintenir la plateforme en conditions opérationnelles, nettoyer l'obsolescence et sécuriser les déploiements.
+* [cite_start]**Les tickets de ton sprint qui vont dedans :** L'upgrade de Python 3.9 vers 3.12 [cite: 71][cite_start], la décommission d'anciens assets [cite: 71][cite_start], le nettoyage des sondes Dynatrace [cite: 72][cite_start], la correction des inventaires Ansible [cite: 54, 64][cite_start], et la revue de dette technique post-production[cite: 8].
+
+***
+
+**Le constat :**
+Ton backlog est en fait extrêmement bien découpé techniquement, mais les tickets semblent "flotter" sans parent direct (Épique) qui explique la valeur métier. Structurer ces 8 Épiques permettra à tes équipes de comprendre *pourquoi* ils font ces tâches.
+
+Vinh, maintenant que l'on a ce découpage plus chirurgical, **souhaites-tu que l'on se concentre sur l'Épique RAG Pipeline (la numéro 5) pour voir comment y insérer nos tickets d'expérimentation LightRAG et d'ontologie ?**
