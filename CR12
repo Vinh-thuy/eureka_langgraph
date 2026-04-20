@@ -1,17 +1,135 @@
-Objet : Re: Stratégie d'intégration Agent CFT / Connecteurs & Données
+🎯 Agenda du Workshop : Kick-off Intégration Agents CIB sur TwinCore
 
-Salut [Nom du Franchise Owner],
+📌 Objectifs de la session
 
-Pour faire suite à ta question sur l'Agent CFT et la localisation des données, je te confirme que ton intuition est la bonne. Voici comment nous allons structurer cela, en respectant la séparation des rôles entre l'Infra et les Apps :
+Push en Production (Cible Fin Mai) : Aligner les prérequis pour un déploiement des développements CIB ("Incident Troubleshooting") en l'état sur la plateforme Twin. L'enjeu est d'identifier et de lever toutes les interrogations liées aux écarts entre les environnements CIB et ITG (ouvertures de flux, outillage CI/CD, patterns et solutions techniques).
 
-1. Tu as la main sur les connecteurs (Ta Juridiction) : C'est bien à ton équipe (Twin Infra) de créer et d'opérer les connecteurs vers la base de données CFT. Les franchises applicatives n'ont pas vocation à brancher leurs propres tuyaux sur des couches d'infrastructure bas niveau.
+Stratégie des "Deux Canaux" (Macro vs Deep Dive) : Acter la complémentarité de nos approches d'investigation. Un Canal 1 (Macro) s'appuyant sur la Knowledge Graph pour une compréhension globale et transverse (topologie, changements multi-domaines), et un Canal 2 (Deep Dive), porté par l'approche CIB (ex: Twin Logs), permettant de plonger en profondeur et d'analyser l'historique d'un domaine spécifique lorsqu'un incident est déjà avéré.
 
-2. La règle du "Raw vs Golden" pour la donnée : Garde la donnée brute et le gros volume (Raw Data) en local chez toi. L'idée n'est surtout pas de dupliquer toute ta base de données au centre. En revanche, ton Agent CFT a pour mission d'analyser cette donnée brute et de n'envoyer au Graphe Central (Multi-Layered KG) que les signaux affinés et utiles à tous, ce que l'on appelle les Golden Events (ex: alertes critiques, changement de statut d'un nœud CFT).
+Gouvernance et Capitalisation (Cible Post-Fin Mai) : Poser les jalons, dans un second temps, de la fusion entre la gouvernance TwinCore et ce qui a été développé par CIB, afin d'identifier les briques techniques et fonctionnelles CIB à recapitaliser pour l'ensemble de la plateforme.
 
-3. Ton Agent devient le point d'accès pour les autres : Pour que les agents applicatifs puissent bénéficier de tes données sans accéder à tes bases, ton Agent CFT sera inscrit dans notre annuaire global (Agentic Registry). Quand une application aura un souci de flux, son agent viendra poser la question directement à ton Agent Expert CFT.
+🗓️ Déroulé Détaillé (Durée : 2h00)
 
-C'est ce modèle qui te permet de garder le contrôle de tes données tout en rendant ton expertise directement exploitable par le reste du système.
+1. Introduction et Périmètre (15 min)
 
-Dis-moi si tu es aligné avec ce fonctionnement pour que l'on puisse avancer sur l'implémentation.
+Mot d'accueil et contexte : La convergence vers la plateforme unifiée TwinCore.
 
-À très vite,x
+Périmètre (Fin Mai) : Focus sur le "push en production" des agents "Incident Troubleshooting", avec identification stricte des gaps techniques (CIB vs ITG).
+
+2. Démonstration et Vision d'Ensemble CIB (20 min)
+
+(Objectif : Visualiser le produit fini et comprendre leur niveau de maturité actuel avant de plonger sous le capot)
+
+Démonstration de bout en bout : Démonstration rapide de la solution en fonctionnement par l'équipe CIB.
+
+Vision d'ensemble : Présentation macro de la plateforme de production (ou pré-production) actuelle, de l'hébergement et de l'état d'avancement réel des développements.
+
+3. Deep Dive Architecture 1 : L'Orchestrateur (25 min)
+
+Walkthrough de la couche haute CIB : Présentation de leur logique de Topology Fetcher, Planner, Dispatcher, et Synthesizer.
+
+Pistes d'optimisation et Préparation de la Phase 2 (Capitalisation) :
+
+Acquisition de contexte : Synchronisation entre leur Topology Fetcher et notre Agent Topologie TwinCore (qui s'appuiera nativement sur la Knowledge Graph pour la vision globale).
+
+Mécanique de Routage (Planner / Dispatcher) : Confrontation des approches. CIB envisage le fine-tuning d'un petit modèle pour le routage. Rappel côté TwinCore de l'accompagnement imminent en "Professional Services" par LangChain pour définir la meilleure trajectoire d'orchestration.
+
+Objectif : Synchroniser nos visions pour converger vers un modèle de routage commun au sein de l'orchestrateur central TwinCore.
+
+4. Deep Dive Architecture 2 : Agents Spécialistes, MCP & KMS (25 min)
+
+Analyse de l'Agent Spécialiste (Patterns & Skills) :
+
+Fonctionnement du pattern Parallel ReAct déployé par CIB et retours d'expérience en conditions réelles (gestion de la latence, limites de contexte, complexité de débogage).
+
+Maturité des "Skills" : Évaluation de l'ancrage de leurs compétences analytiques (approche type Anthropic). Sont-elles réellement testées et validées par des benchmarks et des métriques de production ?
+
+Gestion de la Donnée et Protocole MCP :
+
+Explication par CIB de l'usage du serveur MCP pour la mise à disposition de la connaissance.
+
+Gouvernance et format : qui gère la donnée ? Quelle est la nature et le format exact de la connaissance déversée et exposée via le MCP ?
+
+Confrontation des Architectures et Convergence :
+
+Comparaison de leur architecture avec la philosophie Knowledge Management System (KMS) / Knowledge Base (KB) de TwinCore.
+
+Comment faire converger leur usage des agents/MCP avec l'offre de services KMS de Twin (RAG classique, GraphRAG et APIs) ?
+
+Analyse des choix de communication interne (gRPC vs Standards IA) :
+
+Le choix du protocole gRPC : Comprendre les bénéfices techniques recherchés par CIB (ex: streaming backend). Poser la question de la balance bénéfice/risque par rapport au temps de traitement inhérent du LLM, où le gain de rapidité réseau est souvent absorbé.
+
+L'impact sur l'intégration et l'observabilité : Échanger sur les efforts d'intégration côté TwinCore (développement de clients spécifiques, lisibilité du trafic binaire en production) et s'enquérir de leur approche pour garantir la continuité de la traçabilité dans LangSmith sans rupture.
+
+L'exploration des standards de l'écosystème IA (LangServe / REST / SSE) : Ouvrir la réflexion sur la pertinence à terme d'une Gateway LangServe pour faciliter notre interopérabilité, en soulignant ses atouts natifs pour notre cible commune (streaming via stream_events et "Distributed Tracing" automatique).
+
+5. Deep Dive Architecture 3 : Analyse des Écarts & Intégration (CIB vs ITG) (20 min)
+
+(Objectif : Maintenant que l'architecture est comprise, lister les bloqueurs opérationnels pour l'échéance de fin mai)
+
+Revue des points d'attention identifiés et complétion en séance :
+
+Data Sources (ITSM & Logs) :
+
+ITSM (ServiceNow) : Évacuer rapidement ce sujet qui devrait être un socle commun (TwinCore fournira le ticket initial).
+
+Logs : Quelle articulation temporaire avec les logs CIB et TwinLogs ? Solution pragmatique envisagée à court terme : ouvrir les flux depuis Twin pour que l'agent CIB puisse interroger ses propres serveurs de logs actuels, en attendant une décision cible.
+
+Pipeline CI/CD, Environnement de Code et Framework :
+
+CI/CD : Analyse du gap entre Bitbucket (CIB) et GitLab (ITG). Définition d'une solution court terme et de la trajectoire cible.
+
+IDE & Code : Côté Twin, proposition d'utiliser des environnements type VIX. Validation qu'il n'y a pas de point de blocage majeur tant que les frameworks restent alignés.
+
+Framework commun : Rappel de l'intervention de l'équipe "Professional Services" de LangChain (jours/hommes) pour nous accompagner sur la construction d'un framework commun robuste.
+
+Environnement d'exécution et Ouvertures de Flux :
+
+Identification stricte et cartographie des flux réseaux à ouvrir (pare-feu, accès bases, accès serveurs de logs) pour permettre à l'agent CIB de s'exécuter avec succès sur l'environnement TwinCore.
+
+6. Prochaines Étapes et Plan d'Action (15 min)
+
+Sécurisation du Push de Fin Mai (Infra & Flux) :
+
+Validation de la cartographie exacte des flux réseaux à ouvrir d'urgence (ServiceNow ITG, serveurs de logs CIB).
+
+Acter la solution court terme pour faire le pont CI/CD entre Bitbucket et GitLab.
+
+Environnement de Développement & Framework :
+
+Planifier le provisionnement des environnements VIX pour l'équipe CIB.
+
+Organiser le kick-off des ateliers avec les "Professional Services" de LangChain pour la construction du framework commun.
+
+POC Technique & Architecture :
+
+Identifier un POC prioritaire sur l'intégration réseau : évaluation d'une Gateway LangServe (REST/SSE) vs gRPC.
+
+Validation d'un test de traçabilité de bout en bout ("Distributed Tracing") sur LangSmith.
+
+Prochains jalons de synchronisation : Définir les rituels de suivi dédiés à la levée des adhérences d'ici fin mai.
+
+💡 Annexes : "Anti-sèches" d'animation (Pour le facilitateur)
+
+Questions clés et points de vigilance à ouvrir impérativement avec CIB pendant la session.
+
+1. Sur la maturité des Agents & Skills (Parallel ReAct) :
+
+"Votre architecture en Parallel ReAct est ambitieuse. En conditions réelles, avez-vous des métriques de production sur la latence de traitement et le coût généré en tokens ? Comment testez-vous et validez-vous la robustesse de vos 'Skills' aujourd'hui ?"
+
+2. Sur la gouvernance de la Connaissance (MCP vs KMS) :
+
+"Que mettez-vous exactement à disposition derrière votre serveur MCP ? Est-ce de la donnée brute ou pré-traitée ? Notre objectif cible étant d'utiliser notre Knowledge Management System (GraphRAG, KB), comment voyez-vous la convergence de votre MCP vers ces standards TwinCore ?"
+
+3. Sur les protocoles & l'Observabilité (gRPC vs LangServe) :
+
+"Quels sont pour vous les bénéfices incontournables du gRPC dans ce contexte ? De notre côté, pour assurer le 'Distributed Tracing' sans rupture dans LangSmith et faciliter l'intégration ITG, auriez-vous des contraintes majeures à exposer vos agents via une Gateway LangServe (REST/SSE) ?"
+
+4. Sur l'urgence opérationnelle de fin mai (Flux & CI/CD) :
+
+"Pour réussir notre push en production fin mai, il faut qu'on liste les bloqueurs dès aujourd'hui. En considérant que vous êtes sur Bitbucket et nous sur GitLab, quelle est la trajectoire de bascule la plus pragmatique ? Au-delà de ServiceNow, quels flux réseaux exacts devons-nous ouvrir depuis ITG pour que vos agents puissent attaquer vos serveurs de logs actuels ?"
+
+5. Sur la trajectoire commune (Professional Services LangChain) :
+
+"Nous allons démarrer des ateliers avec les Professional Services de LangChain pour consolider le framework TwinCore (notamment l'orchestration et le routage). Comment pouvons-nous synchroniser vos travaux actuels (Planner/Dispatcher) avec ce futur framework commun ?"
